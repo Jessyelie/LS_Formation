@@ -1,0 +1,273 @@
+>hierarchie
+    espace>dossier>interface
+>installer AGIRH (https://drive.google.com/drive/folders/1eBWFAik32YMka6bYceMYACUTzefyZI1N?usp=drive_link)
+    >>Installer sql server (suppérieur à 2016)
+        >>>faire l'installation de base 
+        >>>faire l'installation de base de SSMS (sql Manager)
+        >>>Creer la base de donnée "AGIRH"
+            >>>>aller sur "base de donnée/nouvelle base de donné"
+                +> penser à modifier les chemins d'accès de la base de donnée 
+            >>>>aller sur "base de donnée/securité/connection/Nouvelle Connexion"
+                +>Dans "Générale":
+                    +>>Taper un nom d’accées (ici, SYSADM)
+                    +>>Selectionnez Authentification Sql server
+                    +>>Taper un mot de passe (ici, SYSADM) et confirmer le mot de passe (SYSADM mot de passe par défaut)
+                +>Dans "Role du serveur":
+                    +>>Cocher "public" et "sysadmin"
+        >>>restorer la base de donnée "AGIRH"
+            >>>>aller sur "AGIRH/Tâches/Restaurer/Base de données":
+                +>Dans "Générale":
+                    +>>selectionner "Périférique"
+                    +>>cliquer sur le bouton "..."
+                        +>>>cliquer sur "ajouter"
+                        +>>>selectionner le path de l'ancien "db.BAK" puis cliquer sur "OK"(ici, DEMO_BASE.BAK)
+
+                +>Dans "Option":
+                    +>>Décochez "Effectuer la sauvgarde de la fin du journal avant restauration"
+                    +>>coché la case « remplacer la base de données existant » puis "OK"
+                
+                +>Dans "Fichier":
+                    +>>dans la colone "Restorer en tant que" mettre les path de la nouvelle db(ici, AGIRH)
+                    +>>cliquer sur "ok".
+
+
+    >>Installer le serveur d'application:
+        >>>Aller dans "Outils d’administration/gestionnaire de serveur",
+            >>>>cliquer 3 fois sur suivants
+            >>>>dans "role de serveur"
+                +>coché 
+                    -Serveur web IIS
+                    -service de fichier de stoquage/service de stoquage
+                    
+
+            >>>>dans "fonctionnalité"
+                +>coché 
+                    -les "fonctionnalité de .NET framework x.x (installé)"
+                    -gestion des stratégies de groupe
+                    -IIS Hostable web core(installé)
+                    -message queuing/service message queeing(1 sur 7 Installer)
+                    -prise en charge WoW64 (installé)
+                    -service d'application processus windows
+                    -windows defender antivirus
+                    -windows powershell/powershell x.x (installer)
+                    -windows powershell/moteur windows powershell x.x (installer)
+                    -windows powershell/windows powershell ISE (installer)
+                    -XPS Viewer(installer)
+                +>cliquer sur "installé"
+            
+    >>Configuration regedit(non-fait)
+        >>>aller dans "regedit"
+        >>> ouvrir "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"
+            +> Modifier le fichier "NtfsDisable8dot3NameCreation" en lui donnant la valeur de 1 puis valider
+    >>Installation AgirhNet
+        >>>dans le dossier agirNet cliquer sur setup (cliquer à chaque fois sur "next")
+        >>>une seconde instalation commence automatiquement
+        >>>ecrire le numero de serie fourni par AGIRH
+        >>>cliquer sur "installé" puis "ternimé" (pour le reste ce ne sont que les "next")
+        >>>(mode administrateur) Dans le cd d’installation, Lancez le Batch "ASSIGNROLE"
+        >>>cliquer sur "installer"
+
+    >>Paramétrage de l’ODBC 
+        >>>aller dans "source de donnée ODBC(64 bit)
+        >>>Sélectionner l’onglet « Source de données système" puis cliquer sur le bouton Ajouter. 
+        >>>Sélectionner le pilote ODBC souhaité, puis cliquer sur Terminer. 
+        >>>Cliquez sur le bouton « Terminer »
+        >>>La boîte de dialogue de configuration de la source de données dépend du pilote choisi.
+        >>>Entrez le nom de la source de données. On peut mettre ce que l'on veut sauf ces caractères interdits : [ ] { } ( ) , ; ? * = ! @ \, AGIRH par exemple 
+        >>>Le champ Description est un commentaire. 
+        >>>Sélectionnez le serveur de base de données par exemple, il faudra fournir le nom du serveur ou son adresse IP, le nom de la base de données, le nom de l'utilisateur et son mot de passe. 
+        >>>Cliquez sur "Suivant"
+        >>>Cliquer sur le mode Authentification SQL Server
+        >>>Saisissez l’ID connexion : SYSADM puis le mot de passé
+        >>>Cliquez sur "Suivant"
+        >>>Choisissez votre base de données
+        >>>Cliquez sur Suivant
+        >>>Cliquez sur Terminer
+        >>>Puis testez la connexion
+        
+    >>générer un point de connection
+        >>>genner un script de connection sur la partie web AGIRH
+            >>>>Aller sur "http://localhost/agirhnet/admin/odbc.aspx" (localhost reprecsente ici l'adresse IP)
+            >>>>Le mot de passe est "DBA + heure et minute"
+        
+        >>>remplire le formulaire de "configuration de connection AGIRH"
+            >>>> Config. Connexion
+                -SGBD : SQLSERVER	
+                -DSN :	AGIRH
+                -Database :	AGIRH
+                -Uid :	SYSADM
+                -Pwd :	SYSADM
+                -Fichier Licence : AGIRH_Licence_xxxxxx-xxxxx (dans "c:\Windows\)
+                -Accès Préfix :	AGIRH
+            >>>> OleDB Connexion.
+                -Connection-String : (décoché)
+                -Connection String : (vide)
+                -Provider :	System.Data.Odbc
+            >>>>DBA
+                -DBA - DSN :	AGIRH
+                -DBA - Uid :	SYSADM
+                -DBA - Pwd :	SYSADM
+        >>>TESTER puis reecrir les mots de passe et "appliquer"
+
+    >>Copiez les fichiers adonet.xml , adonet_Company et AGIRH_LICENCE_ xxxx-xxxxx.ini dans "C:\windows" à partir de "C:\inetpub\ wwwroot \agihnet"
+
+    >>Maintenance du portail (En cas de Mise à jour)-------------------------------------
+        >>>aller sur http://localhost/AgirhNet/admin/ptf.aspx
+    
+    >>Gestion du Service "Agirh_SysAlerte"
+        >>>Lancer le batch c:\inetpub\wwwroot\agirh_sysalerte\instaLL 
+        >>>Copiez les deux fichiers adonet et License du répertoire  "c:\intpeub\wwwroot \AgirhNet" vers "c:\windows"
+            >>>>aller dans "service"
+                +>demarer "Agirh_SysAlerte",
+                +>faire un clique droit et aller sur propriete puis rendre le service automatique
+    
+    >>Pour Accéder à AGIRHNET avec "http://localhost/AgirhNet/IHMG/Accueil.aspx"
+
+>redemarer le serveur(IIS)
+    -taper IIS dans la bare de recherche windows
+    -cliquer en suit sur les serveur et cliquer sur "redemarer" tout a droite
+
+
+>Ajouter des widgets à la page principale
+    -cliquer sur l'icone d'engrenage (Agirh-Params) à droite de l'écran et aller sur "widget"
+    -selectionnez  les widgets a ajouter et cliquez sur "enregister"
+    -se deconecter puis se reconnecter        
+
+>Ajouter des elements aux favoris
+    -cliquer sur l'icone d'engrenage (Agirh-Params) a droite de l'écran et aller sur "favoris"
+    -selectionnez  les éléments à ajouter et les déplacer à droite via les fleches du milieu puis enregister
+    -se deconecter puis se reconnecter    
+
+
+>changer le mot de passe d'un salarié
+    -aller dans "centre d’administrateur/securité/utilisateur " 
+    -sur "detail colaborateur" selectionner l'utilisateur conserné
+    -décocher "Envoyer un e-mail d'information"
+    -aller sur "nouvaux mot de passe" et ecrir le nouveau mot mot de passe puis valider.  
+    NB: le matricule de connection est la valeur qui est apparu sur "detail colaborateur" lorsqu'on a selectionner un user 
+
+>creer un espace
+    >>aller dans "centre d'administration/securite/groupe";
+        -...
+        -cliquer sur le bouton "creer"
+
+>attribuer une interface a un espace
+    >>aller dans "centre d'administration/securite/privilege groupe";
+        -selectionner l'espace, il devrait apparaitre un lot de dossiers
+        -ouvrir le dossier et cocher l'interface à ajouter à l'espace 
+        -ajouter si necessaire une durée de validité
+        -cliquer sur "appliquer" pour valider
+
+>attribuer un espace a un utilisateur 
+    >>aller dans "centre d'administration/securite/managers";
+        -matricule:mettre le matricule du user
+        -groupe: mettre l'espace précédement creer 
+        -groupe de démarage (cocher pour enfaire l'espace par defaut de l'utilisatur)
+        -accès intranet (coché)
+        -message d'acceuille (si on veut un messge d'aceuille)
+        -cliquer sur creer
+
+
+>comment restaurer une base 
+    >>aller sur SQL server
+        >>>respecter "restorer la base de donnée "AGIRH""
+        >>>taper la commande "UPDATE company SET id_client = '<la licence utiliser par le serveur>'
+    >>aller sur "http://localhost/AgirhNet/admin/ptf.aspx"
+        -Admin Ptf :SYSPTF
+        -mot de passe : PTF<aaaa><hh><mm>
+        >>>cliquer sur "metre a jour" tout en haut
+        >>>cliquer sur "executer la MàJ"
+    >>redemarer l'ISS 
+
+
+>faire une integration de donnée
+    >>De excel a AGIRH
+        >>>aller sur excel
+            -repertorier les matricules puis les colones a integrer dans AGIRH(faire une "rechercheV")
+            -une fois les matricules et les colones celectionner un a un dans differrentes pages , expoter en CSV(comma delimited)
+        >>>aller sur AGIRH
+            >>>>aller dans "paie/élément variable/Saisie intensive des E.L.V2"
+                -Choisir la rubrique a importer
+                    (
+                        les noms peuvent légerement varier:
+                            ->precomte = avance sur salaire
+                            ->retenu1% = effort de paie
+                            -CNSS CARFO Salarié = PS
+                            ->autre i = i.de sujestion
+                            ->SS  Carfo part Patron = PP
+                            ->salaire de base = salaire de base categoriel
+                    )
+                -type: "forcage"
+                -date de debut et de fin 
+                -impoter puis lire 
+                -si tout est bon terminer en cliquenat sur "gerrer"
+    >>Calcule et comparaison de l'integration
+        >>>calclue de la paie
+            >>>>aller dans "paie/traitement de la paie/calcule de la paie"
+                -societe : <société conserné>
+                -plan paie : mensuel
+                -num paie : <année conserné><mois conserné>
+                -cliquer sur calcluler paie (en scrolan)
+                -voir la progression du calcule sur la derniere ligne du tableau tout en bas
+
+
+
+        >>>Comparaison de la paie
+            >>>>aller dans un fichier excel ou se trouve le montant Brut reel
+                -ajouter la colone Brute du ficier excel de base 
+                    (
+                        soit: 
+                            -"Matricule" , la colone original des matricules,
+                            -"M"  , la colone ajouté des matricules,
+                            -"Brute", la colone original des prix brute
+                            -"B", la colone Ajouter des prix brute
+                            -la formule du VLOOKUP est " =VLOOKUP($A4(donc matricule);F(Donc M):G(donc B);2;FALSE) "
+                    )
+                -calculer la différence B et les colones du VLOOKUP ( B - VLOOKUP ) 
+                -si la réponse n'est pas Zero sur chaque colone,les colones dont les valeurs ne sont pas egales a 0 ont des problemes 
+            >>>>aller dans AGIRH : "Paie/Element variable / saisie des E.L.V paie "
+                -matricule:entre le matricule dont les valeurs ne sont pas egales a 0
+                -num paie:<mois><année>
+                -dans le tableau qui apparait en bas, verifier que tous les imports ont bien été faites:
+                 (si ce n'est pas le cas, les ajouter manuellement:
+                 -choisir la rubrique
+                 -choisir le montant
+                 -cliquer sur "ajouté"  
+                 )
+
+
+
+                    
+                
+
+
+
+
+
+
+>les erreurs et leur solution
+    >>Installation AGIRH
+        ❌Le bouton "CONNECT" est désactivé au niveau de "http://localhost/agirhnet/admin/odbc.aspx"
+        ☑️Aller modifier la ligne suivante <add key="Odbc_Access" value="false"/>  par  la ligne <add key="Odbc_Access" value="true"/> au niveau du fichier "web.config" qui se trouver dans le répertoire "C:\inetpub\wwwroot\AgirhNet"
+
+
+        ❌ (http://localhost/AgirhNet/admin/ptf.aspx): Groupe. :: ERR. 9001 ! Invalid
+        ☑️  ???
+
+        ❌
+        ☑️
+
+        ❌
+        ☑️
+
+
+
+---------------------------------------------------------------------------excel et Agirh
+>>rechercheV: 
+    >> structure:
+        >>>FR
+            =RECHERCHEV(valeur_cherchée (ex:"Fatou"); table_matrice(ex:Feuille A2:C4); no_index_col(ex:2); [valeur_proche](ex:FAUX)) 
+        >>>en anglais 
+            =VLOOKUP($D13;Sheet1!A:B;2;FALSE)
+    >>est une fonction d’Excel qui permet de retrouver une valeur dans la première colonne d’un tableau et d’en extraire une information se trouvant dans une autre colonne de la même ligne.
+ 
