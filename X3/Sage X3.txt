@@ -1,0 +1,1315 @@
+•Les phases d'un projet(C Ip Ho T FGA):
+    1-Cadrage (ou Analyse): comprendre le besoin du Client ET REMPLIR LES ANCIENNES DONNEES DU CLIENT  
+    2-Instalation et parmetrage :
+        -installation puis parametrage de SageX3 cher le client .
+    3-Homolgation: Validation du parametrage par le client
+    4-Test: Simulation de l'application avec les données du client
+    5-Formation: Apprentissage de la solution au client ou a ses employes
+    6-GO LIFE: debut d'utilisation de la solution par le client ou ses employes
+    7-Assistance: accompagner le client durant une certaine periode de temps
+
+NB: Toujours faire un livrable entre chaque phase et doit etre signer par le Client avant de passer
+a la seconde phase.
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+•Les Modules de SageX3:
+    +administration
+    +devellopement 
+    +parametrage
+
+    -donnee de base
+    -achat
+    -vente
+    -stock
+    -comptabilité
+    -comptabilité tier
+    -immobilisation
+
+NB: SageX3 a pour language le L4G.
+
+------ installation Sage X3
+-changer son mot de passe de maniere acceuil nest que des valeurs alpha numerique sans signe
+-Ouvrir une session entant que service avant de commencer l'installation
+    (
+        -Dans 'Strategie de securite locale:attribution des droits d'utilisateur - ouvir une session entant que service 
+        -cliquer sur ajouter un utilisateur
+        -dans nom des objet a celectionner, ecrir le nom dutiliateur: (ici Administrateur) 
+        puis cliquer sur appliquer et ok
+    )
+
+    +installation
+        >JDK-java
+        >Apache
+            ->mettre le dossier apache24 dans le path C:\
+            ->taper dans le terminal en mode admin : 
+                -cd C:\apache24\bin
+                -.\httpd.exe -k install -n "Apache2.4"
+            ->aller dans service et activer le service apache
+
+        >SQL Server
+            ->aller dans le dossier de l'installation de SQL Server C:\Users\user\Desktop\VM install\INSTALLX32024R2A\SQL2019\Developer_FRA
+            ->demarer le setup
+            ->copier et coller la cle
+
+        >X3
+            -adxAdmin : ecoute les ports pour X3
+            -application : c'est le server d'application
+                ->nom du composant (choisir un nom sans espace,en lettre capitale et commun ex: SAGEX3)
+            -console :generation,parametrage server d'impression duplication et import de dossier 
+            -DBsql ou DBOracle : base de donnee sql ou oracle
+                ->nom du composant (choisir un nom sans espace,en lettre capitale et commun ex: SAGEX3)
+            -mongoDB : retranscrition de donnee
+                ->decocher le serveur accepte uniquement les connectionS securiser SSL
+            
+            -print server : serveur d'imperssion
+
+            -runtime
+                ->nom du composant (choisir un nom sans espace,en lettre capitale et commun ex: SAGEX3)
+                ->aller dans C:\SAGE\SAGEX3\runtime depences
+                    -installer msodbcsql,PowerShell-win-x64 et Vcredist-x64
+                    -relancer le runtime.
+
+            -syracuse server: serveur web qui entraine une duplication des utilisateurs cree a l'interieur de mongoDB
+                ->mette le path de la licence (un fichier.json)
+                ->mette le le nom et le password
+                ->remplir le passPhrase (ici Loggy120320)
+                ->remplir le formulaire 'donnee du certificat'
+                ->remplir le passPhrase (ici Loggy120320) sur la pge suivante
+            -se connecter sur 'localhost:8124' avec le login 'admin' et le mot de passe 'Admin123456789-'
+
+        >Console de configuration SAGEX3 
+            -cliquer nouvaux, remplir les champs et valider pour créer la solution
+                -nom du server (nom du pc)
+                -utilisateur (ici Administrateur)
+                -mot de passe (ici Loggy120320)
+
+            -cliquer sur la solution et remplir les champs:
+                ->Donnee application:
+                    ->connection avec la base de donnee (remplir TOUT le formulaire 'Serveur de donnee SQLserver sur win-xxxxx')
+                    ->connection avec le serveur apache (remplir TOUT le formulaire 'Serveur application SAGEX3 sur win-xxxxx')
+                    ->connection avec la session utilisateur cense demarer les services (remplir tout le formulaire 'Serveur de traitement principale')
+                    ->enregistrer          
+                ->Configurer base de donnee:
+                    ->entrer un mot de passe (ici Loggy120320) puis valider
+                ->Configure application:
+                    ->valider
+                ->publication:
+                    ->valider
+            -NB:
+                ->Serveur de donnee SQLserver sur win-xxxxx     --------->      lien entre sqlserver et Sage X3
+                ->Serveur application SAGEX3 sur win-xxxxx      --------->      lien entre apache et Sage X3
+                ->Serveur de traitement principale              --------->      lien entre la machine et Sage X3
+
+        >installer l'interface de SQLserver (SSMS-Setup-fra)
+
+    +Parametrage du dossier X3
+            >Copie du fichier .pem (dans le dossier 'C:\Sage\SyracuseComponent\Syracuse\certTools\outpout') vers 'C:\Sage\SAGEX3\runtime\keys'
+            >Creation du dossier X3
+                -Creation d'une solution 
+                    ->code(nom de la solution ici SAGEX3)
+                    ->...
+                    ->application (toujours choisir ERP)
+                    ->hote du serveur(nom du pc)
+                    ->port (choisir le port designe au debut (ici 81))
+                -creation d'un point de connection
+                    ->cliquer sur les trois ligne du tableau, puis 'personalisation et initialisation' (cela ne se fait que sur le dossier X3 et qune fois)
+                -se deconecter puis se reconnecter, le dossier X3 est créer et visible.
+
+    +creation du dossier de Test
+            >dans le dossier X3 , dans le module parametrage puis dossier 
+                -dossier(id de lentreprise, sans espace)
+                -nom(nom de l'entreprise)
+                -...
+                -date de debut
+                -devise (XOF)
+                -localisation (tout les actif doivent etre sur Non)
+                -langue (entrer FRA)
+                -legistation (entrer FRA)
+                -langue par défaut (FRA)
+                -pays par défaut (TG)
+                -cliquer sur validation et decocher validation differer (6H ou plus)
+                    -> deverrouillage:(il peut arrivé que la validation dun dossier sois interompus pour une raison ou pour une autre, 
+                        dans cette situatuation la solution si il ya erreur lorsqu'on reessaie 
+                        de lancer la validation,c'est d'effectuer un deverouillage) 
+                        -->aller dans ""
+                        -->choisir le dossier andeverouiiler et cliquer sur ok . 
+                        -->vous pouvez ensuite relancer la validation
+
+            >creation d'un point de connection 
+                -Dossier du serveur 
+                    --------->si il y a abcence du dossier generer dans (ici LOGGYSTD): 
+                        aller dans C:\Sage\SAGEX3\Dossier et ouvir Folder pour y ajouter
+                        la balise 
+                            '
+                                <FOLDER ID="LOGGYSTD" MOTH1="X3">
+                                    <IAD>SAGEX3</IAD>
+                                    <VERSION>R090.029.058</VERSION>
+                                    <RELEASE>R090.029.058</RELEASE>
+                                    <NEWVER>2022 R1 (12.0.29)</NEWVER>
+                                    <UPDATE>15/01/2022</UPDATE>
+                                    <PUBLIASEAR>YES</PUBLIASEAR>
+                                    <LANGS>FRA;ENG;ITA;POR;SPA;BRI;GER;POL;CHI;ARB;AUS</LANGS>
+                                </FOLDER>
+                            '
+                        dans <ACTUAL>
+                    --------->si le dossier généré n'a pas de problème
+                        -remplir les champs puis valider
+                            ->solution (SageX3)
+                            ->Dossier du serveur(nom du donnier conserner)
+                            ->Dossier de reference (X3)
+
+                        -groupe (choisir superAdministrateur)
+                        -NB: ne pas faire  'personalisation et initialisation' car cela ne se fait que pour le dossier X3
+
+                
+    +creation du dossier d'exploitation
+        >Faire une extration de donnee du dossier conserner (sauvegarde des tables)
+            ->aller sur "Dévelopement/extraction-intégration/extraction données"
+            -choisir les tables a sauvegarder ou mettre * pour tout sauvegarder
+            -Volume de sauvegarde(par convention le nom de la sauvegarde doit etre 'SVG-dateDaujourDHuit')
+            -tu peut retrouver les tables sauvegardé dans le path "C:\Sage\SAGEX3\dossiers\<nom du dossier>"
+            
+        >Faire une duplication de dossier (console de X3)
+            -choisir sur la fenetre Dossier
+            -selectionner le dossier a dupliquer et Cliquer sur dupliquer
+            -mettre un nom de dossier
+            -ecrir le nom de la sauvegarde faite précédement ('SVG-dateDaujourDHuit')
+            -cliquer sur suivant puis suivant
+            -(sur X3)creer le point de connection pour le nouveau dossier(dans "administration/points de connection/points de connection")
+            -se deconnecter puis se reconnecter
+
+        >Faire une integration de donnee (reatribution des tables dans un autre dossier)
+            -aller sur "Dévelopement/extraction-intégration/integration données"
+            -(suivre la logique dans extraction de donnée)
+
+        >Pemettre les impressions des etats dans un dossier X3
+            -aller dans la console de configuration de sageX3 et cliquer sur "sage x3 print server"
+            -sur la barre laterale, cliquer sur "publication dimpression"
+            -cliquer sur "SageX3" puis cochez le dossier dont on veux permettre l'impression
+            -cliquer sur appliquer la solution pour validé le changement.
+
+        >Supprimer un DossierX3(si necessaire)
+            -aller sur "administariation/points de connection/points de connection"
+            -supprimé "le dossier conserné"
+            -aller sur "parametrage/parametres généraux/Dossiers"
+            -selectioner le meme dossier et le supprimer
+            -aller dans "C:\Sage\SAGEX3\dossiers" et supprimer le meme dossier
+            -aller dans "C:\Sage\SAGEX3\dossiers\X3_PUB" et supprimer le meme dossier
+
+
+        NB:integration de dossier != integration de donnee
+
+    +parametrage du dossier d'exploitation(dossier > societes > sites)
+        >créer des axes (dans parametrage - structure generale - axes)
+            -entete colone (nom de l'axe)
+            -format des sessions (3c)
+
+        >creation d'une société
+            -> aller dans "parametrage/comptabilité/codes comptables:"
+                -crée la société 
+                NB:les comptes de benefice et de perte sont de classe 1
+            -> aller dans "parametrage/comptabilité/codes comptables:"
+                -crée le site
+                NB:les comptes de benefice et de perte sont de classe 1
+            ->aller dans "parametrage/structure général/société"
+                -(intitule de 5 lettres)
+                -(nom)
+                -(intitule cour 10 lettres)
+                -forme juridique (SA:Societe anonyme)
+                -capital social (XOF)
+                -(capital) 20 000 000 par exemple
+                -site principale
+                    ->site(nom du cite Principale(SIEGE))
+                    ->description(SIEGE)
+                    ->intitule court (SIEGE)
+                    ->Societe juridique()
+                    ->pays(TG)
+                -...
+
+            -aller dans "parametrage/structure general/compta"
+                ->modele comptable (a créer ou ajouter)
+                    -referentiel(lettre LIMITER)
+                    -designation (nom du model compta)
+                    -...
+                    ->plan comptable (a créer ou ajouter)
+                        -code plan (lettre LIMITER)
+                        -designation (nom du plan comptrable)
+                        -intule court(code plan)
+                        -entete de colone(code plan)
+                        -cocher (suivie generale, auxiliarisation,gestion des taxes).
+                        -format des comptes 6#
+                        -Classe par défaut
+                            ->créer les differentes classes:
+
+                                +------------------------------------------------------------------------------------------------+
+                                    code                   intitule         RAN         Sense par défaut        Sens analitique
+                                +------------------------------------------------------------------------------------------------+
+                                    >1-capitaux         -   normal  -       oui       -   credit          -       produit
+                                    >2-Immobilisation   -   normal  -       oui       -   debit           -       charge
+                                    >3-stock            -   normal  -       oui       -   indeterminer    -       charge
+                                    >4-tier             -   normal  -       oui       -   indeterminer    -       charge
+                                    >5-financier        -   normal  -       oui       -   indeterminer    -       charge
+                                    >6-charge           -   normal  -       non       -   debit           -       charge
+                                    >7-produit          -   normal  -       non       -   credit          -       produit
+                                    >8-autres           -   normal  -       non       -   indeterminer    -       produit
+                                +------------------------------------------------------------------------------------------------+
+
+                            ->selon le type de plan on a :
+
+                                >(analytique)
+                                    +------------------------------------------------------------------------+
+                                        prefix               classe                   intitule    
+                                    +------------------------------------------------------------------------+  
+                                        >2             -        2          -     (se rempliautomatiquement)    
+                                        >6             -        6          -     (se rempliautomatiquement)    
+                                        >7             -        7          -     (se rempliautomatiquement)     
+                                    +------------------------------------------------------------------------+
+
+                                >(social)
+                                    +------------------------------------------------------------------------+
+                                      prefix                  classe                      intitule    
+                                    +------------------------------------------------------------------------+
+                                        >1             -        1         -     (se rempliautomatiquement)    
+                                        >2             -        2         -     (se rempliautomatiquement)    
+                                        >3             -        3         -     (se rempliautomatiquement)    
+                                        >4             -        4         -     (se rempliautomatiquement)    
+                                        >5             -        5         -     (se rempliautomatiquement)    
+                                        >6             -        6         -     (se rempliautomatiquement)    
+                                        >7             -        7         -     (se rempliautomatiquement)    
+                                        >8             -        8         -     (se rempliautomatiquement)      
+                                    +------------------------------------------------------------------------+
+                ->date premiere exer(date de creation mis dans le dossier)
+                ->devise comptable(XOF)
+                ->code comptable (créer dans le module 'transaction de saisi code comptable')
+                    -code transaction (5 lettres)
+                    -intitule(nom du code comptable)
+                    -tableau (conf. plan comptable) 
+                ->créer des axes (dans parametrage - structure generale - axes)
+
+            -adresse
+                ->tableau adresse:(ecrire un nom a l'adresse dans le tableau)
+                ->code ::: intitule (rue, pays, quartier ...)
+                ->pays  ::: intitule (nom pays)
+
+            NB: le code comptable permet d'initialiser des comptes en fonction de la nature de l'operation
+        
+        >Creation d'un site(dans parametrage - structure generale - sites)
+            -generalites
+                ->site(nom du site)
+                ->description(nom du site)
+                ->intitule court (nom du site)
+                ->societe juridique(societe auquel appartient le site)
+                ->pays(TG)
+            
+            -compta
+                ->site financier (le site principale de l'entreprise)
+                ->code comptable (code comptable)
+                ->tableau:Axe
+            
+            -adresse
+                ->tableau adresse:(ecrire un nom a l'adresse dans le tableau)
+                ->code ::: intitule (rue, pays, quartier ...)
+                ->pays  ::: intitule (nom pays)
+
+            -Details
+                -jour ouver par défaut (de lundi a samedi)
+
+    
+        > cliquer sur X3 print server puis cliquer sur 'nouvaux print server' 
+        > aller sur publication et impression - 'ajouter une solution' 
+        > choisir l'identifiant de solution X3
+        > choisir les dossiers test et d'exploitation puis cliquer sur 'appliquer la publication'
+
+
+    
+
+------ tutoriels dans X3
++faire une extraction/ integration de donnee
+    >extraction de donnee
+        -aller dans "devellopement/extraction données"
+            ->Dossier:choisir le dossier ou se trouve les tables à extraire
+            ->les tables a sauvegarder::choisir via un nom (ex GAC*, ou GAC ,*GAC*...)
+            ->Volume de sauvegarde:donner le dossier ou se trouve les tables a integrer
+            ->cliquer sur "ok"
+            
+            
+    >integration de donnee
+        -aller dans "devellopement/extraction de donnee"
+            ->Dossier:choisir le dossier X3 ou se trouve les table a integer
+            ->Volume de sauvegarde:donner le dossier ou se trouve les tables a integrer
+            ->les tables a integé::choisir via un nom (ex GAC*, ou GAC ,*GAC*...)
+            ->cliquer sur "ok"
+
++Importation de dossier (soit Folder0 et Folder0_PUB les dossiers à importer)
+    >copier les dossier dans les repertoire
+        -aller dans "C:\Sage\SAGEX3\dossiers"
+            ->coller Folder0
+        -aller dans "C:\Sage\SAGEX3\dossiers\X3_pub"
+            ->coller Folder0_PUB
+
+    >aller dans la console
+        -aller dans "solution/importer"
+        -choisir Folder0 et le dossier d'emplacement des tables(par défaut SVG)
+        -valider et attendre la fin l'importation
+
++Exportation de dossier (soit Folder0 et Folder0_PUB les dossiers à importer)
+    >aller dans la console
+        -aller dans "solution/exporter"
+        -choisir Folder0 et le dossier d'emplacement des tables(par défaut SVG)
+        -valider et attendre la fin l'exportation
+        
+
++ créer un utilisateur 
+    créer un utilisateur se fait en 2 etapes: (Param:MFMU - Admin:nrgu) 
+        > module parametrage(specififie les modules visibles)
+            ->profil menu: affiche les modules au user  (sans lui donner de droit)
+                -menue de depart (entrer le profil menu du debut,permet de créer un menu de depart vide et y ajouter des fonctions)
+            ->profil fonction - habilitation: spécifie les droits de l'utilisateur (CRUD sur le module)
+            ->profil metier: 
+                permet de lier un profil menu a un profil fonction 
+                (afin de ne pas avoir a lier et le Profil Fonction et le Profil Menu au user)
+            ->utilisateur:
+                -code:(a une dimension a ne par depasser, tu metre ce que tu veux)
+                -nom:
+                -Identifiant(pas d'esapce)
+                -code metier(choisir un profil metier) 
+                -profil menu et profil fonction: (ne pas remplir le code metier si on veutreplir ces imputs)
+       
+        > module administration(donner un role au user)
+            ->page de navigation
+                -nom (nom de ta page)
+                -titre (equivalent de code) 
+                -module (les modules visibles)
+                -role(choisi les role qui pourrons utiliser la page de navigation)
+                
+            ->groupe
+                -intitule (nom du groupes)
+                -role(choisir)
+                -point de connection (choisir les dossier sur lesquel le user poura se connecter)
+                - ...
+
+            ->role
+                -code (a une dimension à ne pas dépasser)
+                -intitule (nom du role)
+                -factory owner(toujours SAGE)
+                -badges (type de licence)
+                -profil securite (choisir utilisateur par défaut)
+                -page de navigation (trie ce qui doit etre vue par le user)
+                -page d'acceuille (affiche la liste des modules visibles sur la page d'acceuille du user)
+
+            
+            ->utilisateur
+                -Identifiant(ecrir l'identifiamt du user créer dans parametrage)
+                -mot de passe 
+                -groupe(choisir un groupe prealablememt créer)
+
+        NB:
+            -A part pour la creation d'un user la premiere lettre de son nom (intitule) doit etre X,Y ou Z
+            -menu = module
+            -Generalememt les Codes des menu(profil menu) commence par M,le reste  est pour les fonctions  (P,G)
+
++les tiers
+    >Créer un tiers(fournisseur)
+        -> Creation des categories (dans 'donnee de base' - 'categorie fournisseurs')
+            -categorie (nbre  de caractere min 2 max 5)
+            -intitule ( description)
+            -intitule court (nbre de caractere max 12)
+            -pays(FRA)
+            -langue(FR)
+            -devise(XOF) 
+            -type fournisseur(normal , prospect(potencielle fournisseur))
+            -...
+            -Code comptable (a créer puis remplir)
+            -regime taxe exo(a créer puis remplir)
+            -condition de payement (choisir)
+        -> (code comptable:fournisseur)
+        -> Creation d'un fournisseur (aller dans 'donnee de base' - 'fournisseurs')
+            -categorie ( choisir une categorie prealablememt créer)
+            -fournisseur (metrre le compteur créer dans categorie pour le lier ou en ecrir un)
+            -intitule court (nom du fournisseur)
+            -sigle (racourtie de lintitulte court)
+            -raison social (nom complet du fournisseur)
+            -pays(SN)
+            -langue(FRA)
+            -devise(XOF)
+            -...
+            -'remprir le formulaire adresse rien n'est obligatoire'
+            -condition de payememt(a créer puis remplir)
+        
+        -> Creation d'un compteur
+            -compteur (nom du compteur)
+            -intitule (description)
+            -niveaux Dossier (degerer de visibilite du dossier)
+            -niveaux RAZ (Remise a zero)
+            -Type (Alphanumerique)
+            -composant (generer automatiauement des numero de compte)
+                -----------------------------
+                (type composant): Constante (on va gerrer les valeurs constante dana le numero de co)
+                (longqueur): 2 par exemple donc formule doit avoir 2 caractere (ici F et C)
+                (formule): FC par exemple
+                ------------------------------
+                (type composant): No Sequence 
+                (longqueur): 3 par exemples donc FC est suivie de 3 lettre (de 001 - 999)
+                (formule): vide
+        
+    >Créer un tiers(Client)
+        -> Creation des categories (dans 'donnee de base' - 'categorie client')
+            (confert avec fournisseur)
+        -> (code comptable:Client)
+        -> Creation d'un compteur 
+            (confert avec fournisseur)
+
+        -> Creation d'un client (aller dans 'donnee de base' - 'client')
+        ->créer une taxe se fait de au niveau du tableau de ligne colone TAUX
+
++les taxes
+    >Taux de taxes(creer une taxe et leur affecter le pourcentage )
+        -...
+        -(tableau:ligne) dans taux, ecrire le pourcentage de la taxe
+    >creer les regimes de taxes():
+
++circuit NEGOCE (achat-vente-stock)
+
+    NB:pour pouvoir effectuer le circuit de negociation il faut créer des comptes, des taxes
+        un tier peu etre client,fournisseur , un personnel ou un prospect
+
+    > creer un code comptable
+        -aller dans "/parametre comptabilitité/codes comptables/"
+        -(tableau:detail) mettre un comptes sociale et un compte analitique 
+
+    >Créer un article
+        il existe 3 types d'article(A.,A. de dépôt et A. site)
+        -> Creation des categories (dans 'donnee de base' - 'categorie article')
+            -categorie (min 2, max 5)
+            -intitule (description)
+            -intitule court (nom de l'article)
+            -compteur d'article (créer ou lier)
+            -'cocher service , acheter ,vendu et livrable'
+            -unite stock (créer ou lier)
+            -unite vente (créer ou lier) ::: car on a cocher vente
+            -code comptable (créer ou lier)
+            -niveaux de taxe 1...3 (créer ou lier)
+            
+        -> Creation d'un article (aller dans 'donnee de base/article')
+            -categorie (créer ou lister)
+            -statut article (actif) 
+            -article (auto-generation)
+            -intitule (nom article)
+
+        -> donner a un article gerer en stock un emplacement et un dépôt
+            (un article dépôt est utiliser pour le sockage des articles)
+            -aller dans le site auquel attribuer le dépôt et cocher "gestion depo"
+            -aller dans "donnee de base/dépôt"
+                -... 
+            -aller dans "donnee de base/table article/type emplacement"
+                -...
+                -Catég emplacement:Interne
+                -Format emplacement:AAAAA
+                -Ordre proposition:AAAAA
+                -cliquer en suite sur "creer empl."
+                    -Création emplacements
+                    -Dépôt:<depot creer>
+                    -Format emplacement:AAAAA
+                    -Emplacement début:AAAAA
+                    -Emplacement fin:AAAAA
+            -aller dans "donnee de base/article"
+                >>seletionner l'article puis aller sur "article site"
+                    >>>cocher "Gestion emplacement"
+                    >>>(tableau:stoquage)<type demplacement> - AAAA
+                    >>>cliquer sur "article depot" tout en haut 
+                        >>>>Cocher "emplacement par défaut" 
+                        >>>>(tableau:stoquage)<type demplacement> - AAAA
+        -> Creation d'un article site (aller dans 'donnee de base' - 'article-site')
+        -> (code comptable:article)
+        
+
+    >gerrer un achats
+        -Créer une demande d'achat
+            (pour devenir une commande , une demande d'achat doit etre valider par un utilisateur)
+            ->demande d'achat (aller dans 'achat' )
+                -apres avoir rempli demande d'achat cliquer sur commamnde tout en haut pour verifier si il n'y a pas d'erreur et générer la ou des commande(s) 
+                (ne pas oublier de remplir la colone social avec un compte de type 6)
+
+            ->faire appel d'offre(facultatif):permet de demander des prix des articles a different fournisseurs 
+                -faire une demande d'appelle d'offre
+                    -aller dans "appel d'offre/demande"et remplir
+                    -puis imprimer
+                
+                -faire une relance(facultatif):dans le cas ou il n'y a pas de la part du fournisseur 
+                    -aller dans "appel d'offre/relance" et remplir
+                    -puis imprimer(créer prealablement un model sur Cristal report)
+                
+                -faire une reponse à la demande d'offre
+                    -aller dans "appel d'offre/relance"et remplir
+                    -puis imprimer(créer prealablement un model sur Cristal report)
+
+            ->tarif(facultatif):represente le prix de l'article auquel le fournisseur le vend en se basant aussi sur les variations en fonction de la quantite
+                -aller dans "achat/generation ligne de tarif" 
+                    -renseigner le fourniseur et remplir le tableau
+                -voir le tarif 
+                    -aller dans "saisi de tarif" ,choisir T20 et voir si le tarif a bien été créé
+                -aller dans "demande d'achat" pour verifier dans le tableau de l'achat si les prix varient bien en fonction de la quantité
+
+            ->commandes (aller dans 'achats/commamndes' )
+                -apres avoir rempli commande (fourniseur,BL ,date)
+                -aller dans selection commande et choisir la commande précedement créer
+                    NB: l'article doit etre en 'non-gerrer' si il na pas de stock (dans 'gestion/gestion de stock' et dans 'gestion/article site')
+            
+            ->receptions(aller dans 'achats/receptions')
+            ->factures(aller dans 'achats/facture')
+                -...
+                -bon a payer(CHOISIR BON A Payer)
+                -aller dans selection commande et choisir la commande precedement créer
+                -ht Ligne (ht saisi = ht calculer et total taxe saisi = ecart taxe)
+                - cliquer sur valiation tout enhaut pour créer une piece comptable.
+             
+        -sur les articles:les points importants pour gerrer un achat
+            ->gestion stock (prendre "a gerrer" si les articles sont stocker et "art non gerrer" si l'article n'est pas a stocker )
+            ->gestion lot (les gestions de numero de lot et la meme pour un nombre d'article)
+                -pas de gestion lot
+                -lot facultatif
+                -lot obligatoire
+                -lot et sous lot(un lot d'article peut avoir pluieurs sous lot individuelle)
+            
+            ->gestion serie:
+                -pas de gestion
+                -en sortie ()
+                -Entree/sortie
+                -ENtre sortie globale
+                NB: 
+                    -les lots et series font en quelque sorte allusion a un 'matricule ou compteur' commun en lot et different en serie
+                    -un matricule ne peut pas etre modifier
+                    -sorti = vente de l'article
+                    -entrer = achat de l'article
+                    -entrer/sorti = utiliser le maticule recupérer a l'achat
+
+            ->Unite (unite de vente d' achat et de stock peuvent varier selon la facon dont le vendeur vend, achete et stock ses produits)
+            ->COMPTA GENERALE ()
+                -le niveau de taxe se base sur le nombre de taxes a payer pour l'article
+        
+        -sur les Fournisseurs:les points important  pour gerrer un achat
+            ->les en-cours
+                -controle encours:
+                    ->controler(on controle tes dettes Avant de te lier au fournisseur)
+                    ->libre(ON NE controle PAS tes dettes Avant de te lier au fournisseur)
+                    ->bloquer(tu ne peut pas acheter cher le fournisseur)
+                
+                -encour autoriser(somme a partir duquel tu recoit des avertissements)
+                -total encourt(COMBIEMT LE CLIENT DOIT ACTEULLEMEMT)
+                -litige(degret de conflit ou bloquage du client)
+                -CONDITION DE payememt(type de payememt )
+
+    >gerrer une Vente
+        -permetre l'ecriture du prix brut
+            ->aller dans "parametrage/Utilisateur"
+                -(tableau:parametre)cliquer sur les premiers points de la ligne dont lintitule est "habilitation"
+                -Cliquer sur detail et metre "SPRIMOD" sur "oui"
+                -cliquer sur "ok" puis "oui"
+
+        -realiser une vente 
+            ->aller dans 'vente/devis'
+                -...
+                -choisir un client
+                -pour la determination de taxe , TSN (regime de taxe)
+                -remplir les informations du tableau ligne
+            ->commande(apres avoir rempli devis, cliquer sur commamnde tout en haut )
+            ->livraison(apres avoir rempli commande, cliquer sur commamnde tout en haut )
+                -apres avoir rempli les champ cliquer sur validation
+            ->facture()
+                -type
+                    +dans la legislation cocher OHA
+                    +dans LIGNE /la legislation cocher OHA (ligne ht, ligne tva, ligne tier et facture a emetre)
+                -apres avoir rempli les champ cliquer sur validation pour créer la piece comptable
+
+    >gestion un stocks
+        +entré diverse (dans le cas d'un achat pour ajouter du stock)
+            -famille mouvement (role?)
+
+        +sorti diverse  (dans le cas d'une vente pour retirer du stock)
+            -famille mouvement (role?)
+
+        +stock par site     (voir les stocks d'un site en particulier en vue de consulter ou de l'imprimmer)
+        +stock par article  (voir les stocks d'un article en particulier en vue de consulter ou de l'imprimer)
+
+    >gerrer un compte
+        -créer un compte
+            ->aller dans 'table comptable/comptes'
+                - cliquer sur plan (ici choisir social )
+                - plan: soc
+                - compte: compte de l'entreprise (valeur numerique)
+                - nom de l'entreprise
+
+        -exporter un compte
+            ->aller dans 'parametrage/imports-exports/modele imports-exports'
+                -prendre le model GAC et le renommer YGAC 
+                -(tableau)identificateur : ne conserver que la ligne de 1
+                -(tableau)champs : ne conserver que les ligne d'intitule 'code plan','compte','intitule','colectif,'code dappel','devise' et 'classification'
+                -cliquer sur export
+                    ->(tableau) pour bornes  effacer le contenue de valeur de debut et de fin
+                    ->(tableau) pour critere  effacer critere.
+
+            -> aller dans 'exploitation/import-export/exports '
+                -modelle a utiliser : YGAC (qu'on viens de créer)
+                    ->(tableau) pour bornes  effacer le contenue de  debut et de fin
+                    ->(tableau) pour critere  effacer critere.
+                    -> en cliquant sur ok le fichier (a ouvrir dans tsnexcel) se telecharge
+                    ->remplir le fichier destiner a etre ouvert avec excel et se baser sur le les ecrit deja present pour remplir les lignes
+                    ->(Verifier si dans piece auto "/parmetrage/comptabilité/piece automatique" le OHA est coché pour chaque pieces)
+                    NB:la case G doit rester G SUR TOUTES LES LIGNES et SOC aussi
+                    le fichier apres modification doit est au format csv(avec poin vigule)
+
+
+        -importer un fichier csv vers sage
+            ->aller dans 'exploitation/model/import-export' 
+                -aller sur format fichier et mettre utf-8.
+            
+            ->aller dans 'exploitation/import-export/import'
+                -choisir le fichier à importer(.txt ou .csv)
+        
+
+    >lier le compte social et compte analytique
+        ->aller dans 'table comptable/comptes par défaut'
+            -remplir 'autre plan comptable (ici avec ANA)
+            -remplir 'COMPTE PAR défaut' (avec un numero de compte analitique)
+    
+    >Desactiver les signatures
+        ->aller dans "prametrage/valeur parametre"
+            - selectioner "ACH achat/dossier/<nom du dossier>" dans le menu de gauche
+            - chercher gestion signature et cliquer sur les trois trait et choisir detail 
+            - Tout mette à "non" sauf la derniere ligne puis cliquer sur OK pour valider.
+
++finance(J-tP-Sp-Pc)
+    >creer un journal
+        ->aller dans "Donnee de base/journaux comptable"
+        ->...
+        ->type (si le il s'agit d'un compte de type "trésorerie" il faut ajouter un plan comptable dans le tableau (OHADA) et un numero de compte appropriée)
+    
+    >creer une type de piece 
+        ->aller dans "parametrage/comptabilite/types de piece"
+        ->...
+        ->journal par défaut(choisir un journal precedement creer qui se remplira par défaut lors de la création d'une pièce)
+        ->choisir entre un compteur manuel ou remplir un compteur
+        ->categorie (cocher piece et Simulation)
+        ->(tableau:type de journal) cocher les types de journal consernée
+        ->gestion (coher "creation depence" et "gestion echeance")
+        ->(tableau:referenciel) tout autorisé
+
+    >faire une saisie de piece
+        ->ouvir l'exercice comptable (dans "parametrage/comptabilite/exercice") et cliquer sur ouvrir
+        ->ouvrir la periode comptable (dans "parametrage/comptabilite/période") et cliquer sur ouvrir
+        ->aller dans "comptabilite/piece/saisie pièces "  
+            -...
+            -categorie(choisir "reel") 
+            -etat(choisir "provisoire")
+            -libelle(comme intitulé)
+            -bon à payer(choisir Bon à payé)
+            -(tableau):
+                -creer une colone pour fourniseur (le compte doit etre classe 4 et on doit faire un crédit)
+                -creer une colone pour Charge (le compte doit etre classe 6 et on doit faire un débit)
+                NB: la somme des debits doit ètre égale a la somme des credits (comptabilité) 
+    
+    >extourner une ecriture comptable(pour "ajouter une saisi qui annule la saisi erroné" donc facultatif)
+        ->methode 1
+            -aller sur saisie piece et cliquer sur les barres de parametre tout en haut
+            -choisir "extourne"
+            -selectionner "Montant <=> montant négatif"  pour faire l'extourne negative (recommandé)
+        
+        ->methode 2
+            -aller sur extourne et choisir "extrourner a"
+            -date d'extourne "choisir une date  ex aujourd'hui"
+            -aller sur Comptatbilité/extrournes
+                -toute societe (preciser la societe)
+                -...
+                -date debut et date fin (entre ces dates , toute les ecritures comptables seront extrudé)
+                -type de generation (choisir Montant <=> montant négatif)
+        
+        NB:afin d'extourner il faut absolutement utiliser un compteur au niveau de "type de piece"
+    
+    >faire une Consultation(connaitre les activités effecutés sur un élément)
+       ->Consultation de compte
+            -aller sur "comptabilité/consultation/compte"
+            -...
+            -remplir date de debut et date de fin pour l'ecart conserné
+            - si 
+                *le saisi est de classe 5 , remplire "compte"
+                *le saisi est de classe 4 , remplir "collectif" et remplir "tiers"
+            -cliquer sur recherche
+
+       ->Consultation d'écriture
+            -aller sur "comptabilité/consultation/ecriture"
+            -...
+            -remplir date de debut et date de fin pour l'ecart conserné
+            -cliquer sur Critere pour choisir un journale ou un type de piece (optionelle)
+            -cliquer sur recherche
+
+       ->Consultation de balance (permet de savoir si le solde du compte est créditeur , débiteur ou null)
+            -aller sur "comptabilité/consultation/balance"
+                -...
+                -remplir date de debut et date de fin pour lecart conserné
+                -remplir compte de debut et compte de fin pour lecart conserné
+                -cliquer sur recherche
+
+    >faire un lettrage (lier la ou les factures fournisseurs aux règlements client)
+        ->creer 2 saisies de pièce , un pour l'achat(facture) et l'autre pour la trésorerie(règlement)
+        ->aller dans "comptabilité/lettrage manuel"
+            -compte:
+            -...
+            - remplir "collectif" et remplir "tiers"
+            -cocher les 2 lignes (achats et reglement)
+            -puis cliquer sur lettrer
+    
+    >faire une simulation
+        -creer une simulation actif(a un impacte sur la valeur de tes comptes)
+               >faire la saisie
+                    ->ouvir l'exercice comptable (dans "parametrage/comptabilite/exercice") et cliquer sur ouvrir
+                    ->ouvrir la periode comptable (dans "parametrage/comptabilite/période") et cliquer sur ouvrir
+                    ->aller dans "comptabilite/piece/saisie pièces "  
+                        -...
+                        -categorie(choisir "simulation actif") 
+                        -etat(choisir "provisoire")
+                        -libelle(comme intitulé)
+                        -bon à payer(choisir Bon à payé)
+                        -(tableau):
+                            -creer une colone pour fourniseur (le compte doit etre classe 4 et on doit faire un crédit)
+                            -creer une colone pour Charge (le compte doit etre classe 6 et on doit faire un débit)
+                            NB: la somme des debits doit ètre égale a la somme des credits (comptabilité)  
+
+        -creer une  simulation innactif(n'a pas d' impacte sur la valeur de tes comptes)
+            >faire la saisie
+                ->ouvir l'exercice comptable (dans "données de base/table comptable/exercice") et cliquer sur ouvrir
+                ->ouvrir la periode comptable (dans "données de base/table comptable/période") et cliquer sur ouvrir
+                ->aller dans "comptabilite/piece/saisie pièces "  
+                    -...
+                    -categorie(choisir "simulation actif") 
+                    -etat(choisir "provisoire")
+                    -libelle(comme intitulé)
+                    -bon à payer(choisir Bon à payé)
+                    -(tableau):
+                        -creer une colone pour fourniseur (le compte doit ètre classe 4 et on doit faire un crédit)
+                        -creer une colone pour Charge (le compte doit ètre classe 6 et on doit faire un débit)
+                        NB: la somme des debits doit ètre égale a la somme des credits (comptabilité)  
+            
+            
+        -rendre une simulation inactive active
+            >aller dans "contact/Simulation/activation" 
+                -...
+                -cocher tout utilisateurs
+                -cliquer sur "ok"
+                -les simulation conserné seront activé
+        
+        -rendre une simulation active inactive
+            >aller dans "contact/Simulation/desactivation" 
+                -...
+                -cocher tout utilisateurs
+                -cliquer sur "ok"
+                -les simulations conserné seront desactivé
+            
+        -faire une annulation
+            >aller dans "contact/Simulation/annulation" 
+                -...
+                -cocher tout utilisateurs
+                -si 
+                    *"Simulations non actives" est coché il supprimera toute les simulations inactif et actif
+                    *"Simulations non actives" est coché il supprimer que les simulations actif
+                -cliquer sur "ok"
+                -les simulations conserné seront supprimé
+        
+        -faire une Validation
+            >aller dans "contact/Simulation/annulation" 
+                -...
+                -cocher tout utilisateurs
+                -si 
+                    *"Simulations non actives" est coché il rendra réel toute les simulations inactifs et actifs
+                    *"Simulations non actives" est coché il rendra réel  que les simulations actifs
+                -cliquer sur "ok"
+                -les simulations conserné seront reel
+
+    >Faire une facture tiers client(generalement utiliser pour les factures lemenet qui ne sont pas des artices,aussi utilisable pour les abonnements)
+        -...
+        -(ligne)table:mettre le compte du produit et à somme au niveau debiteur
+
+    >Faire une facture tiers fourniseur(generalement utiliser pour les factures lemenet qui ne sont pas des artices,aussi utilisable pour les abonnements)
+        -...
+        -(ligne)table:mettre le compte de charge et à somme au niveau debiteur
+
+    >gerrer les écheances(date limite pour réglé la facture entrainant )
+        -aller dans "comptabilite tier/saisie echeance"
+        -choisir les criteres pui cliquer sur "ok"
+        -(tableau:bon a payer) choisir 'bon à payer' pour payer ou "en attente" pour dire qu'il peut etre payer par lentreprise
+
+    >gerrer les saisies règlement
+        NB:(on fait une saisie règlement A LA PLACE d'un reglement manuel ce qui entraine un lettrage automatique )
+        -Adapter les pieces automatiques    
+            ->aller dans "parametrage/Comptabilité piece automatique";
+                -selectionner "princ" et cocher OHA
+                -cliquer sur ligne,coher le OHA de chaque élément un à un.
+
+        - creer une transaction de saisie règlement (selon qu'il s'agisse d'un fournisseur ou d'un client, il faut creer les différents type de saisie règlement)
+            ->aller dans "paramétrage/comptabilité tier/transaction saisie règlement"
+                -...
+                -sens:(si on parle d'achat,choisir "dépence" et si on parle de vente, choisir "recette")
+                -au niveau des saisi: cocher les champs à saisir obligatoire ou non.
+                -destination par défaut: choisier "pay" pour achat et "rec" pour vente
+                -cocher "Banque-obligatoire" 
+
+                -étape:(comptabilisation banque)
+                    ->cocher "comptabilisation"
+                    ->groupe piece: step1 
+                        Regroupement règlement:Règlement
+                        Regroupement escompte:Règlement
+                        Type journal: banque
+
+        -Creer une formule par legislation
+            ->aller dans "parametrage/comptabilite/type de piece"
+                - creer Decai et ENCAI 
+                - pour DECAI:vente,tresorerie et OD1 sont a oui 
+                - pour ENCAI:achat,tresorerie et OD1 sont a oui
+                - cocher "reel" et "simulation"
+
+        -Creer une formule par legislation
+            ->aller dans "parametrage/comptabilite/formule par législation"
+                - code: ecrir "PRG"
+                - au niveau de formule écrir "string$([F:TB0]SNS=1, "DECAI")+string$([F:TB0]SNS=2, "ENCAI")"
+            ->creer un 2e:
+                -code: ecrir "PRJ"
+                - au niveau de formule écrir "string$([F:TB0]CUR<>[F:BAN]CUR & [F:BAN]CUR<>"",[F:BAN]JOU)"
+        -(s'assurer d'avoir fait le lettrage des factures conserné par la saisie de règmement)
+        
+        -Creer une saisie de règlement à une etape:
+            ->aller dans "paramètrage/Comptabilité tiers/Transactions saisie règlement" (ou plutot "comptabilité/règlement/saisie règlement" )
+                -choisir le choix de transactions creer précedement
+                -...
+                -creer une baque (par effet de tunel)
+                -libllé: metre la valeur de son choix
+                -aller dans le menu echeance(qui affiche la facture du fourniseur choisi)
+                -Montant Tiers:ne pas remplir le montant (sauf on veut tout payer)
+                
+                -valider
+
+        -Creer une saisie de reglement a plusieurs etapes:
+            ->aller dans "parametrage/Comptabilité tiers/Transactions saisie règlement"
+                -aller dans étape , comptabilisation des effets :
+                    Groupe pièce:STEP1
+                    Type journal:Chq à encaisser
+
+                -aller dans étape , comptabilité intermediaire des effets :
+                    Groupe pièce:STEPN
+                    Type journal encaissement:Remise à l'encaissement
+                    Type journal escompte:banque
+                
+                -aller dans étape , comptabilité :
+                    Groupe pièce:STEPN
+                    Type journal reglement:Règlement
+                    Regroupement escompte:Règlement
+                    Type journal :banque
+            
+            ->aller dans "donnée de base/compte en banque " (creer lier chaque step a un compte:)
+                -...
+                -(tableau:journaux):sur chaque ligne mettre les différents journaux(afin d'adapter chaque compte de tresorerie a chaque etape)
+                
+    >enregistrer une piece comptable
+
++immobilisation(faire l'immobilisation d'un article)
+    >(
+        -COCHER CREATON DE DEPENCE dans le compte de classe 2
+        -suivie immo: mettre immo en service aulieu d'encours
+        -pour l'article utiliser il faut cocher immobilisable lors de sa creation
+        -Creer une facture d'achat pour le bien comptable.
+        -Il faut aussi que le compte social appliqué sois un compte de classe 2 
+        -La facture dois avoir subit sa validation
+    )
+    >parametrage du contexte d'amortissement (creer les périodes et exercices)
+        ->aller dans "paramètrage/immobilisation/Contextes d'amortissements"
+            -(tableau:liste des plans gérés)
+            -(tableaux: exercice/periode):creer les exercice et leurs periode un par un dans les 2 tables
+            -(tableau:definition exercices)cliquer sur les trois lignes de la prèmiere ligne et y mettre "période comptable"
+    >Gestion des comptes comptables
+        ->aller dans "donne de base/table comptable/comptes"
+            -cocher "suivie Immobilisation" pour les comptes conserné(compte de classe 2)
+
+    >Gestion des codes comptables 
+        ->aller dans "parametrage/comptabilité/code comptable"
+            -creer le code comptable "fourniseur" 
+            -affecter un compte à la ligne "immobilisation","compte amortissement" et "dotation amortissement d'exploitation"
+            NB:ligne "immobilisation" et "compte amortissement" sont de classe 4.
+
+    >Gestion des familles d'immobilisation
+        ->aller dans "donnee de base/table immobilisation/familles immobilisation"
+            -Groupe de société:<nom societe>
+            -Code famille:<nom de la famille d'immo>
+            -Désignation:<...>
+            -Intitulé court:<...>
+
+    >Gestion des amoritissements
+        ->aller dans "donnée de base/table immobilisation/association valeur"
+            -société:<...>
+            -Modele comptable:<...>
+            -Objet metier:"bien comptable" 
+            -Determinant:"famille comptable"
+            -valeur:<...>
+            -(tableau:bien comptable):
+                type dimmobilisation,1(corporel);
+                code comptable, <code de classe 2>
+            
+            -(tableau:valeur plan):
+                Comptable, <mode (ex:LP>)>,<durée en nbre d'année>
+        
+        ->aller dans "immobilisation/immobilisation/bien comptable"
+            -...
+            -cliquer sur "immobiliser"
+                ● ...
+                ● (tableaux:depense immobilisable)cocher la ou les dépences à immobilisé
+                    NB:Les dépenses immobilisables sont les factures qui ont subit la validation.
+                ●famille comptable :...
+                ●Code comptable :(se remplis automatiquement)
+            -cliquer sur "Simulation du plan d'amortissement"
+                ●Detail:cocher période 
+                ●cliquer sur "calculer"
+        NB: En cas d'erreur, aller dans "changer l'imputation comptable"
+
+        ->immobilisation traitement generation Ecriture comptable
+            -decocher "simulation" si on creer une ecriture reel
+            -exercice: choisir "Courant" si on travail sur l'exercice actuelle oyu sur suivant si on travaille sur l'exercice suivant.
+            -...
+
+    >creer un piece comptable depuis le module de comptabilité:(il existe 2 méthodes)
+        ->aller dans "comptabilite/piece/saisie pièces "  
+            -...
+            -categorie(choisir "reel") 
+            -etat(choisir "provisoire")
+            -libelle(comme intitulé)
+            -bon à payer(choisir Bon à payé)
+            -(tableau):
+                -creer une colone pour fourniseur (le compte doit etre classe 4 et on doit faire un crédit)
+                -creer une colone pour Charge (le compte doit etre classe 6 et on doit faire un débit)
+                NB: la somme des debits doit ètre égale a la somme des crédits (comptabilité) 
+        
+
+        ->aller dans "comptabilité/facture tier fournisseur"
+            -...
+            -(tableau:ligne):remplir SYSCOA (compte de classe 2),type (immo pure ce cas-ci),activité (compte de classe 1)
+            -Cliquer sur "enregistrer"
+            -puis "valider"
+            
+     NB: il est généralement préférable de creer une pièce comptable grace à une facture et non de manière manuel comme il est fait ici,
+     pour rappel ,une piece comptable se crée automatiqument à la validation d'une facture (NEGOCE).
+         
+
+
+
+    >voir le sataut détailler du contexte d'amortissement(pour verifier si il n'y a pas un bien pas encore calculé)
+        ->aller dans "paramètrage/immobilisation/Contextes d'amortissements"
+            -cliquer sur "statut détaillé"
+                ● Dans "Calcul" on peut encore calcluler "verifier si il n'y a pas un bien pas encore calculé"
+                ● Dans "Comptabilisation" si tout est vert, tout est correctement comptabilisé sinon il reste des bien a comptabilisé
+                    --pour connaitre les évenement nomcomptabilisé cliquer sur les trois point au debut de la ligne conserné puis "detail"
+                ● Dans "Divers" on peut encore calculer "verifier si il n'y a pas un bien inactif ou detenus pour la vente..."
+                 NB:il ne doit pas avoir de probleme visible au niveau du "statut detaillé " quand on veut cloturer la periode d'amortissement ou un exercice comptable.
+
+
+    >cloturer un ammoritssement
+        ->aller dans "immobilisation/traitements/cloture amortissement"
+
+
+    >generer l'écriture 
+        ->aller dans "immobilisation/traitement/calcul amortissement"
+            -cocher chaque ligne pour chaque tableau puis "ok"
+
+    >éclater un bien comptable
+        ->aller dans "immobilisation/bien comptable"
+            -cliquer sur "éclatement"
+                ● date éclatement:choisir
+                ● Motif:choisir
+                ● par:choisir
+                ● Montent: valeur entrée HT PCG
+                ● en: <nombre de partie>
+                ● chocher "éclater les dépenses"
+                ● cliquer sur ok
+                ● changer si necessaire le nom le la nouvelle partie dans le tableau designation
+                ● cliquer sur "OK"
+            -cliquer sur enregister 
+        (les nouveaux biens serons créés)
+
+    >sortir un bien comptable
+        ->aller dans "Immobilisation/Immobilisation/bien comptable"
+            -selectionner le bien puis Cliquer sur "mouvement/sortir"
+                ● date sortie:choisir
+                ● Motif sortie:choisir 
+                    (si on choisi vente:)
+                    -- type de montant de vente: "montant à saisir"
+                    -- montant vente : <prix de vente du bien>
+                    -- cle de repartition:"valeur nette du plan
+                    -- plan d'ammoritssement: comptable
+                    -- code de taxe:choisir
+                    -- type de facture:choisir
+                    -- client: <compte comptable de classe 4>
+                ● Regle de sortie:choisir
+                ● cliquer sur OK
+            -cliquer sur "enregister"
+            NB:certain reference peu etre en rouge apres ces modification cela signifie que le bien est deja sortie
+
+
+
+
+
+    >imprimer la liste de tous les bien comptables 
+        ->aller dans "impressions/impression-groupe/immobilisation"
+            -chercher "liste des bien comptables" 
+            -mettre la societe consetné en valeur de debut et valeur de fin sur la premiere ligne dut tableau cliquer sur imprimmer
+
++créer un patch pour les donnees de base
+    >créer des modeles d'import
+        +dans "model d'import/export" choisir un model (ex: client) puis le dupliquer et le modifier selon sa convenance
+        +créer un code d'activité(ex:YMOD) qui permetra de retrouver l'ensemble des models conserner pour le patch
+        
+    >créer le patch
+        +aller dans "développement/patch/développement de patch"
+                -Type de destination (choisir client)
+                -(tableau)Objet
+                    ->la premiere ligne doit etre "ACV | code model(ex : YMOD) | nom du model"
+                    ->les autres lignes commencent part " AOE |code donne de base |nom de la donne de base"
+                -(tableau)Code activite
+                    ->la ligne doit etre "YMOD | nom du model"
+        puis cliquer sur OK . cela téléchargera le fichier donc le patch.
+    
+    >integerer le patch
+        +(Windows)aller dans "c:\Sage\SAGEX3\dossiers\FOLDER0\EDI\IMPORT"
+            -coller le PATCH à intégerer 
+        +(Sage X3)aller dans "developpement/patch/developpement de patch"
+            -Type de destination (choisir Serveur)*
+            -patch: cliquer sur la loupe et choisir le type d'element a importé pour avoir son Path puis cliquer sur OK
+            -cliquer sur integration de patch puis "ok"
+                    
++chercher une colone depuis un ecrans
+    >aller dans le module conserné et taper echap + F6
+        -structure de l'alert
+            dans "Champ PQHNUM / Ecran PQF1 [DIA]"
+                -> PQHNUM = champ (column)
+                -> PQF1 = Ecran
+                -> DIA = abreviation ()
+
+        -prendre le code de l'ecran puis chercher les tables qui y sont lier (les tables n'ont pas toujours le meme nom que la donne de base)
+        -a pratir de la table recuperer les colones rechercher (on peut saider de SQLSever).
+
++module developpement
+    >ajouter un champ a un module
+        -aller sur l'ecran du module et trouver la table determiné
+        -creer une nouvelle colone dans la table via "aller a"
+            -...
+            -type: mettre "A" pour Alphanumerique "D" pour date ...
+            -enregistre puis valide
+        
+        -creer une colone de meme nom sur l'écran
+            -...
+            -type: metre "A" pour Alphanumerique "D" pour date ...
+            -enregistre puis valide
+            -le champ devrait ètre créée
+    
+    >creer une transaction de saisie(permetre l'appartition de certain imputs)
+        -aller dans "/parametrage/'nomDuModule'/'nomDusousModule' "
+        -creer via duplication la nouvelle transaction de saisie
+        -validé
+    
+    >lier une transaction de saisie a la un utilisateur
+        -creer un code d'acces
+            ->aller dans "parametrage/code d'acces"
+                -...
+        -lier le code d'acces à la transaction de saisie
+            ->aller dans "/parametrage/'nomDuModule'/'nomDusousModule' "
+                -dans "code d'acces" mettre le nouveau code d'acces
+        -lier le code d'acces à l'utilisateur
+            ->aller dans "parametre/utilisateur
+                -(tableau)mettre le nom de nouveau code d'acces puis cliquer sur "oui" a tous pour permetre les interactions.
+
++Retirer ou supprimer tous les données(sauf les données de base)
+    >aller dans "Dévelopement/remise à Zéro dossier"
+        -selectionner le dossier et cliquer sur "OK".
+
+    (il ya 2 methodes pour supprimer d'autres donnée)
+            >aller dans "développement/tables/tables"
+                -selectionner la table de l'element conserner
+                -cocher "remise a zero" (pou toute les tables a vidé)
+            >aller dans "Dévelopement/remise à Zéro dossier"
+                -selectionner le dossier et cliquer sur "OK".
+        (ou)
+            >>aller dans "développement/tables/tables"
+                -selectionner la table de l'element conserner
+                -cliquer sur les trois ligne en haut a droite et cliquer sur "RAZ"
+
+
+
+
+------------------------------------------------------structuration de Djago LS
+    >les types de fournisseur ou de client a Djago-i 
+        Il y en a generalememt 2:
+        ->Fournisseurs ou client Locaux:
+            -ont une TVA
+            -les pays sont les meme 
+            -la devise est la meme
+        ->Fournisseurs ou client Etrangers:
+            -n'ont pas de TVA
+            -le pays different
+            -la devise peut differer
+
+    >Schema comptable: indique la liste des comptes comptable a utiliser selon le debit et le credit dans (tableau:ligne de saisi des pièces comptable)
+    >collectif fourniseur: c'est un compte qui peut faire appel a plusieurs Fournisseurs
+    >extourne: c'est le fait dannuler une ecrture (e. par sense et e. negative)
+    >Article
+        NB: Pour les modules "production" il faut utiliser comme categorie d'article, "matiere premiere" et "semi fini"
+
+
+------mot clef
+-(Entree par tunnel): redirige vers le formulaire de creation du module conserné
+-(ecriture comptable): le fichier creer apres la validation de la facturation 
+
+
+------champs et leur role (a toujours remplir si présent dans un module ou une donnee de base)
+(pour le boulot actuelle utiliser "YMOD")
+>code activité:permet de securiser l'information enregister par l'utilisateur
+
+>dictionnaire de donnee/Table : voir la liste des columns de chaque donnée de base 
+
+
+
+-----------les erreurs et leur solution
+
++NEGOCE
+    >achat
+        ❌(achat:reception)Erreur zone "Commande"-Commande non signée ou déjà réceptionnée.
+        ☑️retier les signatures du module achat(ou gerrer les signatures si nécessaire)
+
+        ❌(achat:reception:trace)"MAT-000001" Prix de valorisation nul non autorisé !
+        ☑️(article:article-site) changer la valorisation en "AVC"
+
+        ❌(achat:reception)methode de valorisation null non autorisé
+        ☑️ -Aller sur l'aritcle-site de l'article conserné module court 
+            -prendre l'entrée en tunel de methode
+            -dans methode1 choisir par exemple prix moyen non ponderé
+
+        ❌(achat:facture)Erreur zone "Date comptable"-Période non ouverte
+        ☑️(donne de base:jouranaux comptable) puis creer achat et lui donner le type achat ,cliquer sur ouverture et donner "01/01/<annee actuelle>" puis "ok"
+
+        ❌(achat:facture)Erreur de l'application-Type de pièce non défini
+        ☑️Cliquez sur les trait de "type de facture fournisseur"
+            -Catégorie facture achat:Facture
+            -Pièce auto achat:PIHI2
+            -Pièce auto tiers:BPSIN
+            -Journal:ACHAT
+            -Type de pièce:DBR(verifier si dans DBR achat est a oui)
+
+        ❌(achat:facture) DBRSIEGE25/00000003 La pièce automatique n'autorise pas la validation 
+        ☑️(achat:facture)aller dans type de facture fourniseur
+            ->Pièce auto achat:PIHI
+                -chocher OHA dans l'entre en tunnelle de PIHI
+                -cliquer sur "ligne" puis chocher OHA pour chaque ligne
+                -aller dans "pieces automatiques" et cocher OHA pour chaque lignes
+
+        ❌(achat:facture) evalue(func SUBTFO.FC("PIF")) et (achat:facture) DBRSIEGE25/00000003 PIHI Ligne 20 : FREREF Erreur en évaluation de zone
+        ☑️(achat:facture)aller dans type de facture fourniseur
+            ->Pièce auto achat:PIHI
+            ->cliquer sur "ligne" puis sur la ligne 20 retier (func SUBTFO.FC("PIF"))
+            ->lancer le serveur bach dans "exploitation/tache comptable"
+
+
+    >vente
+        ❌(vente:devis)Erreur zone "Niveau taxe 1"-Code taxe obligatoire : Aucune règle de détermination des taxes ne s'applique
+        ☑️-la taxe sur le client ne doit pas etre "CEE"
+            -creer la determination de taxe (TSNEXO)
+            -aller dans ECRANT pui chercher "gestion devis" de code WK1ALL2 mettre "oblig" à non sur la ligne "VACITM" deux tableaux
+            -valider
+
+        ❌(vente:devis)***pouvoir ecrir le prix brute dans le tableau des devis***
+        ☑️->aller dans "parametrage/Utilisateur"
+            -(tableau:parametre)cliquer sur les premiers points de la ligne dont lintitule est "habilitation"
+            -Cliquer sur detail et metre "SPRIMOD" sur "oui"
+            -cliquer sur "ok" puis enregistrer la modifier
+        
+        ❌(vente:devis)xxxxxxxx 20/09/25 Quantité en rupture : stock négatif interdit Livraison non crée Il n'y a rien à traiter
+        ☑️ faire une "entrée diverse" pour rajouter au stock l' atrticle manquant   
+
+        ❌(vente:entrée diverse)
+        ☑️ -mette un prix different de 0 dans "prix" du tableau de "ligne" dans "vente/entrée diverse"
+
+        ❌ (vente:facture)La pièce automatique n'autorise pas la validation 
+        ☑️ -(Vente:facture)aller dans "type" 
+            ->Pièce auto achat:SIHI2
+                -chocher OHA dans l'entre en tunnelle de SIHI2
+                -cliquer sur le bouton "ligne"en haut puis chocher OHA pour chaque ligne
+                -aller dans "pieces automatiques" et faire pareil
+
+    >stock
+        ❌(donnée de base:dépôs)Erreur zone "Site stock"-Il n'y a pas de gestion de dépôt sur ce site.
+        ☑️-aller dans le site auquel attribuer le dépôt et cocher "gestion depo"
+
+
+        ❌MAT-000001 SIEGE : Article site non géré en emplacement --> l'article dépôt est inutile : MAT-000001 CHANT
+        ☑️creer un type demplavement puis ajouter emplacement
+       
++finance
+    >piece
+        ❌(Comptabilité:saisie pieces)Message d'information - Aucune transaction autorisée
+        ☑️Dans le dossier principale "SAGE X3/ X3" autorisé tout les dossiers 
+            ->creer "les saisies de pieces" FACLI ET FAFOU
+            ->aller dans  "parametrage/compta/transaction saisie piece"
+                -copier "la transaction de saisie de piece" STDCO puis valider
+
++Immobilisation
+    ❌Erreur zone "Site financier"-Opération impossible. Le contexte "fiscal & comptable" de la société doit avoir été défini au préalable.
+    ☑️(parametrage:immobilisation)creer un "Contexte d'amortissement" lier a la societe
+
+    ❌(parametrage:contexte d'immobillisation)Definir un exercice courant
+    ☑️(parametrage:'amortissements)
+            -(tableaux: exercice/periode):creer les exercice et leurs periode un par un dans les 2 tables
+            -(tableau:definition exercices)cliquer sur les trois trait de la premiere ligne et y metre periode comptable
+
+    
+    ❌(immobillisation:bien comptable )facture tier impossible:VTE: vous n'avez pas les droits d'exexution
+    ☑️ permetre a VTE d'enresister les fatures tiers dans un journal ou dans un journal qui lui est dédier ou carement l'empecher de creer une facture tiers fournisseur
+        -aller dans "immobilisation/traitement/generation ecriture comptable"
+            --cocher simulation
+            --exercice courant
+            --societe : choisir 
+            --(tableau:type decriture comptable) type choisir sotie d'article
+            nb;sassuer de luverture des exercices comptables     
+
+    ❌(IMMOBILISATION:Bien comptable) Paramètres incorrects sur la méthode d'amortissement du plan Comptable --> Le mode d'amortissement des plans d'un bien en cours doit être "SA" sauf pour les plans autorisés selon paramétrage.
+    ☑️(IMMOBILISATION:Bien comptable) Transphormer "bien encour" en "bien en service"  ou utiliser "SA" a la place de "LP" si li le bien est encour(c'est à dire pas encore utilisé
+
++Articles
+    ❌(donnee de base:Atricles)La combinaison Fournisseur - Référence existe déjà : xxxxxxxx vide Renseignez la référence article fournisseur.
+    ☑️ Dans"Donne de base/Articles" aller dans la rubrique "Fournisseur" et changer xxxxxxxx par un autre fourniseur
+
+    ❌ Comment supprimer un article?
+    ☑️ Dans"Donne de base/Articles" aller dans la rubrique "Fournisseur" et changer xxxxxxxx par un autre fourniseur
+
++???
+    ❌ (ecrit partout mais là: en vente)En-cours autorisé atteint
+    ☑️
+
+    ❌ (comptabilité:saisie reglement)Type de pièce Erreur en évaluation de la formule evalue(func SUBTFO.FC("BKG"))
+    ☑️ creer le type dachat "BKG" meme vide
+
+    ❌ (devellopement:Integration patch)Pas de patch dans le répertoire <Exemple repertoire>
+    ☑️ -recuperer le PACTH et le coller dans <Exemple repertoire>
+        -en recliquant sur la loupe de patch, il suffit de seectionner l'objet precedement selectionner pour quon te paropose le patch precedement ajouter dans <Exemple repertoire>
+
+    ❌ (import/export) Indicateur mal placé
+    ☑️ -pour un import ou un export le premier";" doit etre précéder de la letre qui le represente dans le tableu de moel dans X3 (ex:l'indicateur G car  le champ est "/")
+
++imports/exports
+    ❌(imports: journaux comptables)Le compte trésorerie doit être saisie sur au moins un plan de compte flagué Général
+    ☑️ajouter la colone "Plan" au model
+
+    ❌(imports: journaux comptables)Zone JOU : Journal non défini pour le plan OHA (CAI) <CPR>
+    ☑️Verifier dans les plan comptable si il ya des comptes dans les tableaux
+
+    ❌creation caisse (probleme lier a OHA)
+    ☑️Parametrage/referenciel changer le code plan
+
+    ❌(reponse d'un import)Zone BPSNUM : Un compteur est défini. La référence du fournisseur doit exister dans les tiers. <xxxxxX>
+    ☑️BPSNUM represente lacolone des numero de compteur 
+
+-----------------------------------------------------------------------------------------------------importation csv
+(import/export - plan Comptable):si "le compte est colectif" iL faut creer sois meme le code d'apelle (ex:C1,c2,F1,F2 ...)
+(import/export - all):achaque fois que on veut utiliser un compte, il faut la colone Plan comptable avant

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 -------------------------------------------------------cour
 
 -------------------------------------------------------tutoriels
@@ -41,3 +42,48 @@
 
 
 -------------------------------------------------------questions
+=======
+-------------------------------------------------------cour
+
+-------------------------------------------------------tutoriels
+
++les modules 
+    	>admin. personnel
+    	>Gestion du social
+    	>paie et simulation-campagne de rénumération
+    	>missions note de frais
+    	>management de la formation
+    	>Carriere et people review
+    	>evaluations
+    	>Recrutement
+    	>gestion du temps
+
++les outils
+    	>designer
+    	>sécurité
+    	>traçabilité 
+    	>workflow
+    	>Intelligence artificiel
+
+
++la paie
+	
+	>prérequis
+		-convention collectifs 
+		-le principe de part:
+			célibataire = 1P
+			marié = 1.5P
+			Marié + ENFANT(1...5) = 1.5 + 0.5*(nbreEnfant)
+			Marié(f sans boulot ) + ENFANT(1...5) = 1.5 + 0.5*(nbreEnfant) + 0.5 (a cause de la femme)
+
+			
+	>element de paie 
+		-le avant ne depasse jamais le tier du salaire
+	>Calcule de simulation
+	>APRÈS paix
+	>bulletin de salaire
+	>Conclusion
+
+
+-------------------------------------------------------questions
+>>>>>>> 148eaa7 (first commit)
