@@ -213,7 +213,7 @@ NB: SageX3 a pour language le L4G.
                 -crée le site
                 NB:les comptes de benefice et de perte sont de classe 1
             ->aller dans "parametrage/structure général/société"
-                -(intitule de 5 lettres)
+                -(intitulé de 5 lettres)
                 -(nom)
                 -(intitule cour 10 lettres)
                 -forme juridique (SA:Societe anonyme)
@@ -325,8 +325,8 @@ NB: SageX3 a pour language le L4G.
     
 
 ------ tutoriels dans X3
-+faire une extraction/ integration de donnee
-    >extraction de donnee
++faire une extraction/ integration de donnée
+    >extraction de donnée
         -aller dans "devellopement/extraction données"
             ->Dossier:choisir le dossier ou se trouve les tables à extraire
             ->les tables a sauvegarder::choisir via un nom (ex GAC*, ou GAC ,*GAC*...)
@@ -334,8 +334,8 @@ NB: SageX3 a pour language le L4G.
             ->cliquer sur "ok"
             
             
-    >integration de donnee
-        -aller dans "devellopement/extraction de donnee"
+    >integration de donnée
+        -aller dans "devellopement/extraction de donnée"
             ->Dossier:choisir le dossier X3 ou se trouve les table a integer
             ->Volume de sauvegarde:donner le dossier ou se trouve les tables a integrer
             ->les tables a integé::choisir via un nom (ex GAC*, ou GAC ,*GAC*...)
@@ -361,7 +361,7 @@ NB: SageX3 a pour language le L4G.
         
 
 + créer un utilisateur 
-    créer un utilisateur se fait en 2 etapes: (Param:MFMU - Admin:nrgu) 
+    créer un utilisateur se fait en 2 étapes: (Param:MFMU - Admin:nrgu) 
         > module parametrage(specififie les modules visibles)
             ->profil menu: affiche les modules au user  (sans lui donner de droit)
                 -menue de depart (entrer le profil menu du debut,permet de créer un menu de depart vide et y ajouter des fonctions)
@@ -497,8 +497,8 @@ NB: SageX3 a pour language le L4G.
             -article (auto-generation)
             -intitule (nom article)
 
-        -> donner a un article gerer en stock un emplacement et un dépôt
-            (un article dépôt est utiliser pour le sockage des articles)
+        -> donner à un article gerer en stock un emplacement et un dépôt
+            (un article dépôt est utiliser pour le stockage des articles)
             -aller dans le site auquel attribuer le dépôt et cocher "gestion depo"
             -aller dans "donnee de base/dépôt"
                 -... 
@@ -513,14 +513,15 @@ NB: SageX3 a pour language le L4G.
                     -Format emplacement:AAAAA
                     -Emplacement début:AAAAA
                     -Emplacement fin:AAAAA
-            -aller dans "donnee de base/article"
-                >>seletionner l'article puis aller sur "article site"
+            -aller dans "donnée de base/article"
+                >>selectionner l'article puis aller sur "article site"
                     >>>cocher "Gestion emplacement"
-                    >>>(tableau:stoquage)<type demplacement> - AAAA
+                    >>>(tableau:stoquage)<type d'emplacement> - AAAA
                     >>>cliquer sur "article depot" tout en haut 
                         >>>>Cocher "emplacement par défaut" 
-                        >>>>(tableau:stoquage)<type demplacement> - AAAA
-        -> Creation d'un article site (aller dans 'donnee de base' - 'article-site')
+                        >>>>(tableau:stoquage)<type d'emplacement> - AAAA
+        -> Creation d'un article site (aller dans 'donnée de base' - 'article-site')
+
         -> (code comptable:article)
         
 
@@ -554,7 +555,7 @@ NB: SageX3 a pour language le L4G.
             ->commandes (aller dans 'achats/commamndes' )
                 -apres avoir rempli commande (fourniseur,BL ,date)
                 -aller dans selection commande et choisir la commande précedement créer
-                    NB: l'article doit etre en 'non-gerrer' si il na pas de stock (dans 'gestion/gestion de stock' et dans 'gestion/article site')
+                    NB: l'article doit ètre en 'non-gerrer' si il na pas de stock (dans 'gestion/gestion de stock' et dans 'gestion/article site')
             
             ->receptions(aller dans 'achats/receptions')
             ->factures(aller dans 'achats/facture')
@@ -1185,7 +1186,7 @@ NB: SageX3 a pour language le L4G.
         ❌(achat:reception)methode de valorisation null non autorisé
         ☑️ -Aller sur l'aritcle-site de l'article conserné module court 
             -prendre l'entrée en tunel de methode
-            -dans methode1 choisir par exemple prix moyen non ponderé
+            -dans "methode1" choisir par exemple prix moyen non-ponderé
 
         ❌(achat:facture)Erreur zone "Date comptable"-Période non ouverte
         ☑️(donne de base:jouranaux comptable) puis creer achat et lui donner le type achat ,cliquer sur ouverture et donner "01/01/<annee actuelle>" puis "ok"
@@ -1210,9 +1211,16 @@ NB: SageX3 a pour language le L4G.
             ->Pièce auto achat:PIHI
             ->cliquer sur "ligne" puis sur la ligne 20 retier (func SUBTFO.FC("PIF"))
             ->lancer le serveur bach dans "exploitation/tache comptable"
+        
+        ❌(achat:demande d'achat)article inexistant sur ce site
+        ☑️aller sur le site et cocher achat afin de le permetre
+
 
 
     >vente
+        ❌(achat:devis)article inexistant sur ce site
+        ☑️aller sur le site et cocher vente afin de le permetre
+        
         ❌(vente:devis)Erreur zone "Niveau taxe 1"-Code taxe obligatoire : Aucune règle de détermination des taxes ne s'applique
         ☑️-la taxe sur le client ne doit pas etre "CEE"
             -creer la determination de taxe (TSNEXO)
