@@ -1220,7 +1220,7 @@ NB: SageX3 a pour language le L4G.
     >vente
         ❌(achat:devis)article inexistant sur ce site
         ☑️aller sur le site et cocher vente afin de le permetre
-        
+
         ❌(vente:devis)Erreur zone "Niveau taxe 1"-Code taxe obligatoire : Aucune règle de détermination des taxes ne s'applique
         ☑️-la taxe sur le client ne doit pas etre "CEE"
             -creer la determination de taxe (TSNEXO)
