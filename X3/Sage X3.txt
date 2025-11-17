@@ -678,13 +678,13 @@ NB: SageX3 a pour language le L4G.
             - chercher gestion signature et cliquer sur les trois trait et choisir detail 
             - Tout mette à "non" sauf la derniere ligne puis cliquer sur OK pour valider.
 
-+finance(J-tP-Sp-Pc)
++finance(J-tP-Sp-Sr-Pc)
     >creer un journal
         ->aller dans "Donnee de base/journaux comptable"
         ->...
-        ->type (si le il s'agit d'un compte de type "trésorerie" il faut ajouter un plan comptable dans le tableau (OHADA) et un numero de compte appropriée)
+        ->type (si il s'agit d'un compte de type "trésorerie" il faut ajouter un plan comptable dans le tableau (OHADA) et un numero de compte appropriée)
     
-    >creer une type de piece 
+    >creer un type de piece 
         ->aller dans "paramétrage/comptabilite/types de piece"
         ->...
         ->journal par défaut(choisir un journal precedement creer qui se remplira par défaut lors de la création d'une pièce)
@@ -694,7 +694,7 @@ NB: SageX3 a pour language le L4G.
         ->gestion (coher "creation depence" et "gestion echeance")
         ->(tableau:referenciel) tout autorisé
 
-    >faire une saisie de piece
+    >faire une saisie de piece (si un facture NEGOCE a été validé, il devrait normalement apparaitre dans la liste des pieces saisie)
         ->ouvir l'exercice comptable (dans "paramétrage/comptabilite/exercice") et cliquer sur ouvrir
         ->ouvrir la periode comptable (dans "paramétrage/comptabilite/période") et cliquer sur ouvrir
         ->aller dans "comptabilite/piece/saisie pièces "  
@@ -708,7 +708,7 @@ NB: SageX3 a pour language le L4G.
                 -creer une colone pour Charge (le compte doit etre classe 6 et on doit faire un débit)
                 NB: la somme des debits doit ètre égale a la somme des credits (comptabilité) 
     
-    >extourner une ecriture comptable(pour "ajouter une saisi qui annule la saisi erroné" donc facultatif)
+    >extourner une écriture comptable(pour "ajouter une saisie qui annule la saisie erronée" donc facultatif)
         ->methode 1
             -aller sur saisie piece et cliquer sur les barres de parametre tout en haut
             -choisir "extourne"
@@ -717,21 +717,21 @@ NB: SageX3 a pour language le L4G.
         ->methode 2
             -aller sur extourne et choisir "extrourner a"
             -date d'extourne "choisir une date  ex aujourd'hui"
-            -aller sur Comptatbilité/extrournes
-                -toute socitété (preciser la socitété)
+            -aller sur "Comptatbilité/extrournes"
+                -toute socitété (préciser la socitété)
                 -...
                 -date debut et date fin (entre ces dates , toute les ecritures comptables seront extrudé)
                 -type de generation (choisir Montant <=> montant négatif)
         
-        NB:afin d'extourner il faut absolutement utiliser un compteur au niveau de "type de piece"
+        NB:afin d'extourner il faut absolutement utiliser un compteur au niveau de "type de pièce"
     
     >faire une Consultation(connaitre les activités effecutés sur un élément)
        ->Consultation de compte
             -aller sur "comptabilité/consultation/compte"
             -...
-            -remplir date de debut et date de fin pour l'ecart conserné
+            -remplir date de debut et date de fin pour l'écart conserné
             - si 
-                *le saisi est de classe 5 , remplire "compte"
+                *le saisi est de classe 5 , remplire "comptes"
                 *le saisi est de classe 4 , remplir "collectif" et remplir "tiers"
             -cliquer sur recherche
 
@@ -899,7 +899,7 @@ NB: SageX3 a pour language le L4G.
                 
                 -aller dans étape , comptabilité :
                     Groupe pièce:STEPN
-                    Type journal reglement:Règlement
+                    Type journal règlement:Règlement
                     Regroupement escompte:Règlement
                     Type journal :banque
             
@@ -1136,7 +1136,7 @@ NB: SageX3 a pour language le L4G.
                 -selectionner la table de l'element conserner
                 -cliquer sur les trois ligne en haut a droite et cliquer sur "RAZ"
 
-
++code de restriction(pour limiter par exemple les d'article visible par site)
 
 
 ------------------------------------------------------structuration de Djago LS
@@ -1148,7 +1148,7 @@ NB: SageX3 a pour language le L4G.
             -la devise est la meme
         ->Fournisseurs ou client Etrangers:
             -n'ont pas de TVA
-            -le pays different
+            -le pays différent
             -la devise peut differer
 
     >Schema comptable: indique la liste des comptes comptable a utiliser selon le debit et le credit dans (tableau:ligne de saisi des pièces comptable)
@@ -1267,7 +1267,6 @@ NB: SageX3 a pour language le L4G.
     >stock
         ❌(donnée de base:dépôs)Erreur zone "Site stock"-Il n'y a pas de gestion de dépôt sur ce site.
         ☑️-aller dans le site auquel attribuer le dépôt et cocher "gestion depo"
-
 
         ❌MAT-000001 SIEGE : Article site non géré en emplacement --> l'article dépôt est inutile : MAT-000001 CHANT
         ☑️creer un type demplavement puis ajouter emplacement
