@@ -56,7 +56,7 @@ NB: SageX3 a pour language le L4G.
             -adxAdmin : ecoute les ports pour X3
             -application : c'est le server d'application
                 ->nom du composant (choisir un nom sans espace,en lettre capitale et commun ex: SAGEX3)
-            -console :generation,paramétrage server d'impression duplication et import de dossier 
+            -console :génération,paramétrage server d'impression duplication et import de dossier 
             -DBsql ou DBOracle : base de donnee sql ou oracle
                 ->nom du composant (choisir un nom sans espace,en lettre capitale et commun ex: SAGEX3)
             -mongoDB : retranscrition de donnee
@@ -357,7 +357,7 @@ NB: SageX3 a pour language le L4G.
         -choisir Folder0 et le dossier d'emplacement des tables(par défaut SVG)
         -valider et attendre la fin l'exportation
         
-+ créer un utilisateur 
++pcréer un utilisateur 
     créer un utilisateur se fait en 2 étapes: (Param:MFMU - Admin:nrgu) 
         > module paramétrage(specififie les modules visibles)
             ->profil menu: affiche les modules au user  (sans lui donner de droit)
@@ -491,10 +491,10 @@ NB: SageX3 a pour language le L4G.
         -> Creation d'un article (aller dans 'donnee de base/article')
             -categorie (créer ou lister)
             -statut article (actif) 
-            -article (auto-generation)
+            -article (auto-génération)
             -intitule (nom article)
 
-        -> donner à un article gerer en stock un emplacement et un dépôt
+        -> donner à un article gerrer en stock un emplacement et un dépôt
             (un article dépôt est utiliser pour le stockage des articles)
             -aller dans le site auquel attribuer le dépôt et cocher "gestion depo"
             -aller dans "donnee de base/dépôt"
@@ -511,7 +511,7 @@ NB: SageX3 a pour language le L4G.
                     -Emplacement début:AAAAA
                     -Emplacement fin:AAAAA
             -aller dans "donnée de base/article"
-                >>selectionner l'article puis aller sur "article site"
+                >>selectionner l'article puis aller sur "article-site"
                     >>>cocher "Gestion emplacement"
                     >>>(tableau:stoquage)<type d'emplacement> - AAAA
                     >>>cliquer sur "article depot" tout en haut 
@@ -543,7 +543,7 @@ NB: SageX3 a pour language le L4G.
                     -puis imprimer(créer prealablement un model sur Cristal report)
 
             ->tarif(facultatif):represente le prix de l'article auquel le fournisseur le vend en se basant aussi sur les variations en fonction de la quantite
-                -aller dans "achat/generation ligne de tarif" 
+                -aller dans "achat/génération ligne de tarif" 
                     -renseigner le fourniseur et remplir le tableau
                 -voir le tarif 
                     -aller dans "saisi de tarif" ,choisir T20 et voir si le tarif a bien été créé
@@ -600,7 +600,7 @@ NB: SageX3 a pour language le L4G.
 
     >gerrer une Vente
         -creer les 4 type de determination de taxes
-        -permetre l'ecriture du prix brut
+        -permetre l'écriture du prix brut
             ->aller dans "paramétrage/Utilisateur"
                 -(tableau:parametre)cliquer sur les premiers points de la ligne dont lintitule est "habilitation"
                 -Cliquer sur detail et metre "SPRIMOD" sur "oui"
@@ -709,19 +709,19 @@ NB: SageX3 a pour language le L4G.
                 NB: la somme des debits doit ètre égale a la somme des credits (comptabilité) 
     
     >extourner une écriture comptable(pour "ajouter une saisie qui annule la saisie erronée" donc facultatif)
-        ->methode 1
+        ->méthode 1
             -aller sur saisie piece et cliquer sur les barres de parametre tout en haut
             -choisir "extourne"
             -selectionner "Montant <=> montant négatif"  pour faire l'extourne negative (recommandé)
         
-        ->methode 2
+        ->méthode 2
             -aller sur extourne et choisir "extrourner a"
             -date d'extourne "choisir une date  ex aujourd'hui"
             -aller sur "Comptatbilité/extrournes"
                 -toute socitété (préciser la socitété)
                 -...
-                -date debut et date fin (entre ces dates , toute les ecritures comptables seront extrudé)
-                -type de generation (choisir Montant <=> montant négatif)
+                -date debut et date fin (entre ces dates , toute les écritures comptables seront extrudé)
+                -type de génération (choisir Montant <=> montant négatif)
         
         NB:afin d'extourner il faut absolutement utiliser un compteur au niveau de "type de pièce"
     
@@ -736,7 +736,7 @@ NB: SageX3 a pour language le L4G.
             -cliquer sur recherche
 
        ->Consultation d'écriture
-            -aller sur "comptabilité/consultation/ecriture"
+            -aller sur "comptabilité/consultation/écriture"
             -...
             -remplir date de debut et date de fin pour l'ecart conserné
             -cliquer sur Critere pour choisir un journale ou un type de piece (optionelle)
@@ -840,7 +840,7 @@ NB: SageX3 a pour language le L4G.
     >gerrer les saisies règlement
         NB:(on fait une saisie règlement A LA PLACE d'un reglement manuel ce qui entraine un lettrage automatique )
         -Adapter les pieces automatiques    
-            ->aller dans "paramétrage/Comptabilité piece automatique";
+            ->aller dans "paramétrage/Comptabilité/piece automatique";
                 -selectionner "princ" et cocher OHA
                 -cliquer sur ligne,coher le OHA de chaque élément un à un.
 
@@ -879,14 +879,13 @@ NB: SageX3 a pour language le L4G.
             ->aller dans "paramètrage/Comptabilité tiers/Transactions saisie règlement" (ou plutot "comptabilité/règlement/saisie règlement" )
                 -choisir le choix de transactions creer précedement
                 -...
-                -creer une baque (par effet de tunel)
+                -creer une banque (par effet de tunel)
                 -libllé: metre la valeur de son choix
-                -aller dans le menu echeance(qui affiche la facture du fourniseur choisi)
+                -aller dans le menu échéance(qui affiche la facture du fourniseur choisi)
                 -Montant Tiers:ne pas remplir le montant (sauf on veut tout payer)
-                
                 -valider
 
-        -Creer une saisie de reglement a plusieurs etapes:
+        -Creer une saisie de règlement à plusieurs étapes:
             ->aller dans "paramétrage/Comptabilité tiers/Transactions saisie règlement"
                 -aller dans étape , comptabilisation des effets :
                     Groupe pièce:STEP1
@@ -912,7 +911,7 @@ NB: SageX3 a pour language le L4G.
 +immobilisation(faire l'immobilisation d'un article)
     >(
         -COCHER CREATON DE DEPENCE dans le compte de classe 2
-        -suivie immo: mettre immo en service aulieu d'encours
+        -suivie immo: mettre immo en service au lieu d'encours
         -pour l'article utiliser il faut cocher immobilisable lors de sa creation
         -Creer une facture d'achat pour le bien comptable.
         -Il faut aussi que le compte social appliqué sois un compte de classe 2 
@@ -920,39 +919,44 @@ NB: SageX3 a pour language le L4G.
     )
     >paramétrage du contexte d'amortissement (creer les périodes et exercices)
         ->aller dans "paramètrage/immobilisation/Contextes d'amortissements"
-            -(tableau:liste des plans gérés)
-            -(tableaux: exercice/periode):creer les exercice et leurs periode un par un dans les 2 tables
-            -(tableau:definition exercices)cliquer sur les trois lignes de la prèmiere ligne et y mettre "période comptable"
+            -(tableau: liste des plans gérés)
+            -(tableaux: exercice/periode):creer les exercices et leurs periodes un par un dans les 2 tables
+            -(tableau: definition exercices)cliquer sur les trois lignes de la première ligne et y mettre "période comptable"
     >Gestion des comptes comptables
-        ->aller dans "donne de base/table comptable/comptes"
+        ->aller dans "donnée de base/table comptable/comptes"
             -cocher "suivie Immobilisation" pour les comptes conserné(compte de classe 2)
 
     >Gestion des codes comptables 
         ->aller dans "paramétrage/comptabilité/code comptable"
-            -creer le code comptable "fourniseur" 
-            -affecter un compte à la ligne "immobilisation","compte amortissement" et "dotation amortissement d'exploitation"
+            -creer le code comptable "Fournisseur"
+            -creer le code comptable "Immobilisation"
+                ●affecter un compte à la ligne "immobilisation","compte amortissement" et "dotation amortissement d'exploitation"
             NB:ligne "immobilisation" et "compte amortissement" sont de classe 4.
 
     >Gestion des familles d'immobilisation
-        ->aller dans "donnee de base/table immobilisation/familles immobilisation"
+        ->aller dans "donnée de base/table immobilisation/familles immobilisation"
             -Groupe de société:<nom socitété>
             -Code famille:<nom de la famille d'immo>
             -Désignation:<...>
             -Intitulé court:<...>
+            -cliquer sur "association"
+                ● Société: <...>
+                ● Modèle comptable: OHA
+                ● Objet metier: "bien comptable"
+                ● Determinant: "code comptable"
+                ● Cocher "actif"
+                ●(tableau) cocher "type d'immobilisation",code comptable,mode amortissement,durée amortissement et taux amortissement
+            -cliquer sur "saisie valeurs"
+                ●(tableau:bien comptable):type d'immobilisation,1(corporel);
+                code comptable, <code de classe 2>
+                ●(tableau:valeur plan):
+                Comptable, <mode (ex:LP>)>,<durée en nbre d'année>
+                NB si tu ne trouve pas LP ,aller dans mode d'ammoritissement et retirer "fr" de limiter au pays 
+                
+
 
     >Gestion des amortissements
-        ->aller dans "donnée de base/table immobilisation/association valeur"
-            -société:<...>
-            -Modele comptable:<...>
-            -Objet metier:"bien comptable" 
-            -Determinant:"famille comptable"
-            -valeur:<...>
-            -(tableau:bien comptable):
-                type dimmobilisation,1(corporel);
-                code comptable, <code de classe 2>
-            
-            -(tableau:valeur plan):
-                Comptable, <mode (ex:LP>)>,<durée en nbre d'année>
+        ->(Gestion des familles d'immobilisation)
         
         ->aller dans "immobilisation/immobilisation/bien comptable"
             -...
@@ -967,8 +971,8 @@ NB: SageX3 a pour language le L4G.
                 ●cliquer sur "calculer"
         NB: En cas d'erreur, aller dans "changer l'imputation comptable"
 
-        ->immobilisation traitement generation Ecriture comptable
-            -decocher "simulation" si on creer une ecriture reel
+        ->immobilisation traitement génération écriture comptable
+            -decocher "simulation" si on creer une écriture reel
             -exercice: choisir "Courant" si on travail sur l'exercice actuelle oyu sur suivant si on travaille sur l'exercice suivant.
             -...
 
@@ -1007,7 +1011,7 @@ NB: SageX3 a pour language le L4G.
                  NB:il ne doit pas avoir de probleme visible au niveau du "statut detaillé " quand on veut cloturer la periode d'amortissement ou un exercice comptable.
 
 
-    >cloturer un ammoritssement
+    >cloturer un amortissement
         ->aller dans "immobilisation/traitements/cloture amortissement"
 
 
@@ -1039,7 +1043,7 @@ NB: SageX3 a pour language le L4G.
                     -- type de montant de vente: "montant à saisir"
                     -- montant vente : <prix de vente du bien>
                     -- cle de repartition:"valeur nette du plan
-                    -- plan d'ammoritssement: comptable
+                    -- plan d'amortissement: comptable
                     -- code de taxe:choisir
                     -- type de facture:choisir
                     -- client: <compte comptable de classe 4>
@@ -1067,7 +1071,7 @@ NB: SageX3 a pour language le L4G.
                 -Type de destination (choisir client)
                 -(tableau)Objet
                     ->la premiere ligne doit etre "ACV | code model(ex : YMOD) | nom du model"
-                    ->les autres lignes commencent part " AOE |code donne de base |nom de la donne de base"
+                    ->les autres lignes commencent part " AOE |code donnée de base |nom de la donnée de base"
                 -(tableau)Code activite
                     ->la ligne doit etre "YMOD | nom du model"
         puis cliquer sur OK . cela téléchargera le fichier donc le patch.
@@ -1088,10 +1092,10 @@ NB: SageX3 a pour language le L4G.
                 -> PQF1 = Ecran
                 -> DIA = abreviation ()
 
-        -prendre le code de l'ecran puis chercher les tables qui y sont lier (les tables n'ont pas toujours le meme nom que la donne de base)
+        -prendre le code de l'ecran puis chercher les tables qui y sont lier (les tables n'ont pas toujours le meme nom que la donnée de base)
         -a pratir de la table recuperer les colones rechercher (on peut saider de SQLSever).
 
-+module developpement
++module développement
     >ajouter un champ a un module
         -aller sur l'ecran du module et trouver la table determiné
         -creer une nouvelle colone dans la table via "aller a"
@@ -1125,7 +1129,7 @@ NB: SageX3 a pour language le L4G.
     >aller dans "Dévelopement/remise à Zéro dossier"
         -selectionner le dossier et cliquer sur "OK".
 
-    (il ya 2 methodes pour supprimer d'autres donnée)
+    (il ya 2 méthodes pour supprimer d'autres donnée)
             >aller dans "développement/tables/tables"
                 -selectionner la table de l'element conserner
                 -cocher "remise a zero" (pou toute les tables a vidé)
@@ -1160,7 +1164,7 @@ NB: SageX3 a pour language le L4G.
 
 ------mot clef
 -(Entree par tunnel): redirige vers le formulaire de creation du module conserné
--(ecriture comptable): le fichier creer apres la validation de la facturation 
+-(écriture comptable): le fichier creer apres la validation de la facturation 
 
 
 ------champs et leur role (a toujours remplir si présent dans un module ou une donnee de base)
@@ -1181,13 +1185,13 @@ NB: SageX3 a pour language le L4G.
         ❌(achat:reception:trace)"MAT-000001" Prix de valorisation nul non autorisé !
         ☑️(article:article-site) changer la valorisation en "AVC"
 
-        ❌(achat:reception)methode de valorisation null non autorisé
-        ☑️ -Aller sur l'aritcle-site de l'article conserné module court 
-            -prendre l'entrée en tunel de methode
-            -dans "methode1" choisir par exemple prix moyen non-ponderé
+        ❌(achat:reception)méthode de valorisation null non autorisé
+        ☑️ -Aller sur l'aritcle-site de l'article conserné
+            -prendre l'entrée en tunel de "méthode"
+            -dans "méthode1" choisir par exemple prix moyen non-ponderé
 
         ❌(achat:facture)Erreur zone "Date comptable"-Période non ouverte
-        ☑️(donne de base:jouranaux comptable) puis creer achat et lui donner le type achat ,cliquer sur ouverture et donner "01/01/<annee actuelle>" puis "ok"
+        ☑️(donnée de base:jouranaux comptable) puis creer achat et lui donner le type achat ,cliquer sur ouverture et donner "01/01/<annee actuelle>" puis "ok"
 
         ❌(achat:facture)Erreur de l'application-Type de pièce non défini
         ☑️Cliquez sur les trait de "type de facture fournisseur"
@@ -1223,6 +1227,8 @@ NB: SageX3 a pour language le L4G.
           -aller sur abonnements via les trois trait sur la ligne cliquer cocher tous jours 
 
 
+        ❌(achat:facture) XXXXXXXXXXXXXXX Pièce déséquilibrée Social
+        ☑️(achat:facture) attribuer un collectif dans l'import 
 
     >vente
         ❌(achat:devis)article inexistant sur ce site
@@ -1242,7 +1248,7 @@ NB: SageX3 a pour language le L4G.
             -cliquer sur "ok" puis enregistrer la modifier
         
         ❌(vente:devis)xxxxxxxx 20/09/25 Quantité en rupture : stock négatif interdit Livraison non crée Il n'y a rien à traiter
-        ☑️ faire une "entrée diverse" pour rajouter au stock l' atrticle manquant   
+        ☑️ faire une "entrée diverse" pour rajouter au stock l'article manquant   
 
         ❌(vente:entrée diverse)
         ☑️ -mette un prix different de 0 dans "prix" du tableau de "ligne" dans "vente/entrée diverse"
@@ -1291,22 +1297,34 @@ NB: SageX3 a pour language le L4G.
     
     ❌(immobillisation:bien comptable )facture tier impossible:VTE: vous n'avez pas les droits d'exexution
     ☑️ permetre a VTE d'enresister les fatures tiers dans un journal ou dans un journal qui lui est dédier ou carement l'empecher de creer une facture tiers fournisseur
-        -aller dans "immobilisation/traitement/generation ecriture comptable"
+        -aller dans "immobilisation/traitement/génération écriture comptable"
             --cocher simulation
             --exercice courant
             --socitété : choisir 
-            --(tableau:type decriture comptable) type choisir sotie d'article
+            --(tableau:type décriture comptable) type choisir sotie d'article
             nb;sassuer de luverture des exercices comptables     
 
     ❌(IMMOBILISATION:Bien comptable) Paramètres incorrects sur la méthode d'amortissement du plan Comptable --> Le mode d'amortissement des plans d'un bien en cours doit être "SA" sauf pour les plans autorisés selon paramétrage.
     ☑️(IMMOBILISATION:Bien comptable) Transphormer "bien encour" en "bien en service"  ou utiliser "SA" a la place de "LP" si li le bien est encour(c'est à dire pas encore utilisé
 
 +Articles
-    ❌(donnee de base:Atricles)La combinaison Fournisseur - Référence existe déjà : xxxxxxxx vide Renseignez la référence article fournisseur.
-    ☑️ Dans"Donne de base/Articles" aller dans la rubrique "Fournisseur" et changer xxxxxxxx par un autre fourniseur
+    ❌(donnée de base:Atricles)La combinaison Fournisseur - Référence existe déjà : xxxxxxxx vide Renseignez la référence article fournisseur.
+    ☑️ Dans"donnée de base/Articles" aller dans la rubrique "Fournisseur" et changer xxxxxxxx par un autre fourniseur
 
     ❌ Comment supprimer un article?
-    ☑️ Dans"Donne de base/Articles" aller dans la rubrique "Fournisseur" et changer xxxxxxxx par un autre fourniseur
+    ☑️ Dans"donnée de base/Articles" aller dans la rubrique "Fournisseur" et changer xxxxxxxx par un autre fourniseur
+
+    ❌(article:article-site)le tableau "emplacement par défaut" ne permet pas d'écriture
+    ☑️-dans "catégorie article",cocher "gestion emplacement"
+        -dans le tableau, ajouter livraison, picking, stockage et réception 
+        -de retour sur l'article site tu pourra donner les emplacements et les dépots par défaut.
+
+    ❌(type d'emplacement:emplacement) 0 emplacement creer
+    ☑️"AAAAA" Doit ètre remplacer par "BBBBB" par exemple au niveau du code de début et de fin.
+
+    ❌(catégorie article)Erreur de l'application:Des enregistrements catégories - sites existent pour cette catgorie
+    ☑️
+
 
 +???
     ❌ (ecrit partout mais là: en vente)En-cours autorisé atteint
@@ -1320,12 +1338,14 @@ NB: SageX3 a pour language le L4G.
         -en recliquant sur la loupe de patch, il suffit de seectionner l'objet precedement selectionner pour quon te paropose le patch precedement ajouter dans <Exemple repertoire>
 
     ❌ (import/export) Indicateur mal placé
-    ☑️ -pour un import ou un export le premier";" doit etre précéder de la letre qui le represente dans le tableu de moel dans X3 (ex:l'indicateur G car  le champ est "/")
+    ☑️ -pour un import ou un export le premier ";" doit etre précéder de la letre qui le represente dans le tableu de moel dans X3 (ex:l'indicateur G car  le champ est "/")
 
     ❌ (copie)Droit d'accès à ce dossier insuffisant
     ☑️ -aller à l'intérieur du dossier X3 dans dossiers 
         -chercher le tableau lien et selectionner "tous" au niveau de la colone "autorisation accoré sur le dossier courant"
 
+    ❌ (pour toute validation)la validation ne mache pas mais est sans erreur
+    ☑️ -vérifier dans "plan comptable" si la ligne de compte de resultat dansa le tableau "comptes divers" est remplis.
 
 +imports/exports
     ❌(imports: journaux comptables)Le compte trésorerie doit être saisie sur au moins un plan de compte flagué Général
