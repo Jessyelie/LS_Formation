@@ -1,4 +1,4 @@
-•Les phases d'un projet(C Ip Ho T FGA):
+•Les phases d'un projet(C Ip Ho T F G A):
     1-Cadrage (ou Analyse): comprendre le besoin du Client ET REMPLIR LES ANCIENNES DONNEES DU CLIENT  
     2-Instalation et parmetrage :
         -installation puis paramétrage de SageX3 cher le client .
@@ -951,7 +951,7 @@ NB: SageX3 a pour language le L4G.
                 code comptable, <code de classe 2>
                 ●(tableau:valeur plan):
                 Comptable, <mode (ex:LP>)>,<durée en nbre d'année>
-                NB si tu ne trouve pas LP ,aller dans mode d'ammoritissement et retirer "fr" de limiter au pays 
+                NB si tu ne trouve pas LP ,aller dans mode d'amortissement et retirer "fr" de limiter au pays 
                 
 
 
@@ -962,7 +962,7 @@ NB: SageX3 a pour language le L4G.
             -...
             -cliquer sur "immobiliser"
                 ● ...
-                ● (tableaux:depense immobilisable)cocher la ou les dépences à immobilisé
+                ● (tableaux:depense immobilisable)cocher la ou les dépences à immobiliser
                     NB:Les dépenses immobilisables sont les factures qui ont subit la validation.
                 ●famille comptable :...
                 ●Code comptable :(se remplis automatiquement)

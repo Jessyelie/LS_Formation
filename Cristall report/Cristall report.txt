@@ -1,0 +1,71 @@
+--------------------
+>creer une connection
+    -aller fichier/nouveau/creer une connection
+    -choisi ODBC puis choisir la source de donnée (mot de passe et nom doivent etre celui de SQLSERVER)
+    -chooisir ensuite le schema (la base de donne conserné)
+
+>creer un rapport(etat)
+    +choisir les tables conserné
+        -aller dans le module conserné
+            ->aller sur un imput et taper "ECHAP + F6" et recuperer le code de l'obj (la valeur dans le [] tout a la fin)
+        -X3/dellopement/dictionnaire des scripts/ecrans
+            ->filter la liste des tables par abreviation 
+            -> dans table de reference ont a la liste des tableaux du module a chercher dans SQLSERVER
+        -dans Cristal report  selectionner les tables en question puis joindre en restactant 2regles
+            (les colones voivent avoir le meme nom dans chaque colone et doient etres des index (chercher dans Developement/tables puis voir dans index)) puis  cliquer sur "suivant"
+        -selectionner les colone a afficher (opitonnelle) suis suivant jusqua la fin
+
+    +designer Laffichange sur cristalle R
+        -dans explorateur de champ il y a la liste les colones des tables selectionné plus tot
+        -Dans detail, utiliser les fonction qui se repettent (agis comme un foreach)
+        -pour ecrir un text aller sur inserer/champ texte
+        -voir les modifications dans apercu
+
+>Creer une fonction
+    +dans l'explorateur de champ faire un clique gauche sur "champ de formule" puis donner un nom a la formule
+    +apres validation, pour recuperer une variable d'un tableau de la base de donné, il faut ouvrir "{}" 
+        (ex: {table1.prix}+{table2.tva})
+    +appuier sur enregister et valider suis sauvegarder le rapport
+    +toujours dans l'exploration de champ en dessous de "champ de formule" il y aura le champ de la fonction pour  
+
+
+>Faire un filte d'affichage
+    +sur la barre laterale appuier sur l'antonoire orange puis choisir le champ qui permetra la selectioner puis valider
+    +appuier sur  "editeur de formule" ensuite ecrir sa formule (ex: {table1.prix}>1000)
+    +appuier sur enregister et valider suis sauvegarder le rapport
+    +amoins de supprimer le filte, le tableau n'affichera que le les elements qui respectent le filtre 
+
+
+>importer un fichier cristall report sur sage 
+    + aller dans "C:\Sage\SAGEX3\dossiers\X3(si tu veut pouvoir l'utiliser dans tout dossier)\REPORT\FRA(selon la lanque choisis)"
+        -coller le fichier.rpt    
+    +dans cristall import creer un champ de parametre (ex:numCde) puis un filtre (ex:{PORDER.POHNUM_0} = {?numCde})
+    +sur X3, aller dans "dictionaire des etats" puis -dupliquer le model et donner lui donner le nom du fichier .rpt
+        ->si il y a des paramtere a rempir
+            -remplir le tableau parametre (nom du parametre sur cristal report|intitule au choix|code objet|||unique|oui|[M:code objet]code du champ ou [F:abreviation table]code column||||||)
+
+    +aller sur la donnée de base  et recuperer le solde de l'objet (echap + F6: la valeur avant le []) 
+    +Aller dans dictionnaire de script/objet de base ,
+        -chercher le code objet dans la liste 
+        -chercher le champ impression et recuperer le code
+    +aller dans "parametrage/destination/code d'impression " et remplir le tableau (code du champ "impression"|etats|nom du fichier|non| | )
+    +retourner sur la donneé de base puis cliquer sur l'icone imprimente, 
+        -choisir fichier 
+        -selectionner le nouvel etat précédement créée puis validé (le fichier devrait se télécharger)  
+
+
+>actualiser
+    -cliquer sur rapport/actualiser
+
+>les lien entre plusieurs tables:
+    ->trouver les colone a joidre
+        -cas1:
+            -aller sure "https://online-help.sagex3.com/erp/12/fr-fr/Content/MCD/ATB_0.htm"
+            -taper le nom du tableaux et tu saura les index conserné
+
+        -cas2:
+            -aller sur sqlserver et taper le nom des tableaux pour trouver les colu aux valeurs commune. 
+            
+
+
+
