@@ -1,0 +1,12 @@
+>faire une comparaison
+    -soit A et B les deux colones à comparer et C la colone des difference à recuperer:
+    donne moi le Code francais et anglais pour recuperer le C quand A et B sont numeriquement different  et en D met 0 si 
+    A et B sont numeriquement different et 1 sinon.
+
+
+
+
+
+-----------------------------------
+ quantité-quantité 
+ Montant-montant

@@ -222,7 +222,7 @@
                             -"M"  , la colone ajouté des matricules,
                             -"Brute", la colone original des prix brute
                             -"B", la colone Ajouter des prix brute
-                            -la formule du VLOOKUP est " =VLOOKUP($A4(donc matricule);F(Donc M):G(donc B);2;FALSE) "
+                            -la formule du VLOOKUP est " =VLOOKUP($A4(donc matricule commun entre les 2 tableau);F:G(donc B);2;FALSE) "
                     )
                 -calculer la différence B et les colones du VLOOKUP ( B - VLOOKUP ) 
                 -si la réponse n'est pas Zero sur chaque colone,les colones dont les valeurs ne sont pas egales a 0 ont des problemes 

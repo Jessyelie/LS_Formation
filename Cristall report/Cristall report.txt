@@ -11,11 +11,11 @@
         -X3/dellopement/dictionnaire des scripts/ecrans
             ->filter la liste des tables par abreviation 
             -> dans table de reference ont a la liste des tableaux du module a chercher dans SQLSERVER
-        -dans Cristal report  selectionner les tables en question puis joindre en restactant 2regles
+        -dans Crystal report  selectionner les tables en question puis joindre en restactant 2regles
             (les colones voivent avoir le meme nom dans chaque colone et doient etres des index (chercher dans Developement/tables puis voir dans index)) puis  cliquer sur "suivant"
-        -selectionner les colone a afficher (opitonnelle) suis suivant jusqua la fin
+        -selectionner les colones à afficher (optionnelle) suis suivant jusqua la fin
 
-    +designer Laffichange sur cristalle R
+    +designer Laffichange sur Crystal report
         -dans explorateur de champ il y a la liste les colones des tables selectionné plus tot
         -Dans detail, utiliser les fonction qui se repettent (agis comme un foreach)
         -pour ecrir un text aller sur inserer/champ texte
@@ -36,13 +36,13 @@
     +amoins de supprimer le filte, le tableau n'affichera que le les elements qui respectent le filtre 
 
 
->importer un fichier cristall report sur sage 
+>importer un fichier Crystal report sur sage 
     + aller dans "C:\Sage\SAGEX3\dossiers\X3(si tu veut pouvoir l'utiliser dans tout dossier)\REPORT\FRA(selon la lanque choisis)"
         -coller le fichier.rpt    
-    +dans cristall import creer un champ de parametre (ex:numCde) puis un filtre (ex:{PORDER.POHNUM_0} = {?numCde})
+    +dans Crystal import creer un champ de parametre (ex:numCde) puis un filtre (ex:{PORDER.POHNUM_0} = {?numCde})
     +sur X3, aller dans "dictionaire des etats" puis -dupliquer le model et donner lui donner le nom du fichier .rpt
         ->si il y a des paramtere a rempir
-            -remplir le tableau parametre (nom du parametre sur cristal report|intitule au choix|code objet|||unique|oui|[M:code objet]code du champ ou [F:abreviation table]code column||||||)
+            -remplir le tableau parametre (nom du parametre sur Crystal report|intitule au choix|code objet|||unique|oui|[M:code objet]code du champ ou [F:abreviation table]code column||||||)
 
     +aller sur la donnée de base  et recuperer le solde de l'objet (echap + F6: la valeur avant le []) 
     +Aller dans dictionnaire de script/objet de base ,
@@ -57,15 +57,22 @@
 >actualiser
     -cliquer sur rapport/actualiser
 
->les lien entre plusieurs tables:
-    ->trouver les colone a joidre
+>les liens entre plusieurs tables:
+    ->trouver les colones a joidre
         -cas1:
             -aller sure "https://online-help.sagex3.com/erp/12/fr-fr/Content/MCD/ATB_0.htm"
             -taper le nom du tableaux et tu saura les index conserné
 
         -cas2:
-            -aller sur sqlserver et taper le nom des tableaux pour trouver les colu aux valeurs commune. 
+            -aller sur sqlserver et taper le nom des tableaux pour trouver les colones aux valeurs commune. 
             
+>lier un ficier .rpt dans un nouveau rapport
+    >>aller dans "Base de donné/Expert base de données"
+        -De manière successive dans "remplacer par" choisir les tables a remplacer puis dans "source de donnée actuelle" selectionner la table conserné pui cliquer sur "mettre a jour"
+        -faire pareil pour valeur et sous valeur
+        -cliquer su "fermer"        
+
+NB: 
 
 
 
