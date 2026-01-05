@@ -1,7 +1,15 @@
+>>rechercheV: 
+    >> structure:
+        >>>FR
+            =RECHERCHEV(valeur_cherchée (ex:"Fatou"); table_matrice(ex:Feuille A2:C4-donc les colone du 2e tableau); no_index_col(ex:2 -la colone a creer); [valeur_proche](ex:FAUX)) 
+        >>>en anglais 
+            =VLOOKUP($D13;Sheet1!A:B;2;FALSE)
+    >>est une fonction d’Excel qui permet de retrouver une valeur dans la première colonne d’un tableau et d’en extraire une information se trouvant dans une autre colonne de la même ligne.
+
 >faire une comparaison
-    -soit A et B les deux colones à comparer et C la colone des difference à recuperer:
-    donne moi le Code francais et anglais pour recuperer le C quand A et B sont numeriquement different  et en D met 0 si 
-    A et B sont numeriquement different et 1 sinon.
+    -soit A et B les deux colones à comparer et C la colone des différence à recuperer:
+    donne moi le Code francais et anglais pour récupérer le C quand A et B sont numériquement différent et en D met 0 si 
+    A et B sont numériquement différent et 1 sinon.
 
 
 

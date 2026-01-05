@@ -4,11 +4,11 @@
         -installation puis paramétrage de SageX3 cher le client .
     3-Homolgation: Validation du paramétrage par le client
     4-Test: Simulation de l'application avec les données du client
-    5-Formation: Apprentissage de la solution au client ou a ses employes
-    6-GO LIFE: debut d'utilisation de la solution par le client ou ses employes
+    5-Formation: Apprentissage de la solution au client ou a ses employés
+    6-GO LIFE: debut d'utilisation de la solution par le client ou ses employés
     7-Assistance: accompagner le client durant une certaine periode de temps
 
-NB: Toujours faire un livrable entre chaque phase et doit ètre signer par le Client avant de passer
+NB: Toujours faire un livrable entre chaque phase et doit etre signer par le Client avant de passer
 à la seconde phase.
 
 ----------------------------------------------------------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ NB: Toujours faire un livrable entre chaque phase et doit ètre signer par le Cl
 NB: SageX3 a pour language le L4G.
 
 ------ installation Sage X3
--changer son mot de passe de maniere acceuil nest que des valeurs alpha numerique sans signe
+-changer son mot de passe de manière acceuil nest que des valeurs alpha numerique sans signe
 -Ouvrir une session entant que service avant de commencer l'installation
     (
         -Dans 'Strategie de securite locale:attribution des droits d'utilisateur - ouvir une session entant que service 
@@ -357,7 +357,7 @@ NB: SageX3 a pour language le L4G.
         -choisir Folder0 et le dossier d'emplacement des tables(par défaut SVG)
         -valider et attendre la fin l'exportation
         
-+pcréer un utilisateur 
++créer un utilisateur 
     créer un utilisateur se fait en 2 étapes: (Param:MFMU - Admin:nrgu) 
         > module paramétrage(specififie les modules visibles)
             ->profil menu: affiche les modules au user  (sans lui donner de droit)
@@ -502,7 +502,7 @@ NB: SageX3 a pour language le L4G.
             -aller dans "donnee de base/table article/type emplacement"
                 -...
                 -Catég emplacement:Interne
-                -Format emplacement:AAAAA
+                -Format emplacement:AAAAA 
                 -Ordre proposition:AAAAA
                 -cliquer en suite sur "creer empl."
                     -Création emplacements
@@ -521,7 +521,6 @@ NB: SageX3 a pour language le L4G.
 
         -> (code comptable:article)
         
-
     >gerrer un achats
         -Créer une demande d'achat
             (pour devenir une commande , une demande d'achat doit etre valider par un utilisateur)
@@ -666,7 +665,6 @@ NB: SageX3 a pour language le L4G.
             ->aller dans 'exploitation/import-export/import'
                 -choisir le fichier à importer(.txt ou .csv)
         
-
     >lier le compte social et compte analytique
         ->aller dans 'table comptable/comptes par défaut'
             -remplir 'autre plan comptable (ici avec ANA)
@@ -678,7 +676,7 @@ NB: SageX3 a pour language le L4G.
             - chercher gestion signature et cliquer sur les trois trait et choisir detail 
             - Tout mette à "non" sauf la derniere ligne puis cliquer sur OK pour valider.
 
-+finance(J-tP-Sp-Sr-Pc)
++finance(Journal -type de Pièce - Saisie piece - Saisie règelement - Piece comptable)
     >creer un journal
         ->aller dans "Donnee de base/journaux comptable"
         ->...
@@ -694,7 +692,7 @@ NB: SageX3 a pour language le L4G.
         ->gestion (coher "creation depence" et "gestion echeance")
         ->(tableau:referenciel) tout autorisé
 
-    >faire une saisie de piece (si un facture NEGOCE a été validé, il devrait normalement apparaitre dans la liste des pieces saisie)
+    >faire une saisie de pièce (si un facture NEGOCE a été validé, il devrait normalement apparaitre dans la liste des pieces saisie)
         ->ouvir l'exercice comptable (dans "paramétrage/comptabilite/exercice") et cliquer sur ouvrir
         ->ouvrir la periode comptable (dans "paramétrage/comptabilite/période") et cliquer sur ouvrir
         ->aller dans "comptabilite/piece/saisie pièces "  
@@ -1157,12 +1155,12 @@ NB: SageX3 a pour language le L4G.
 
     >Schema comptable: indique la liste des comptes comptable a utiliser selon le debit et le credit dans (tableau:ligne de saisi des pièces comptable)
     >collectif fourniseur: c'est un compte qui peut faire appel a plusieurs Fournisseurs
-    >extourne: c'est le fait dannuler une ecrture (e. par sense et e. negative)
+    >extourne: c'est le fait dannuler une écrture (e. par sense et e. negative)
     >Article
         NB: Pour les modules "production" il faut utiliser comme categorie d'article, "matiere premiere" et "semi fini"
 
 
-------mot clef
+------mot clé
 -(Entree par tunnel): redirige vers le formulaire de creation du module conserné
 -(écriture comptable): le fichier creer apres la validation de la facturation 
 
@@ -1261,8 +1259,8 @@ NB: SageX3 a pour language le L4G.
                 -aller dans "pieces automatiques" et faire pareil
         
         ❌ (vente:facture) Erreur de l'application-Tiers client non autorisé pour le compte collectif
-        ☑️-aller dans "donné de base/générale/compte" et selectionner le comptes du client.
-          -dans le tableau "autorisation tier-client" mettre autorisation à "oui" pour client 
+        ☑️-aller dans "donné de base/comptes" et selectionner le compte du client.
+          -dans le tableau "autorisation tier" dans la colone "client" mettre autorisation à "oui" pour client 
         
         ❌ (vente:facture)Erreur de l'application-Type de pièce inexistant
         ☑️ creer le Type de pièce "FACLI" par entré en tunel 
@@ -1270,12 +1268,21 @@ NB: SageX3 a pour language le L4G.
         ❌ (vente:facture:Validation) XXXXXXXXXXXXX La pièce automatique n'autorise pas la validation 
         ☑️ dans SIHI2 cocher OHA pareil en cliaquant sur "ligne"
 
+        ❌(période:cloture)$ECH XX XXXXXXXXXXXXXXX 1 Total des échéances incorrect X XXXXX
+        ☑️L'écheance d'une facture de vente a été supprimer de manière inapropriée APRES la validation de la facture
+            -aller dans "comptabilité/Resyncronistaion/écrtures"
+            -cliquer sur la loupe de exercice et selectionner l'exercice conserné
+            -chocher "Inclure les pièces définitives" et "Resynchronisation" puis "ok"
+        
+        ❌(comptabilité:Resyncronistaion/écrtures)Impossible de poser un verrou exclusif sur la société CGCSN
+        ☑️-vérifier si personne n'utilise le module comptabilité de la société concerné
+
     >stock
         ❌(donnée de base:dépôs)Erreur zone "Site stock"-Il n'y a pas de gestion de dépôt sur ce site.
         ☑️-aller dans le site auquel attribuer le dépôt et cocher "gestion depo"
 
         ❌MAT-000001 SIEGE : Article site non géré en emplacement --> l'article dépôt est inutile : MAT-000001 CHANT
-        ☑️creer un type demplavement puis ajouter emplacement
+        ☑️creer un type d'emplacement puis ajouter emplacement
        
 +finance
     >piece
@@ -1285,6 +1292,25 @@ NB: SageX3 a pour language le L4G.
             ->aller dans  "paramétrage/compta/transaction saisie piece"
                 -copier "la transaction de saisie de piece" STDCO puis valider
 
+        ❌(periodes)$VERF_HAE2 Pièce XXXXX XXXXXXXXXXXXX A extourner 31/03/24
+        ☑️ l'extourne de la pièce etait prévu a ètre extouné
+            (transaction de mise a jours) 
+                -code :mettre un code
+                -table :mettre "table des pièces comptable"
+                -dans "detail" la tableau "selection" mettre " [F:PYH]NUM='<code de la piece>' "
+                -dans "detail" la tableau "mis a jour" mettre " modification " au niveau de la colone "transaction",choisir "extourne" et mettre 1 sur la colone suivante
+                -enregister puis "exec"
+
+    >règlement
+        ❌(comptabilité:saisie reglement)"Fichier : GACCDUDATE [DUD] Clé : 416404 1 Pas d'enregistrement courant" puis Fichier : GACCDUDATE [DUD]Clé : 0 0 Pas d'enregistrement courant Transaction interrompue
+        ☑️ les fichier de "GACCDUDATE" (donc "dates d'échéance")auquel sont lier le rege=lemnt on ete supprimeer de manière inadaptée
+            (transaction de mise a jours) 
+                -code :mettre un code
+                -table :mettre "PAYMENTH"
+                -dans "detail" la tableau "selection" mettre " [F:PYH]NUM='<code de la piece>' "
+                -dans "detail" la tableau "mis a jour" mettre " suppresion " au niveau de la colone "transaction"
+                -enregister puis "exec"
+     
 +Immobilisation
     ❌Erreur zone "Site financier"-Opération impossible. Le contexte "fiscal & comptable" de la société doit avoir été défini au préalable.
     ☑️(paramétrage:immobilisation)creer un "Contexte d'amortissement" lier a la socitété
@@ -1325,6 +1351,18 @@ NB: SageX3 a pour language le L4G.
     ❌(catégorie article)Erreur de l'application:Des enregistrements catégories - sites existent pour cette catgorie
     ☑️
 
++imports/exports
+    ❌(imports: journaux comptables)Le compte trésorerie doit être saisie sur au moins un plan de compte flagué Général
+    ☑️ajouter la colone "Plan" au model
+
+    ❌(imports: journaux comptables)Zone JOU : Journal non défini pour le plan OHA (CAI) <CPR>
+    ☑️Verifier dans les plan comptable si il ya des comptes dans les tableaux
+
+    ❌creation caisse (probleme lier a OHA)
+    ☑️paramétrage/referenciel changer le code plan
+
+    ❌(reponse d'un import)Zone BPSNUM : Un compteur est défini. La référence du fournisseur doit exister dans les tiers. <xxxxxX>
+    ☑️BPSNUM represente lacolone des numero de compteur 
 
 +???
     ❌ (ecrit partout mais là: en vente)En-cours autorisé atteint
@@ -1347,19 +1385,7 @@ NB: SageX3 a pour language le L4G.
     ❌ (pour toute validation)la validation ne mache pas mais est sans erreur
     ☑️ -vérifier dans "plan comptable" si la ligne de compte de resultat dansa le tableau "comptes divers" est remplis.
 
-+imports/exports
-    ❌(imports: journaux comptables)Le compte trésorerie doit être saisie sur au moins un plan de compte flagué Général
-    ☑️ajouter la colone "Plan" au model
-
-    ❌(imports: journaux comptables)Zone JOU : Journal non défini pour le plan OHA (CAI) <CPR>
-    ☑️Verifier dans les plan comptable si il ya des comptes dans les tableaux
-
-    ❌creation caisse (probleme lier a OHA)
-    ☑️paramétrage/referenciel changer le code plan
-
-    ❌(reponse d'un import)Zone BPSNUM : Un compteur est défini. La référence du fournisseur doit exister dans les tiers. <xxxxxX>
-    ☑️BPSNUM represente lacolone des numero de compteur 
-
 -----------------------------------------------------------------------------------------------------importation csv
-(import/export - plan Comptable):si "le compte est colectif" iL faut creer sois meme le code d'apelle (ex:C1,c2,F1,F2 ...)
-(import/export - all):achaque fois que on veut utiliser un compte, il faut la colone Plan comptable avant
+(import/export - plan Comptable):si "le compte est collectif" il faut creer sois meme le code d'apelle (ex:C1,c2,F1,F2 ...)
+(import/export - all):a chaque fois qu'on veut utiliser un compte, il faut la colone Plan comptable avant
+la cloture des exercices comptables se fait dans "paramétrage/comptabilité/Fin d'exercice"

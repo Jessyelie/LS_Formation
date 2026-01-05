@@ -255,12 +255,5 @@
 
 
 ---------------------------------------------------------------------------excel et Agirh
->>rechercheV: 
-    >> structure:
-        >>>FR
-            =RECHERCHEV(valeur_cherchée (ex:"Fatou"); table_matrice(ex:Feuille A2:C4-donc les colone du 2e tableau); no_index_col(ex:2 -la colone a creer); [valeur_proche](ex:FAUX)) 
-        >>>en anglais 
-            =VLOOKUP($D13;Sheet1!A:B;2;FALSE)
-    >>est une fonction d’Excel qui permet de retrouver une valeur dans la première colonne d’un tableau et d’en extraire une information se trouvant dans une autre colonne de la même ligne.
->>>>>>> 148eaa7 (first commit)
+
  
