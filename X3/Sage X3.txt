@@ -359,34 +359,35 @@ NB: SageX3 a pour language le L4G.
         
 +créer un utilisateur 
     créer un utilisateur se fait en 2 étapes: (Param:MFMU - Admin:nrgu) 
-        > module paramétrage(specififie les modules visibles)
-            ->profil menu: affiche les modules au user  (sans lui donner de droit)
+        > module paramétrage(spécififie les modules visibles)
+            ->aller dans "paramétrage/utilisateurs/profil menu": affiche les modules au user  (sans lui donner de droit)
                 -menue de depart (entrer le profil menu du debut,permet de créer un menu de depart vide et y ajouter des fonctions)
-            ->profil fonction - habilitation: spécifie les droits de l'utilisateur (CRUD sur le module)
-            ->profil metier: 
+            ->aller dans "paramétrage/utilisateurs/profil fonction" 
+                - cliquer sur le bouton habilitation: spécifie les droits de l'utilisateur (CRUD sur le module)
+            ->aller dans "paramétrage/utilisateurs/profil metier": 
                 permet de lier un profil menu a un profil fonction 
                 (afin de ne pas avoir a lier et le Profil Fonction et le Profil Menu au user)
-            ->utilisateur:
-                -code:(a une dimension a ne par depasser, tu metre ce que tu veux)
+            ->aller dans "paramétrage/utilisateurs/utilisateurs":
+                -code:(a une dimension a ne par depasser, tu met ce que tu veux)
                 -nom:
                 -Identifiant(pas d'esapce)
                 -code metier(choisir un profil metier) 
-                -profil menu et profil fonction: (ne pas remplir le code metier si on veutreplir ces imputs)
+                -profil menu et profil fonction: (ne pas remplir le code metier si on veut replir ces imputs)
        
         > module administration(donner un role au user)
-            ->page de navigation
+            ->aller dans "administration/page de navigation/utilisateurs"
                 -nom (nom de ta page)
                 -titre (equivalent de code) 
                 -module (les modules visibles)
                 -role(choisi les role qui pourrons utiliser la page de navigation)
                 
-            ->groupe
+            ->aller dans "administration/page de navigation/groupes"
                 -intitule (nom du groupes)
                 -role(choisir)
                 -point de connection (choisir les dossier sur lesquel le user poura se connecter)
                 - ...
 
-            ->role
+            ->aller dans "administration/page de navigation/roles"
                 -code (a une dimension à ne pas dépasser)
                 -intitule (nom du role)
                 -factory owner(toujours SAGE)
@@ -397,14 +398,14 @@ NB: SageX3 a pour language le L4G.
 
             
             ->utilisateur
-                -Identifiant(ecrir l'identifiamt du user créer dans paramétrage)
+                -Identifiant(ecrir l'identifiant du user créer dans paramétrage)
                 -mot de passe 
                 -groupe(choisir un groupe prealablememt créer)
 
         NB:
             -A part pour la creation d'un user la premiere lettre de son nom (intitule) doit etre X,Y ou Z
             -menu = module
-            -généralememt les Codes des menu(profil menu) commence par M,le reste  est pour les fonctions  (P,G)
+            -Généralememt les Codes des menu (profil menu) commencent par M,le reste  est pour les fonctions (P,G)
 
 +les tiers
     >Créer un tiers(fournisseur)
@@ -522,6 +523,7 @@ NB: SageX3 a pour language le L4G.
         -> (code comptable:article)
         
     >gerrer un achats
+
         -Créer une demande d'achat
             (pour devenir une commande , une demande d'achat doit etre valider par un utilisateur)
             ->demande d'achat (aller dans 'achat' )
@@ -671,10 +673,27 @@ NB: SageX3 a pour language le L4G.
             -remplir 'COMPTE PAR défaut' (avec un numero de compte analitique)
     
     >Desactiver les signatures
-        ->aller dans "prametrage/valeur parametre"
+        ->aller dans "parametrage/valeurs parametres"
             - selectioner "ACH achat/dossier/<nom du dossier>" dans le menu de gauche
-            - chercher gestion signature et cliquer sur les trois trait et choisir detail 
+            - chercher gestion signature et cliquer sur les trois trait et choisir "detail" 
             - Tout mette à "non" sauf la derniere ligne puis cliquer sur OK pour valider.
+    
+    >utiliser un circuit de validation(activer les signatures)
+        ->aller dans "parametrage/valeurs parametres"
+            - selectioner "ACH achat/dossier/<nom du dossier>" dans le menu de gauche
+            - chercher gestion signature et cliquer sur les trois trait et choisir "detail" 
+            - mettre "oui obbligatoire" sur les lignes conserné
+
+        ->aller dans "parametrage/workfrow/ affectation utilisateur"
+            -Règle d'affectation:YPSHSIG (pour les signature achat par exemple)
+                -->(en entre en tunel) dupliquer "signature demande d'achat" et lui ajouter un "Y" 
+                    --- effacer les donnee du tableau des caractériques
+                    --- choisir le nb de signataire
+                    --- cliquer sur "validation"
+            -Société:choisir la socitété consernée
+            -Intitulé:Signature demandes d'achat
+            -(tableau:valeurs) et selectionner l'utilisateur qui doit signé
+
 
 +finance(Journal -type de Pièce - Saisie piece - Saisie règelement - Piece comptable)
     >creer un journal
@@ -842,7 +861,8 @@ NB: SageX3 a pour language le L4G.
                 -selectionner "princ" et cocher OHA
                 -cliquer sur ligne,coher le OHA de chaque élément un à un.
 
-        - creer une transaction de saisie règlement (selon qu'il s'agisse d'un fournisseur ou d'un client, il faut creer les différents type de saisie règlement)
+        - creer une transaction de saisie règlement [il servent a creer les different type de reglement ex de nom :espece client,chèque fournisseur,chèque client,virement fournisseur...]
+         (selon qu'il s'agisse d'un fournisseur ou d'un client, il faut creer les différents type de saisie règlement)
             ->aller dans "paramétrage/comptabilité tier/transaction saisie règlement"
                 -...
                 -sens:(si on parle d'achat,choisir "dépence" et si on parle de vente, choisir "recette")
@@ -1168,10 +1188,7 @@ NB: SageX3 a pour language le L4G.
 ------champs et leur role (a toujours remplir si présent dans un module ou une donnee de base)
 (pour le boulot actuelle utiliser "YMOD")
 >code activité:permet de securiser l'information enregister par l'utilisateur
-
 >dictionnaire de donnee/Table : voir la liste des columns de chaque donnée de base 
-
-
 
 -----------les erreurs et leur solution
 
@@ -1227,6 +1244,10 @@ NB: SageX3 a pour language le L4G.
 
         ❌(achat:facture) XXXXXXXXXXXXXXX Pièce déséquilibrée Social
         ☑️(achat:facture) attribuer un collectif dans l'import 
+
+
+
+
 
     >vente
         ❌(achat:devis)article inexistant sur ce site
@@ -1385,7 +1406,34 @@ NB: SageX3 a pour language le L4G.
     ❌ (pour toute validation)la validation ne mache pas mais est sans erreur
     ☑️ -vérifier dans "plan comptable" si la ligne de compte de resultat dansa le tableau "comptes divers" est remplis.
 
+    ❌Message d'information-Attention, la date de connexion logique n'est pas égale à la date demandée à la connexion !Le paramètre ENDDAT n'autorise pas les connexions à une date logique supérieure au 31/12/25
+    ☑️
+
+    ❌comment gerrer une transaction de saisie d'un module
+    ☑️aller dans "parametrage /<module>/transaction de saisie /<sous module>"
+
+    ❌(probleme lier a la date EDDATE ou uun truc de ce gebre)
+    ☑️aller dans "parametrage /Valeur parametre"
+        -choisir "suppervieur/dossier /<Nom dossier>"
+        -dans le tableau cocher les 3 point de la ligne "valeur par defaut" et remplir detail
+        -mettre une annee superieur a l'annee actuelle coté ENDDAT
+
 -----------------------------------------------------------------------------------------------------importation csv
 (import/export - plan Comptable):si "le compte est collectif" il faut creer sois meme le code d'apelle (ex:C1,c2,F1,F2 ...)
 (import/export - all):a chaque fois qu'on veut utiliser un compte, il faut la colone Plan comptable avant
 la cloture des exercices comptables se fait dans "paramétrage/comptabilité/Fin d'exercice"
+
+(privileges)si on veut empecher un utilisateur de faire une action  on peut soi lui creer un transaction qui lui sera propre ou le lui interdire via le profil fonction
+-----------------------------------------------------------------------------------------------------
++NEGOCE
+    -achat
+    -vente
+    -stock
+
++finance 
+    -reglement de l'ecriture (reglement via "saisie reglement" entrainant le lettrage automatique)
+    -immobilisation (depence immobilisable,bien comptables,generation ecriture comptable)
+    -
+
++saisie facture tiers - fourniseur/client 
+    -directement en "comptabilité Tiers"
