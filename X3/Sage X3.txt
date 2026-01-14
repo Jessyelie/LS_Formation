@@ -363,7 +363,13 @@ NB: SageX3 a pour language le L4G.
             ->aller dans "paramétrage/utilisateurs/profil menu": affiche les modules au user  (sans lui donner de droit)
                 -menue de depart (entrer le profil menu du debut,permet de créer un menu de depart vide et y ajouter des fonctions)
             ->aller dans "paramétrage/utilisateurs/profil fonction" 
-                - cliquer sur le bouton habilitation: spécifie les droits de l'utilisateur (CRUD sur le module)
+                - decocher "tout les fonctions autorisées" et "Tous codes d'accès"
+                - cliquer sur le bouton habilitation: spécifie les droits de l'utilisateur (CRUD sur le module grace au tableau et au formule symbolisant le CRUD cet a dire 
+                    C : Création
+                    M : Modification
+                    S : Suppression
+                    T : Solde
+                    G : Génération)
             ->aller dans "paramétrage/utilisateurs/profil metier": 
                 permet de lier un profil menu a un profil fonction 
                 (afin de ne pas avoir a lier et le Profil Fonction et le Profil Menu au user)
@@ -1178,6 +1184,42 @@ NB: SageX3 a pour language le L4G.
     >extourne: c'est le fait dannuler une écrture (e. par sense et e. negative)
     >Article
         NB: Pour les modules "production" il faut utiliser comme categorie d'article, "matiere premiere" et "semi fini"
+    
+    >profile fonctions
+        ->achat
+            -Secretaire: 
+                --Demande d'achat
+                --Réception
+                
+            -Comptable:
+            -Direction générale:
+            -Gestionaire de stock:
+                --reception
+
+        ->vente
+            -Direction commerciale:
+            -Comptable:
+            -Direction générale:
+
+        ->comptabilite
+    
+    >circuit de validation
+        ->achat
+            -Secretaire: 
+                --Demande d'achat
+                --Réception
+                
+            -Comptable:
+            -Direction générale:
+            -Gestionaire de stock:
+                --reception
+
+        ->vente
+            -Directuion commerciale:
+            -Comptable:
+            -Direction générale:
+
+        ->comptabilite
 
 
 ------mot clé
