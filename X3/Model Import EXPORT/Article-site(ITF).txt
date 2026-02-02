@@ -1,0 +1,10 @@
+Indicateur;Article;Site stock;Catégorie ABC;Méthode valorisation;Gestion emplacement;Type emplacement défaut (0);Emplacement par défaut (0);Type emplacement défaut (1);Emplacement par défaut (1);Gestion contenant;Contenant par défaut;Contenant;Conditionnement;Nb unités/contenant;Délai réappro;Délai de fabrication;Lot économique;Stock sécurité
+Indicateur;Fournisseur;Priorité;Blocage;Contremarque
+Indicateur;Fournisseur coût;Coef frais approche;Coût fixe unitaire;Structure de coûts
+
+I;PALS00000001;MAGAS;1;STD;2;*;*;*;*;1;;;;0;0;0;0;0
+S;PALS00000001;MAGAS;;;0;0
+C;PALS00000001;MAGAS;;;0;0;0
+
+
+(utiliser S et C que si il y a des données à importer)

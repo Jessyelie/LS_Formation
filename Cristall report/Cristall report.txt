@@ -40,16 +40,16 @@
     + aller dans "C:\Sage\SAGEX3\dossiers\X3(si tu veut pouvoir l'utiliser dans tout dossier)\REPORT\FRA(selon la lanque choisis)"
         -coller le fichier.rpt    
     +dans Crystal import creer un champ de parametre (ex:numCde) puis un filtre (ex:{PORDER.POHNUM_0} = {?numCde})
-    +sur X3, aller dans "dictionaire des etats" puis -dupliquer le model et donner lui donner le nom du fichier .rpt
+    +sur X3, aller dans "Devellopement/dictionnaire des script/etats" puis -dupliquer le model et donner lui donner le nom du fichier .rpt
         ->si il y a des paramtere a rempir
             -remplir le tableau parametre (nom du parametre sur Crystal report|intitule au choix|code objet|||unique|oui|[M:code objet]code du champ ou [F:abreviation table]code column||||||)
 
     +aller sur la donnée de base  et recuperer le solde de l'objet (echap + F6: la valeur avant le []) 
-    +Aller dans dictionnaire de script/objet de base ,
+    +aller dans dictionnaire de script/objet de base ,
         -chercher le code objet dans la liste 
         -chercher le champ impression et recuperer le code
     +aller dans "parametrage/destination/code d'impression " et remplir le tableau (code du champ "impression"|etats|nom du fichier|non| | )
-    +retourner sur la donneé de base puis cliquer sur l'icone imprimente, 
+    +retourner sur la donnée de base puis cliquer sur l'icone imprimente, 
         -choisir fichier 
         -selectionner le nouvel etat précédement créée puis validé (le fichier devrait se télécharger)  
 

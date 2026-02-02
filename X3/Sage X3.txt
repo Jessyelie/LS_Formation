@@ -104,20 +104,20 @@ NB: SageX3 a pour language le L4G.
         >installer l'interface de SQLserver (SSMS-Setup-fra)
 
     +paramétrage du dossier X3
-            >Copie du fichier .pem (dans le dossier 'C:\Sage\SyracuseComponent\Syracuse\certTools\outpout') vers 'C:\Sage\SAGEX3\runtime\keys'
-            >Creation du dossier X3
-                -Creation d'une solution 
-                    ->code(nom de la solution ici SAGEX3)
-                    ->...
-                    ->application (toujours choisir ERP)
-                    ->hote du serveur(nom du pc)
-                    ->port (choisir le port designe au debut (ici 81))
-                -creation d'un point de connection
-                    ->cliquer sur les trois ligne du tableau, puis 'personalisation et initialisation' (cela ne se fait que sur le dossier X3 et qune fois)
-                -se deconecter puis se reconnecter, le dossier X3 est créer et visible.
+        >Copie du fichier .pem (dans le dossier 'C:\Sage\SyracuseComponent\Syracuse\certTools\outpout') vers 'C:\Sage\SAGEX3\runtime\keys'
+        >Creation du dossier X3
+            -Creation d'une solution 
+                ->code(nom de la solution ici SAGEX3)
+                ->...
+                ->application (toujours choisir ERP)
+                ->hote du serveur(nom du pc)
+                ->port (choisir le port designe au debut (ici 81))
+            -creation d'un point de connection
+                ->cliquer sur les trois ligne du tableau, puis 'personalisation et initialisation' (cela ne se fait que sur le dossier X3 et qune fois)
+            -se deconecter puis se reconnecter, le dossier X3 est créer et visible.
 
     +creation du dossier de Test
-            >dans le dossier X3 , dans le module paramétrage puis dossier 
+        >dans le dossier X3 , dans le module paramétrage puis dossier 
                 -dossier(id de lentreprise, sans espace)
                 -nom(nom de l'entreprise)
                 -...
@@ -135,8 +135,8 @@ NB: SageX3 a pour language le L4G.
                         -->aller dans ""
                         -->choisir le dossier andeverouiiler et cliquer sur ok . 
                         -->vous pouvez ensuite relancer la validation
-
-            >creation d'un point de connection 
+        
+        >creation d'un point de connection 
                 -Dossier du serveur 
                     --------->si il y a abcence du dossier generer dans (ici LOGGYSTD): 
                         aller dans C:\Sage\SAGEX3\Dossier et ouvir Folder pour y ajouter
@@ -195,8 +195,6 @@ NB: SageX3 a pour language le L4G.
             -selectioner le meme dossier et le supprimer
             -aller dans "C:\Sage\SAGEX3\dossiers" et supprimer le meme dossier
             -aller dans "C:\Sage\SAGEX3\dossiers\X3_PUB" et supprimer le meme dossier
-
-
         NB:integration de dossier != integration de donnee
 
     +paramétrage du dossier d'exploitation(dossier > socitétés > sites)
@@ -371,7 +369,7 @@ NB: SageX3 a pour language le L4G.
                     T : Solde
                     G : Génération)
             ->aller dans "paramétrage/utilisateurs/profil metier": 
-                permet de lier un profil menu a un profil fonction 
+                permet de lier un profil menu a un profil Fonction 
                 (afin de ne pas avoir a lier et le Profil Fonction et le Profil Menu au user)
             ->aller dans "paramétrage/utilisateurs/utilisateurs":
                 -code:(a une dimension a ne par depasser, tu met ce que tu veux)
@@ -400,7 +398,7 @@ NB: SageX3 a pour language le L4G.
                 -badges (type de licence)
                 -profil securite (choisir utilisateur par défaut)
                 -page de navigation (trie ce qui doit etre vue par le user)
-                -page d'acceuille (affiche la liste des modules visibles sur la page d'acceuille du user)
+                -page d'acceuil (affiche la liste des modules visibles sur la page d'acceuil du user)
 
             
             ->utilisateur
@@ -409,7 +407,7 @@ NB: SageX3 a pour language le L4G.
                 -groupe(choisir un groupe prealablememt créer)
 
         NB:
-            -A part pour la creation d'un user la premiere lettre de son nom (intitule) doit etre X,Y ou Z
+            -A part pour la creation d'un user la première lettre de son nom (intitule) doit etre X,Y ou Z
             -menu = module
             -Généralememt les Codes des menu (profil menu) commencent par M,le reste  est pour les fonctions (P,G)
 
@@ -417,7 +415,7 @@ NB: SageX3 a pour language le L4G.
     >Créer un tiers(fournisseur)
         -> Creation des categories (dans 'donnee de base' - 'categorie fournisseurs')
             -categorie (nbre  de caractere min 2 max 5)
-            -intitule ( description)
+            -intitule (description)
             -intitule court (nbre de caractere max 12)
             -pays(FRA)
             -langue(FR)
@@ -447,7 +445,7 @@ NB: SageX3 a pour language le L4G.
             -niveaux Dossier (degerer de visibilite du dossier)
             -niveaux RAZ (Remise a zero)
             -Type (Alphanumerique)
-            -composant (generer automatiauement des numero de compte)
+            -composant (generer automatiquement des numéro de compte)
                 -----------------------------
                 (type composant): Constante (on va gerrer les valeurs constante dana le numero de co)
                 (longqueur): 2 par exemple donc formule doit avoir 2 caractere (ici F et C)
@@ -688,17 +686,17 @@ NB: SageX3 a pour language le L4G.
         ->aller dans "parametrage/valeurs parametres"
             - selectioner "ACH achat/dossier/<nom du dossier>" dans le menu de gauche
             - chercher gestion signature et cliquer sur les trois trait et choisir "detail" 
-            - mettre "oui obbligatoire" sur les lignes conserné
-
-        ->aller dans "parametrage/workfrow/ affectation utilisateur"
-            -Règle d'affectation:YPSHSIG (pour les signature achat par exemple)
-                -->(en entre en tunel) dupliquer "signature demande d'achat" et lui ajouter un "Y" 
-                    --- effacer les donnee du tableau des caractériques
+            - mettre "oui obligatoire" sur les lignes conserné  (voir si il ya aussi signature a l'entete dans les propositions)
+        ->aller dans "parametrage/workflow/ affectation utilisateur"
+            -Règle d'affectation:PSHSIG (pour les signature achat par exemple)
+                -->(en entre en tunel) dupliquer "signature demande d'achat" et lui ajouter un "Y" mais utiliser celui qui n'en a pas
+                    --- effacer les donnees du tableau des caractériques
                     --- choisir le nb de signataire
                     --- cliquer sur "validation"
             -Société:choisir la socitété consernée
             -Intitulé:Signature demandes d'achat
-            -(tableau:valeurs) et selectionner l'utilisateur qui doit signé
+            -Cliquer sur le bouton "valeurs"
+                -->(tableau:valeurs) selectionner l'utilisateur qui doit signé
 
 
 +finance(Journal -type de Pièce - Saisie piece - Saisie règelement - Piece comptable)
@@ -1166,7 +1164,25 @@ NB: SageX3 a pour language le L4G.
 
 +code de restriction(pour limiter par exemple les d'article visible par site)
 
++supprimer en masse plusieurs ecritures comptable
+    >aller dans "devellopement/suppression"
+    >
 
++faire une integeration de donne via le serveur bach (cas SAMAHOTEL)
+    >ouvrir le gestionnaire de fichier de path le chemin le la liste des fichier a integrer (soit G1)
+    >ouvrir le gestionnaire de fichier de path "F:\Sage\<serveur>\dossiers\<dossier>\ATT\INTERFACAGEOPERA\DATAS" (soit G2)
+    >Ouvrir X3 de path "exploitation /serveur batch/Gestion des requètes" (soit X3)
+    >faire lintegration
+        -dans G1 copier le 1er fichier a integrer
+        -dans G2 coller le fichier et attendre que le fichier disparaisse (signifie que X3 a pris en compte le fichier)
+        -dans X3 cliquer sur "actualiser"
+        -si dans le tableau, la ligne ou se treouve lheur et la miniute actuelle est en vert ou noir cela signifie que l'integration a reussi sinon elle a echoué (en rouge) 
+        -si elle est rouge , creer un fichier "rejet" dans G1 et y copier le fichier echoué
+
++rendre obligatoire 
+    >un article-site
+
+    
 ------------------------------------------------------structuration de Djago LS
     >les types de fournisseur ou de client a Djago-i 
         Il y en a généralememt 2:
@@ -1356,12 +1372,12 @@ NB: SageX3 a pour language le L4G.
                 -copier "la transaction de saisie de piece" STDCO puis valider
 
         ❌(periodes)$VERF_HAE2 Pièce XXXXX XXXXXXXXXXXXX A extourner 31/03/24
-        ☑️ l'extourne de la pièce etait prévu a ètre extouné
+        ☑️ l'extourne de la pièce etait prévu a etre extouné
             (transaction de mise a jours) 
                 -code :mettre un code
                 -table :mettre "table des pièces comptable"
-                -dans "detail" la tableau "selection" mettre " [F:PYH]NUM='<code de la piece>' "
-                -dans "detail" la tableau "mis a jour" mettre " modification " au niveau de la colone "transaction",choisir "extourne" et mettre 1 sur la colone suivante
+                -dans "detail" le tableau "selection" mettre " [F:PYH]NUM='<code de la piece>' "
+                -dans "detail" le tableau "mis a jour" mettre " modification " au niveau de la colone "transaction",choisir "extourne" et mettre 1 sur la colone suivante
                 -enregister puis "exec"
 
     >règlement
@@ -1429,7 +1445,8 @@ NB: SageX3 a pour language le L4G.
 
 +???
     ❌ (ecrit partout mais là: en vente)En-cours autorisé atteint
-    ☑️
+    ☑️ le fournisseur a un montant d'en-cours maximum atteint (modifier dans "donnée de base/tiers/fournisseur")
+        
 
     ❌ (comptabilité:saisie reglement)Type de pièce Erreur en évaluation de la formule evalue(func SUBTFO.FC("BKG"))
     ☑️ creer le type dachat "BKG" meme vide
@@ -1442,24 +1459,39 @@ NB: SageX3 a pour language le L4G.
     ☑️ -pour un import ou un export le premier ";" doit etre précéder de la letre qui le represente dans le tableu de moel dans X3 (ex:l'indicateur G car  le champ est "/")
 
     ❌ (copie)Droit d'accès à ce dossier insuffisant
-    ☑️ -aller à l'intérieur du dossier X3 dans dossiers 
-        -chercher le tableau lien et selectionner "tous" au niveau de la colone "autorisation accoré sur le dossier courant"
+    ☑️ -aller à l'intérieur du dossier X3 dans "parametrage /parametres generaux/dossiers" 
+        -chercher le tableau lien et selectionner "tous" au niveau de la colone "autorisation accordé sur le dossier courant"
 
     ❌ (pour toute validation)la validation ne mache pas mais est sans erreur
     ☑️ -vérifier dans "plan comptable" si la ligne de compte de resultat dansa le tableau "comptes divers" est remplis.
 
     ❌Message d'information-Attention, la date de connexion logique n'est pas égale à la date demandée à la connexion !Le paramètre ENDDAT n'autorise pas les connexions à une date logique supérieure au 31/12/25
-    ☑️
-
-    ❌comment gerrer une transaction de saisie d'un module
-    ☑️aller dans "parametrage /<module>/transaction de saisie /<sous module>"
-
-    ❌(probleme lier a la date EDDATE ou uun truc de ce gebre)
     ☑️aller dans "parametrage /Valeur parametre"
         -choisir "suppervieur/dossier /<Nom dossier>"
         -dans le tableau cocher les 3 point de la ligne "valeur par defaut" et remplir detail
         -mettre une annee superieur a l'annee actuelle coté ENDDAT
 
+    ❌comment gerrer une transaction de saisie d'un module
+    ☑️aller dans "parametrage /<module>/transaction de saisie /<sous module>"
+
+    ❌(probleme lier a la date EDDATE ou uun truc de ce genre)
+    ☑️aller dans "parametrage /Valeur parametre"
+        -choisir "suppervieur/dossier /<Nom dossier>"
+        -dans le tableau cocher les 3 point de la ligne "valeur par defaut" et remplir detail
+        -mettre une annee superieur a l'année actuelle coté ENDDAT
+
+    ❌(connection)Sitemap loading failed Cannot read properties of null (reading '_id')
+    ☑️-donner un point de connection au groupe de l'utilisateur conserné ET donner un badge au role
+
+    ❌(connection)Message d'information - Aucune transaction autorisée
+    ☑️ le code dacces de la transaction de saisie du module conserné n'est pas lier a celui de l'utilisateur ou nest pas vide (ouverte a tous)
+
+    ❌Echec de chargement du plan du site - L'utilisateur n'a pas de badge pour le produit 'Sage X3'.L’accès est limité à l'administration Syracuse.
+    ☑️ attendre que quelqu'un se deconnecte pour que tu puisse te connecter (il y a un nombre limité de connection simultané par licence)
+
+    ❌(exploitation:gestion des requette)Erreur <VTE > BPR XXXXXXXX (Ligne XX) : \Tiers incompatible avec le collectif \(PCS 41110000/CLSAMA000072) (99)
+    ☑️-le tier XXXXXXXX n'est pas creer entant que client ou fournisseur ce qui selon le cas doit ètre fait
+        
 -----------------------------------------------------------------------------------------------------importation csv
 (import/export - plan Comptable):si "le compte est collectif" il faut creer sois meme le code d'apelle (ex:C1,c2,F1,F2 ...)
 (import/export - all):a chaque fois qu'on veut utiliser un compte, il faut la colone Plan comptable avant
@@ -1479,3 +1511,12 @@ la cloture des exercices comptables se fait dans "paramétrage/comptabilité/Fin
 
 +saisie facture tiers - fourniseur/client 
     -directement en "comptabilité Tiers"
+
+
+-----------------------------------------------------------------------------------------------------a apprendre
+
++apprendre ce que c'est que les code d'appel 
+
+
+pour signer , aller dans exploitation/ moniteur workflow
+    
