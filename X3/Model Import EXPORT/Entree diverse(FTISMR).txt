@@ -1,0 +1,9 @@
+Indice; Site stockage ; Date imputation ; Code mouvement 
+Indice;Article ; Unité ; Quantité ; Prix ordre  
+Indice;  Lot fournisseur ; Lot ; Emplacement ; Statut ; Série
+
+
+
+E
+L
+S

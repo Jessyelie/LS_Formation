@@ -314,7 +314,10 @@ NB: SageX3 a pour language le L4G.
 
             -Details
                 -jour ouver par défaut (de lundi a samedi)
-
+        >suppreiion massive des données de base (si necessaire)
+            -aller dans ""
+            -choisir les tables a supprimer
+            -cliquer sur ok
         ---------------------------------------------------------------------------
         > cliquer sur X3 print server puis cliquer sur 'nouvaux print server' 
         > aller sur publication et impression - 'ajouter une solution' 
@@ -464,6 +467,7 @@ NB: SageX3 a pour language le L4G.
 
         -> Creation d'un client (aller dans 'donnee de base' - 'client')
         ->créer une taxe se fait de au niveau du tableau de ligne colone TAUX
+
 
 +les taxes
     >Taux de taxes(creer une taxe et leur affecter le pourcentage )
@@ -681,7 +685,8 @@ NB: SageX3 a pour language le L4G.
             - selectioner "ACH achat/dossier/<nom du dossier>" dans le menu de gauche
             - chercher gestion signature et cliquer sur les trois trait et choisir "detail" 
             - Tout mette à "non" sauf la derniere ligne puis cliquer sur OK pour valider.
-    
+
++les signatures
     >utiliser un circuit de validation(activer les signatures)
         ->aller dans "parametrage/valeurs parametres"
             - selectioner "ACH achat/dossier/<nom du dossier>" dans le menu de gauche
@@ -697,6 +702,13 @@ NB: SageX3 a pour language le L4G.
             -Intitulé:Signature demandes d'achat
             -Cliquer sur le bouton "valeurs"
                 -->(tableau:valeurs) selectionner l'utilisateur qui doit signé
+    
+    >signer un devis
+        ->aller dans "exploitation/exploitation/moniteur workflow"
+            -dans le tableau "Sig. DA"
+            -choisir le devis a signer
+            -cliquer sur "signer" dans la colone "Flag signature"
+            -cliquer sur "ok"
 
 
 +finance(Journal -type de Pièce - Saisie piece - Saisie règelement - Piece comptable)
@@ -1182,7 +1194,32 @@ NB: SageX3 a pour language le L4G.
 +rendre obligatoire 
     >un article-site
 
++Changer le numero de départ du compteur
+    >aller dans "Valeur compteur"
+        -choisir le compteur et le numéro de départ
+
++les champs
+    >creer un nouveau champs
+        -creer dans tables la colone conserner puis validé
+        -creer dans écran la meme colone conserner puis validé
+            ->metra dans la colone Act un code d'activité , afin que les validation de dossier ne supprime pas le champ
+        (le code doit toujours commencer par XY ou Z et les champ doivent avoir les meme nom)
+        -valider la transaciton de saisie de chaque cas
+
+    >creer un nouveau champs calculer
+        -dans écran puis validé
+            ->mettra dans la colone Act un code d'activité , afin que les validation de dossier ne supprime pas le champ
+        (le code doit toujours commencer par XY ou Z et les champ doivent avoir les meme nom)
+        -valider la transaciton de saisie de chaque cas
     
+    >modifier le libeler dun champ
+        -modifier dans tables la colone conserner puis validé
+        -modifier dans écran la meme colone conserner puis validé
+        -valider la transaciton de saisie de chaque cas
+
++desactivé des etat sur X3
+    >aller dans "devellopement/etat"
+        -décocher activer.
 ------------------------------------------------------structuration de Djago LS
     >les types de fournisseur ou de client a Djago-i 
         Il y en a généralememt 2:
@@ -1456,7 +1493,7 @@ NB: SageX3 a pour language le L4G.
         -en recliquant sur la loupe de patch, il suffit de seectionner l'objet precedement selectionner pour quon te paropose le patch precedement ajouter dans <Exemple repertoire>
 
     ❌ (import/export) Indicateur mal placé
-    ☑️ -pour un import ou un export le premier ";" doit etre précéder de la letre qui le represente dans le tableu de moel dans X3 (ex:l'indicateur G car  le champ est "/")
+    ☑️ -pour un import ou un export le premier ";" doit etre précéder de la letre qui le represente dans le tableu de moel dans X3 (ex:l'indicateur G car le champ est "/")
 
     ❌ (copie)Droit d'accès à ce dossier insuffisant
     ☑️ -aller à l'intérieur du dossier X3 dans "parametrage /parametres generaux/dossiers" 
@@ -1498,6 +1535,7 @@ NB: SageX3 a pour language le L4G.
 la cloture des exercices comptables se fait dans "paramétrage/comptabilité/Fin d'exercice"
 
 (privileges)si on veut empecher un utilisateur de faire une action  on peut soi lui creer un transaction qui lui sera propre ou le lui interdire via le profil fonction
+(remplir le stock)pour remplir via import le stock d'un article on utilise le model import des entrees diverses ()
 -----------------------------------------------------------------------------------------------------
 +NEGOCE
     -achat

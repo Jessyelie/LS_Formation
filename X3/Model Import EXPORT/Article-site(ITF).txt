@@ -7,4 +7,4 @@ S;PALS00000001;MAGAS;;;0;0
 C;PALS00000001;MAGAS;;;0;0;0
 
 
-(utiliser S et C que si il y a des données à importer)
+(utiliser S et C que si il y a des données à importer a l'intérieur)

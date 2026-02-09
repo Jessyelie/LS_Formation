@@ -1,2 +1,2 @@
 Indicateur;Article;Site;Statut;Type gestion;Priorité;Dépôt par défaut;Emplacement par défaut;Lot par défaut;Série par défaut;Gestion stock;Champ libre 1;Champ libre 2;Champ libre 3;Quantité mini;Quantité maxi;Stock sécurité;Délai réappro;Blocage
-I;PALS00000001;MAGAS;1;STD;2;*;*;*;*;1;;;;0;0;0;0;0
+I;PALST;PALS00000001;HR2 BULB CARDBOARD ESSENTIAL ;32001;;UN;;0;UN;1;UN;1;;0;;0;PALS;NOR;;;0;0;;
