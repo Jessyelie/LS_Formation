@@ -15,7 +15,7 @@
             (les colones voivent avoir le meme nom dans chaque colone et doient etres des index (chercher dans Developement/tables puis voir dans index)) puis  cliquer sur "suivant"
         -selectionner les colones à afficher (optionnelle) suis suivant jusqua la fin
 
-    +designer Laffichange sur Crystal report
+    +designer L'affichange sur Crystal report
         -dans explorateur de champ il y a la liste les colones des tables selectionné plus tot
         -Dans detail, utiliser les fonction qui se repettent (agis comme un foreach)
         -pour ecrir un text aller sur inserer/champ texte
@@ -37,21 +37,25 @@
 
 
 >importer un fichier Crystal report sur sage 
-    + aller dans "C:\Sage\SAGEX3\dossiers\X3(si tu veut pouvoir l'utiliser dans tout dossier)\REPORT\FRA(selon la lanque choisis)"
+    + aller dans "C:\Sage\SAGEX3\dossiers\X3(si tu veut pouvoir l'utiliser dans tout dossier)\REPORT\FRA(selon la langue choisis)"
         -coller le fichier.rpt    
     +dans Crystal import creer un champ de parametre (ex:numCde) puis un filtre (ex:{PORDER.POHNUM_0} = {?numCde})
-    +sur X3, aller dans "Devellopement/dictionnaire des script/etats" puis -dupliquer le model et donner lui donner le nom du fichier .rpt
-        ->si il y a des paramtere a rempir
+    +sur X3, aller dans "Devellopement/dictionnaire des script/etats" puis creer le model et donner lui donner le nom du fichier .rpt
+        ->si il y a des parametres a rempir
             -remplir le tableau parametre (nom du parametre sur Crystal report|intitule au choix|code objet|||unique|oui|[M:code objet]code du champ ou [F:abreviation table]code column||||||)
 
-    +aller sur la donnée de base  et recuperer le solde de l'objet (echap + F6: la valeur avant le []) 
+    +aller sur la donnée de base  et récupérer le solde de l'objet (echap + F6: la valeur avant le []) 
     +aller dans dictionnaire de script/objet de base ,
         -chercher le code objet dans la liste 
-        -chercher le champ impression et recuperer le code
+        -chercher le champ impression et récupérer le code
     +aller dans "parametrage/destination/code d'impression " et remplir le tableau (code du champ "impression"|etats|nom du fichier|non| | )
-    +retourner sur la donnée de base puis cliquer sur l'icone imprimente, 
+        -si le code d'impression ne se trouve pas dans la liste des code d'impression, il faut le trouver dans "Développement/Dictionnaire scripts/Objets" dans le champ "impression"
+            sinon en creer un deans nobjet puis dans code d'impression
         -choisir fichier 
-        -selectionner le nouvel etat précédement créée puis validé (le fichier devrait se télécharger)  
+    
+    +aller dans "Paramétrage/Destinations/Valeurs par défaut" et remplir le tableau (<nom du parametre>|[M:code objet]code du champ ou [F:abreviation table]code column|)
+
+    +selectionner le nouvel etat précédement créée puis validé (le fichier devrait se télécharger)  
 
 
 >actualiser
@@ -75,4 +79,6 @@
 NB: 
 
 
+>les tables TEXCLOB
+    -il faut  tou aller dans "editeur de mise en forme/paragraphe/interpretation du texte/" et choisir "texte RTF" 
 

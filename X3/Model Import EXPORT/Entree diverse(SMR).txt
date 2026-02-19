@@ -1,0 +1,7 @@
+indicateur;Type pièce;Pièce;Site stockage;Date imputation;Désignation;Affaire;Code mouvement
+indicateur;No ligne pièce;Article;Désignation 1;Unité;Quantité;Unité stock;Quantité US;Prix ordre
+indicateur;Unité;Quantité;Lot fournisseur;Lot;S/lot;Numéro contenant;Emplacement;Statut;Série
+
+E;19;MAGAS2602ENT00000003;MAGAS;20260101;Entrée 01012026;;;
+L;1000;PALS10000022;AMPOULE 12V H1 BULB CARDBOARD ESSENTIAL;UN;20;UN;20;637	
+S;UN;20;;;;;E03R01;A;

@@ -710,6 +710,8 @@ NB: SageX3 a pour language le L4G.
             -cliquer sur "signer" dans la colone "Flag signature"
             -cliquer sur "ok"
 
+    >faire une deleguation de signature
+
 
 +finance(Journal -type de Pièce - Saisie piece - Saisie règelement - Piece comptable)
     >creer un journal
@@ -868,7 +870,7 @@ NB: SageX3 a pour language le L4G.
     >gerrer les écheances(date limite pour réglé la facture entrainant )
         -aller dans "comptabilite tier/saisie echeance"
         -choisir les criteres pui cliquer sur "ok"
-        -(tableau:bon a payer) choisir 'bon à payer' pour payer ou "en attente" pour dire qu'il peut etre payer par lentreprise
+        -(tableau:bon a payer) choisir 'bon à payer' pour payer ou "en attente" pour dire qu'il puisse etre payer par lentreprise
 
     >gerrer les saisies règlement
         NB:(on fait une saisie règlement A LA PLACE d'un reglement manuel ce qui entraine un lettrage automatique )
@@ -1288,7 +1290,8 @@ NB: SageX3 a pour language le L4G.
 -----------les erreurs et leur solution
 
 +NEGOCE
-    >achat
+    ❌(prix net)"on arrive a pas modifier le prix net dans la ligne de facture d'achat"
+    ☑️(transaction de saisie)aller dans "paramétrage/achat/transaction saisie/<l'etape de la NEGOCE conserné>" et mettre "saisi" dans "prix net" et valider
         ❌(achat:reception)Erreur zone "Commande"-Commande non signée ou déjà réceptionnée.
         ☑️retier les signatures du module achat(ou gerrer les signatures si nécessaire)
 
@@ -1534,8 +1537,14 @@ NB: SageX3 a pour language le L4G.
 (import/export - all):a chaque fois qu'on veut utiliser un compte, il faut la colone Plan comptable avant
 la cloture des exercices comptables se fait dans "paramétrage/comptabilité/Fin d'exercice"
 
-(privileges)si on veut empecher un utilisateur de faire une action  on peut soi lui creer un transaction qui lui sera propre ou le lui interdire via le profil fonction
+(gestion des privileges)si on veut empecher un utilisateur de faire une action on peut sois
+    -lui creer un transaction qui lui sera propre 
+    -le lui interdire via le profil fonction
+    - via le code d'access
+    -aller  dans "valeur parametre" dans le tableau habilitation 
+    -
 (remplir le stock)pour remplir via import le stock d'un article on utilise le model import des entrees diverses ()
+(eviter les arrondissements de prix et allonger les vALEUR APRES LA virgule   )pour eviter les arrondis il faut aller dans "parametre /tarif/structure  " et mettre "3.4#" dans "format colone" (donc 4 chiffre apres la virgule) pour les prix d'achat et de vente ou meme 6.1 pour avoir des entier plutot que les pourcentages
 -----------------------------------------------------------------------------------------------------
 +NEGOCE
     -achat

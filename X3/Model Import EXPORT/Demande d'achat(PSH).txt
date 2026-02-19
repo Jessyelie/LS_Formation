@@ -1,0 +1,5 @@
+Indicateur;No demande;Date demande;Demandeur;Site demande;Texte entête;Texte entête;Texte pied;Texte pied
+Indicateur;Article;Désignation;Site réception;Unité achat;Quantité UA;Date souhaitée;Prix brut;Valeur1 remise/frais;Valeur2 remise/frais;Valeur3 remise/frais;Affaire;Texte ligne;Texte ligne
+
+E;DACH20260100000007;20260115;KOFMI;MAGAS;;;;
+L;PALS00001470;EH-115B KLAXON VL MITSUBISHI L;MAGAS;UN;1;20260115;8400;0;0;0;;;

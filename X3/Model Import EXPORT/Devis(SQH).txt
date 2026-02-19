@@ -1,0 +1,7 @@
+Index,Site vente;Type devis;No devis;Client;Date devis;Référence devis;Site expédition;Devise;Régime de taxe;Condition paiement;Affaire;Texte entête;Texte entête;Texte pied;Texte pied
+index,Article;Désignation;Unité vente;Quantité devis;Prix brut;Valeur1 remise/frais;Valeur2 remise/frais;Valeur3 remise/frais;Texte ligne;Texte ligne
+
+
+E;MAGAS;SQN;DEVI20260200000001;CLOC00000067;20260202;Vidange TG 1575;MAGAS;XOF;NOR;CHQ30J;;{\rtf1\ansi{\fonttbl{\f0 MS Sans Serif;}}\uc0\pard\fs24\pard\ql\fs20  R\u233 vision: Service Vidange\fs24\par\pard\pard\ql\fs20 - Remplacement des filtres \u224  huile, \u224  aire, \u224  Pollen\fs24\par};;;
+L;PALS00000292;FILTRE A HUILE ;UN;1;10000;0;0;0;;
+(le L cest par article)
