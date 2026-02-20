@@ -80,5 +80,5 @@ NB:
 
 
 >les tables TEXCLOB
-    -il faut  tou aller dans "editeur de mise en forme/paragraphe/interpretation du texte/" et choisir "texte RTF" 
+    -il faut  toujours aller dans "editeur de mise en forme/paragraphe/interpretation du texte/" et choisir "texte RTF" sinon il ya des valeur etrage qui s'affiche a la place du texte
 

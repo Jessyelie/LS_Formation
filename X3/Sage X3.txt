@@ -1541,10 +1541,10 @@ la cloture des exercices comptables se fait dans "paramétrage/comptabilité/Fin
     -lui creer un transaction qui lui sera propre 
     -le lui interdire via le profil fonction
     - via le code d'access
-    -aller  dans "valeur parametre" dans le tableau habilitation 
+    -aller  dans "valeur parametre" dans le tableau "habilitation" 
     -
 (remplir le stock)pour remplir via import le stock d'un article on utilise le model import des entrees diverses ()
-(eviter les arrondissements de prix et allonger les vALEUR APRES LA virgule   )pour eviter les arrondis il faut aller dans "parametre /tarif/structure  " et mettre "3.4#" dans "format colone" (donc 4 chiffre apres la virgule) pour les prix d'achat et de vente ou meme 6.1 pour avoir des entier plutot que les pourcentages
+(eviter les arrondissements de prix et allonger les vALEUR APRES LA virgule)pour eviter les arrondis il faut aller dans "parametre /tarif/structure  " et mettre "3.4#" dans "format colone" (donc 4 chiffre apres la virgule) pour les prix d'achat et de vente ou meme 6.1 pour avoir des entier plutot que les pourcentages
 -----------------------------------------------------------------------------------------------------
 +NEGOCE
     -achat
