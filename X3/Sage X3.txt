@@ -535,7 +535,7 @@ NB: SageX3 a pour language le L4G.
         -Créer une demande d'achat
             (pour devenir une commande , une demande d'achat doit etre valider par un utilisateur)
             ->demande d'achat (aller dans 'achat' )
-                -apres avoir rempli demande d'achat cliquer sur commamnde tout en haut pour verifier si il n'y a pas d'erreur et générer la ou des commande(s) 
+                -apres avoir rempli demande d'achat cliquer sur commande tout en haut pour verifier si il n'y a pas d'erreur et générer la ou des commande(s) 
                 (ne pas oublier de remplir la colone social avec un compte de type 6)
 
             ->faire appel d'offre(facultatif):permet de demander des prix des articles a different fournisseurs 
@@ -558,7 +558,7 @@ NB: SageX3 a pour language le L4G.
                     -aller dans "saisi de tarif" ,choisir T20 et voir si le tarif a bien été créé
                 -aller dans "demande d'achat" pour verifier dans le tableau de l'achat si les prix varient bien en fonction de la quantité
 
-            ->commandes (aller dans 'achats/commamndes' )
+            ->commandes (aller dans 'achats/commandes' )
                 -apres avoir rempli commande (fourniseur,BL ,date)
                 -aller dans selection commande et choisir la commande précedement créer
                     NB: l'article doit ètre en 'non-gerrer' si il na pas de stock (dans 'gestion/gestion de stock' et dans 'gestion/article site')
@@ -621,8 +621,8 @@ NB: SageX3 a pour language le L4G.
                 -choisir un client
                 -pour la determination de taxe , TSN (regime de taxe)
                 -remplir les informations du tableau ligne
-            ->commande(apres avoir rempli devis, cliquer sur commamnde tout en haut )
-            ->livraison(apres avoir rempli commande, cliquer sur commamnde tout en haut )
+            ->commande(apres avoir rempli devis, cliquer sur commande tout en haut )
+            ->livraison(apres avoir rempli commande, cliquer sur commande tout en haut )
                 -apres avoir rempli les champ cliquer sur validation
             ->facture()
                 -type
@@ -1339,9 +1339,14 @@ NB: SageX3 a pour language le L4G.
           -cliquer sur activé 
           -aller sur abonnements via les trois trait sur la ligne cliquer cocher tous jours 
 
-
         ❌(achat:facture) XXXXXXXXXXXXXXX Pièce déséquilibrée Social
         ☑️(achat:facture) attribuer un collectif dans l'import 
+
+        ❌(achat/vente:facture) il se cree 2 factues au lieu d'une seule(une pour chaque site)
+        ☑️(donne de base:client) -Dans le champ du client "mode Facturation" mettre "Fac manuelle" 
+
+        ❌(achat/vente:commande) pouvoir facturer une commande sans avoir besoin de faire une reception
+        ☑️(donne de base:type de commande) -Dans le champ "Categorie commande" mettre "Factur directe" 
 
 
 
