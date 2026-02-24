@@ -1222,6 +1222,87 @@ NB: SageX3 a pour language le L4G.
 +desactivé des etat sur X3
     >aller dans "devellopement/etat"
         -décocher activer.
+
+
++les vues 
+    >creer une vue 
+        -creer une requette SQL pour la vue
+            WITH BASE AS (
+		SELECT 
+			LEDTYP_0, CPY_0, FCY_0, FIY_0, ACC_0, CURLED_0, COA_0, ACCNUM_0,BPR_0,
+
+			DEBLED_0, DEBLED_1, DEBLED_2, DEBLED_3, DEBLED_4, DEBLED_5,
+			DEBLED_6, DEBLED_7, DEBLED_8, DEBLED_9, DEBLED_10, DEBLED_11, DEBLED_12,
+
+			CDTLED_0, CDTLED_1, CDTLED_2, CDTLED_3, CDTLED_4, CDTLED_5,
+			CDTLED_6, CDTLED_7, CDTLED_8, CDTLED_9, CDTLED_10, CDTLED_11, CDTLED_12
+
+		FROM [X3Schema].BALANCE
+		WHERE LEN(FCY_0) <> 0
+		and (
+			   (CAST(LEFT(ACC_0, 1) AS INT) = 4 and len(BPR_0) <> 0) OR 
+			   (CAST(LEFT(ACC_0, 1) AS INT) <> 4 and len(BPR_0) = 0)
+		)
+	),
+
+	DEB AS (
+		SELECT 
+			LEDTYP_0, CPY_0, FCY_0, FIY_0, ACC_0, CURLED_0, COA_0, ACCNUM_0,BPR_0,
+			CAST(REPLACE(MOIS, 'DEBLED_', '') AS INT) AS MOIS,
+			DEBMOIS
+		FROM BASE
+		UNPIVOT (
+			DEBMOIS FOR MOIS IN (
+				DEBLED_0, DEBLED_1, DEBLED_2, DEBLED_3, DEBLED_4, DEBLED_5,
+				DEBLED_6, DEBLED_7, DEBLED_8, DEBLED_9, DEBLED_10, DEBLED_11, DEBLED_12
+			)
+		) AS U
+	),
+
+	CDT AS (
+		SELECT 
+			LEDTYP_0, CPY_0, FCY_0, FIY_0, ACC_0, CURLED_0, COA_0, ACCNUM_0,BPR_0,
+			CAST(REPLACE(MOIS, 'CDTLED_', '') AS INT) AS MOIS,
+			CDTMOIS
+		FROM BASE
+		UNPIVOT (
+			CDTMOIS FOR MOIS IN (
+				CDTLED_0, CDTLED_1, CDTLED_2, CDTLED_3, CDTLED_4, CDTLED_5,
+				CDTLED_6, CDTLED_7, CDTLED_8, CDTLED_9, CDTLED_10, CDTLED_11, CDTLED_12
+			)
+		) AS U
+	)
+
+	SELECT 
+		DEB.LEDTYP_0,
+		DEB.CPY_0,
+		DEB.FCY_0,
+		DEB.FIY_0,
+		DEB.ACC_0,
+		DEB.CURLED_0,
+		DEB.COA_0,
+		DEB.ACCNUM_0,
+		DEB.MOIS,
+		DEB.BPR_0,
+		DEB.DEBMOIS,
+		CDT.CDTMOIS,
+		DEB.DEBMOIS-CDT.CDTMOIS SOLDEMOIS
+	FROM DEB
+	INNER JOIN CDT 
+		ON CDT.LEDTYP_0 = DEB.LEDTYP_0
+		AND CDT.CPY_0    = DEB.CPY_0
+		AND CDT.FCY_0    = DEB.FCY_0
+		AND CDT.FIY_0    = DEB.FIY_0
+		AND CDT.ACC_0    = DEB.ACC_0
+		AND CDT.CURLED_0 = DEB.CURLED_0
+		AND CDT.COA_0    = DEB.COA_0
+		AND CDT.ACCNUM_0 = DEB.ACCNUM_0
+		AND CDT.MOIS     = DEB.MOIS
+		AND CDT.BPR_0     = DEB.BPR_0
+'
+
+        -aller dans "développement/vues"
+
 ------------------------------------------------------structuration de Djago LS
     >les types de fournisseur ou de client a Djago-i 
         Il y en a généralememt 2:
@@ -1537,6 +1618,10 @@ NB: SageX3 a pour language le L4G.
     ❌(exploitation:gestion des requette)Erreur <VTE > BPR XXXXXXXX (Ligne XX) : \Tiers incompatible avec le collectif \(PCS 41110000/CLSAMA000072) (99)
     ☑️-le tier XXXXXXXX n'est pas creer entant que client ou fournisseur ce qui selon le cas doit ètre fait
         
+    ❌ probleme lier au serveur de messagerie
+    ☑️aller dans parametrage/Valeur parametre
+        -choisir "suppervieur/dossier /<Nom dossier>" et dans le tableau choisir workflow 
+        -dans detail metre a "non" a "Utilisation serveur de notifications"
 -----------------------------------------------------------------------------------------------------importation csv
 (import/export - plan Comptable):si "le compte est collectif" il faut creer sois meme le code d'apelle (ex:C1,c2,F1,F2 ...)
 (import/export - all):a chaque fois qu'on veut utiliser un compte, il faut la colone Plan comptable avant
