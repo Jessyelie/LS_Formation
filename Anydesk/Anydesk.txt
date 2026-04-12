@@ -1,4 +1,5 @@
 >retier le besoin de licence
     -aller dans "C:\Users\user\AppData\Roaming\AnyDesk"
-    -afficher lin fichier caché et tout les type file
+    -afficher les fichiers caché et tout les type file
+    -supprimer les file mais pas les dossiers
     -(cette action peut etre necessaire si la licece est redemander)
