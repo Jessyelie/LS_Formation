@@ -2,4 +2,4 @@
     -aller dans "C:\Users\user\AppData\Roaming\AnyDesk"
     -afficher les fichiers caché et tout les type file
     -supprimer les file mais pas les dossiers
-    -(cette action peut etre necessaire si la licece est redemander)
+    -(cette action peut etre necessaire si la license est redemander)
