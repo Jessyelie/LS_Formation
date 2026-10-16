@@ -1,0 +1,180 @@
++ > -> --> ---> • -
+
+[{Mot cle}]
+    •VLAN (Virtual Local Area Network) : réseau virtuel logique créé sur un réseau 
+    •WLAN ():
+    •DHCP (Dynamic Host Configuration Protocol) :
+    •Spanning-Tree Protocol:
+    •GATEWAY:passerelle en simple le chenin entre 2 differents sous-réseaux
+    •couche OSI
+    •RIP (Routing Information Protocol)
+    •trunk
+
+>
+
+[{PC-Switch-PC}:des la configuration des ip des 2 PC, le reseau fonctionne]
++configurer un adresse ip et le masque d'un pc 
+    +configurer un adresse ip et le masque d'un pc 
+    >PC
+        •ipconfig <adresse ip> <masque de sous-réseau>
+
+[{PC1-Switch1-Switch2-PC2}:des la configuration des ip des 2 PC le reseau fonctionne attention, PC1 et PC2 doivent être dans le même sous-réseau sinon il faut un routeur]
++configurer un adresse ip et le masque d'un pc 
+    >PC
+        •ipconfig <adresse ip> <masque de sous-réseau>  
++configurer un switch
+    >renommer le switch
+        •enable
+        •configure terminal
+        •hostname Switch1
+        •exit
+        •write
+    >verifier si les 2 ports sont "up" cote switch
+        •enable
+        •show ip interface brief
+           -si les ports sont "down"
+                --enable
+                --interface FastEthernet0/0
+                --no shutdown
+                --exit
+                --write
+           -si les ports sont "up" cest bon, ne rien faire
+
+
+[{PC1-Switch1-router-Switch2-PC2}:le plus important est dutiliser les cables croiser(ceux en pointier) entre les routeur]
++configurer une adresse ip et le masque d'un pc 
+    >PC
+        •ipconfig <adresse ip> <masque de sous-réseau>
+    >deafault GATEWAY
+       •aller dans  "PC/IP configuiration" 
+       •taper dans default Gateway <adresse ip du port du routeur lier au pc>          
+    >configurer un switch
+        •"enable" 
+        •"configure terminal" 
+        •"hostname <nom du switch>" 
+        •"exit" 
+        •"write"
++configuer le routeur (NB: les port doivent etre de nivaeu 3 entre 2 routeur :: ajouter les plaquette WIC-1ENET)
+    >Configuration de l'adresse IP du routeur
+        •enable
+        •configure terminal
+        •interface <nom de l'interface>
+        •ip address <adresse ip du meme sous resau que les port des 2 PC et tout autre apareil> <masque de sous-réseau>
+        •no shutdown
+        •exit
+    >Configuration de la route 
+        -->routage statique
+            • ip route <réseau_visé> <masque_du_réseau> <adresse_du_prochain_routeur>
+
+        -->routage dynamique (a faire dans chaue router)
+            •configure terminal
+            •router rip
+            •version 2
+            •network 192.126.1.0 (ex de resau qui passe par r1 vers r2 pas les addresses ip eux-meme )
+            •network 192.126.2.0 (ex de resau qui passe par r1 vers r2 pas les addresses ip eux-meme )
+            •network 10.10.1.0   (ex de resau  qui lie directememt r1 et r2 )
+            •exit
+
+[{PC1-Switch1-router1-router2-Switch2-PC2}:le plus important est dutiliser les cables croiser(ceux en pointier) entre les routeur]
++configurer une adresse ip et le masque d'un pc 
+    >PC
+        •ipconfig <adresse ip> <masque de sous-réseau>
+    >deafault GATEWAY
+       •aller dans  "PC/IP configuiration" 
+       •taper dans default Gateway <adresse ip du port du routeur lier au pc>          
+    >configurer un switch
+        •"enable" 
+        •"configure terminal" 
+        •"hostname <nom du switch>" 
+        •"exit" 
+        •"write"
++configuer les routeurs (NB: les ports doivent etre de nivaeu 3 entre 2 routeur :: ajouter les plaquettes WIC-1ENET)
+    >Configuration de l'adresse IP du routeur
+        •enable
+        •configure terminal
+        •interface <nom de l'interface>
+        •ip address <adresse ip du meme sous resau que les port des 2 PC et tout autre apareil> <masque de sous-réseau>
+        •no shutdown
+        •exit
+    >Configuration de la route 
+        -->routage statique
+            • ip route <réseau_visé> <masque_du_réseau> <adresse_du_prochain_routeur>
+
+        -->routage dynamique (a faire dans chaue router)
+            •configure terminal
+            •router rip
+            •version 2
+            •network 192.126.1.0 (ex de resau qui passe par r1 vers r2 pas les addresses ip eux-meme )
+            •network 192.126.2.0 (ex de resau qui passe par r1 vers r2 pas les addresses ip eux-meme )
+            •network 10.10.1.0   (ex de resau  qui lie directememt r1 et r2 )
+            •exit
+               
+[{serveur-Switch1-router1-router2-Switch2-PC2}:le plus important est dutiliser les cables croiser(ceux en pointier) entre le et le serveur, de plus pener a mettre une plaquette ethernet au serveur,]
++configurer une adresse ip et le masque d'un pc 
+    >PC
+        •ipconfig <adresse ip> <masque de sous-réseau>
+    >deafault GATEWAY
+       •aller dans  "PC/IP configuiration" 
+       •taper dans default Gateway <adresse ip du port du routeur lier au pc>          
+    >configurer un switch
+        •"enable" 
+        •"configure terminal" 
+        •"hostname <nom du switch>" 
+        •"exit" 
+        •"write"
++configuer les routeurs (NB: les ports doivent etre de nivaeu 3 entre 2 routeurs :: ajouter les plaquettes WIC-1ENET)
+    >routeur1
+        ->Configuration de l'adresse IP du routeur
+            •enable
+            •configure terminal
+            •interface <nom de l'interface>
+            •ip address <adresse ip du meme sous resau que les port des 2 PC et tout autre apareil> <masque de sous-réseau>
+            •no shutdown
+            •exit
+        ->Configuration de la route 
+            --->routage statique
+                • ip route <réseau_visé> <masque_du_réseau> <adresse_du_prochain_routeur>
+
+            --->routage dynamique (a faire dans chaque router)
+                •configure terminal
+                •router rip
+                •version 2
+                •network 192.126.1.0 (ex de resau qui passe par r1 vers r2 pas les addresses ip eux-meme )
+                •network 192.126.2.0 (ex de resau qui passe par r1 vers r2 pas les addresses ip eux-meme )
+                •network 10.10.1.0   (ex de resau  qui lie directememt r1 et r2 )
+                •exit
+    >routeur2
+        ->Configuration de l'adresse IP du routeur
+            •enable
+            •configure terminal
+            •interface <nom de l'interface>
+            •ip address <adresse ip du meme sous resau que les port des 2 PC et tout autre apareil> <masque de sous-réseau>
+            •no shutdown
+            •exit
+        ->Configuration de la route 
+            -->routage statique
+                • ip route <réseau_visé> <masque_du_réseau> <adresse_du_prochain_routeur>
+
+            -->routage dynamique (a faire dans chaque router)
+                •configure terminal
+                •router rip
+                •version 2
+                •network 192.126.1.0 (ex de resau qui passe par r1 vers r2 pas les addresses ip eux-meme )
+                •network 192.126.2.0 (ex de resau qui passe par r1 vers r2 pas les addresses ip eux-meme )
+                •network 10.10.1.0   (ex de resau  qui lie directememt r1 et r2 )
+                •network 192.126.5.0 (ex de resau du serveur)
+
+                •exit
+    >serveur
+        •metre mauellememt lip et le gateway dans le server 
+
+
+[{tel1-Switch1-router1-router2-Switch2-tel2}]
++brancher et cabler les tels aux switchs
++configurer un telephone ip
+    >tel
+    >switch
+    >routeur
+ 
+
+   

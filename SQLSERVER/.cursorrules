@@ -1,0 +1,10 @@
+# Style du projet Formation SQL Server
+
+- Scripts T-SQL pédagogiques, commentaires et messages en français.
+- Configuration en tête de script : variables explicites (`@MaBaseDeDonnees`, chemins) avant le DDL.
+- Scripts idempotents : tester l'existence (`IF NOT EXISTS` / `IF EXISTS`) avant CREATE ou ALTER.
+- SQL dynamique (`sp_executesql`) uniquement pour changer de base (`USE`) ou injecter un identifiant de configuration.
+- Noms d'objets entre crochets. Chaînes Unicode (`N'...'`).
+- En-têtes de section en commentaires bloc. Un `--` en début de ligne ne doit jamais précéder un `/*`, sinon le bloc n'est pas ouvert.
+- Messages de fin via `PRINT`. Pas de transaction inutile autour des audits serveur.
+- Préférer `QUOTENAME` pour les identifiants concaténés.
