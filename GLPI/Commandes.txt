@@ -48,7 +48,7 @@
                 • Au moment où l'installateur vous demande l'URL du serveur,LE CHAMP remote target
                     -[pour un serveur]:DANS  http://IP_DU_SERVEUR/front/inventory.php
                     -[en local]: utiliser http://127.0.0.1:8080/front/inventory.php
-                •decocher "quick install".
+                •Decocher "quick install".
 
             
         ->preparer fusion inventory 
@@ -62,7 +62,7 @@
             --> dans gpli(Parc /Ordinateurs ) : la machine Windows va apparaître dans la liste avec l'ensemble de ses composants !
             NB: -l'apparition peu prendre pres de 2 min
                 -pour que les info dun pc apparaisse sur GLPI il faudra soit:
-                    --installer manuellememt fusion inventory dessus
+                    --installer manuellememt fusion inventory dessus.
                     --passer par GPO de Active Directory.
                         L'avantage du fichier d'installation .msi que vous avez téléchargé, c'est qu'il est conçu pour être déployé en masse très facilement. Voici les grandes étapes pour réaliser cela :
                         1. Préparer le dossier partagé
@@ -75,19 +75,24 @@
                             • Vous pouvez générer ce fichier facilement avec un outil gratuit comme Orca (de Microsoft) ou utiliser un générateur en ligne officiel de GLPI.
                             • Dans ce fichier, vous enregistrez le paramètre de votre serveur (ex: SERVER="http://192.168.1").
                         3. Créer la GPO dans Active Directory
-                            1. Sur votre serveur AD, ouvrez la console Gestion des stratégies de groupe (gpmc.msc).
-                            2. Faites un clic droit sur votre domaine ou sur l'Unité d'Organisation (OU) contenant vos ordinateurs, et choisissez "Créer un objet GPO...". Nommez-le par exemple Déploiement GLPI Agent.
-                            3. Faites un clic droit sur cette nouvelle GPO et cliquez sur Modifier.
-                            4. Dans la fenêtre qui s'ouvre, naviguez jusqu'à :
-                            Configuration ordinateur > Stratégies > Paramètres logiciels > Installation de logiciel.
-                            5. Faites un clic droit dans la zone vide > Nouveau > Paquet.
-                            6. Sélectionnez le fichier .msi en passant impérativement par le chemin réseau (ex: \\MonServeurAD\Deploy\GLPI-Agent-1.21-x64.msi).
-                            7. Choisissez le mode de déploiement Avancé.
-                            8. Dans l'onglet Modifications, cliquez sur Ajouter et sélectionnez votre fichier .mst configuré à l'étape 2.
+                            • Sur votre serveur AD, ouvrez la console Gestion des stratégies de groupe (gpmc.msc).
+                            • Faites un clic droit sur votre domaine ou sur l'Unité d'Organisation (OU) contenant vos ordinateurs, et choisissez "Créer un objet GPO...". Nommez-le par exemple Déploiement GLPI Agent.
+                            • Faites un clic droit sur cette nouvelle GPO et cliquez sur Modifier.
+                            • Dans la fenêtre qui s'ouvre, naviguez jusqu'à (Configuration ordinateur / Stratégies / Paramètres logiciels / Installation de logiciel.)
+                            • Faites un clic droit dans la zone vide > Nouveau > Paquet.
+                            • Sélectionnez le fichier .msi en passant impérativement par le chemin réseau (ex: \\MonServeurAD\Deploy\GLPI-Agent-1.21-x64.msi).
+                            • Choisissez le mode de déploiement Avancé.
+                            • Dans l'onglet Modifications, cliquez sur Ajouter et sélectionnez votre fichier .mst configuré à l'étape 2.
 
                                         
+[{les planing}]
++
 
-
+[{notifications de messagerie}]
++aller dans "configuration/notification" et 
+    >activer les 3 notifications puis sauvegarder.
+    >cliquer sur "configuration des notifications par email"
+        -...
 
 
     

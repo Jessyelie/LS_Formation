@@ -1,0 +1,17 @@
++Comment syncroniser les donnees de M-perfect a Pecfect
+    >Dans gestinonaire de fichier
+        ->aller dans "file" et copier le dossier nommer M-perfecct
+        ->coller dans le dossier "sauvegarde M-Perfect/<annee>/<date du jours>sinon si il ni est pas, creer le
+    >Se connecter au wifi "COMM-CREDIT"
+    >Dans M-Perfect
+        •Mot de passe:1234
+        •<>:<chiffre du 1er champs (ex: A01 → 1)><com><numero desrire l'ATP> 
+        •cliquer sur "synchroniser" 
+    >Eteindre le WIFI + l'ATP
+
+
++(probleme):M-Pefrect apres syncronisation affiche une erreur
+    >aller sur les 3 points en haut a droite et choisir voir l"erreur puis reesayer la synchronisation. 
+    si la synchormisation n'est toujours pas entierememt Faites,ren voyer l'APT au commercial.
+
+

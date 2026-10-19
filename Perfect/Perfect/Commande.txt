@@ -1,0 +1,12 @@
++installer Perfect
+    >installer le serveur 
+        ->(ne cliquer que sur suivant)
+    >aller sur "C:\\Perfect serveur" et cliquer sur "setup.exe"
+    >selon qu'il sagisse d'une reinstallation ou d'une premiere installation suivre le cas:
+        •Cas1(installation): 
+            -envoyer le numero de serie afficher au dessus de la demande de cle a la CAGECFI(via whatssap par exemple)
+            -Coller la cle obtenu de CAGECFI la ou est demander la cle
+
+        •Cas2(reinstallation): 
+            -coller "perfect.ini"
+            -le coller dans "C:\\Perfect client" pour remplacer l'originale 
