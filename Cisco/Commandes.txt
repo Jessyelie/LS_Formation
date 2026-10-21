@@ -9,6 +9,8 @@
     •couche OSI
     •RIP (Routing Information Protocol)
     •trunk
+    •Tunnel
+    •priorite
 
 >
 
@@ -176,5 +178,6 @@
     >switch
     >routeur
  
+
 
    

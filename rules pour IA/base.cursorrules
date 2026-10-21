@@ -1,0 +1,3142 @@
+# BASE.CURSORRULES — Gabarit universel + FAQ obligatoire
+#
+# Emplacement : D:\base.cursorrules
+# FAQ.json : NE FAIT PAS PARTIE DU KIT. Il n'existe pas a priori.
+#            L'agent DOIT le creer lui-meme (voir 0A) au premier usage projet.
+# Kit IA (detail) : D:\llama-b8184-bin-win-cpu-x64\AItools\  (annexe IA en bas de ce fichier)
+#
+# Ce fichier = source des QUESTIONS a poser.
+# <chemin vers ce projet>\FAQ.json = fichier GENERE par l'agent (reponses utilisateur).
+# .cursorrules du projet = GENERE apres FAQ complete.
+
+---
+
+## LOI DE STRUCTURE (prime sur tout le fichier)
+
+Le schéma « Structuration Projet » est la seule arborescence autorisée. Le détail est en section 3. Cette loi prime sur tout autre chemin de ce fichier, y compris l'annexe IA.
+
+- Front : `.env`, `App.css`, `App.tsx`, `items`, `interfaces`, `constants`, `combinaisons`, `pages`.
+- Back : `.env`, `interfaces`, `controller`, `services`, `repositories`, `constants`.
+- DB : plusieurs bases reliées entre elles. Tables en tranches `T01`, `T02`, `T03`... Plafond : 10 000 lignes. Rangement alphabétique pour savoir où chercher.
+- Aucun autre dossier. Seule exception : un dossier par page dans `pages`, et rien sous ce dossier.
+- Aucune `class`. Hooks : `useState` et `useEffect` seulement, sauf obligation écrite dans la demande en cours.
+- Interfaces uniquement pour les entités concrètes du projet.
+- `constants` du Front : exactement 3 fichiers, `Environnement.constants.ts`, `Themes.constants.ts`, `ZIndex.constants.ts`.
+- Un chemin qui contredit cette loi est nul : `ecrans`, `securite`, `entite`, `components`, `ui`, `layout`, `hooks`, `services` dans le Front, `utils`, `context`, `styles`, `style.css` ou `json` dans `constants`.
+
+---
+
+## 0A. PROTOCOLE FAQ — OBLIGATOIRE (creation par l'agent, pas par le kit)
+
+### 0A.0 Interdiction
+
+- **Ne jamais** livrer / pre-creer FAQ.json a cote de base.cursorrules dans le kit.
+- **Ne jamais** supposer que FAQ.json existe deja.
+- En lisant CE fichier, l'instance sait **OU** et **COMMENT** creer FAQ.json (ci-dessous).
+
+### 0A.1 OU creer le fichier
+
+| Element | Valeur fixe |
+|---------|-------------|
+| Nom | `FAQ.json` (exact, sensible a la casse) |
+| Chemin absolu | l'actuelle FAQ.json |
+| Regle | **Meme repertoire** que ce .cursorrules |
+| Cardinalite | **Un seul** FAQ.json pour le projet en cours — jamais de second fichier, jamais dans le repo projet |
+
+### 0A.2 QUAND creer / lire
+
+Au **tout debut** de toute session sur un projet (avant code, dossiers, .cursorrules projet) :
+
+1. Tester si l'actuelle FAQ.json existe.
+2. Si **non** → **le creer maintenant** selon 0A.3 + 0A.4 (questions derivees de CE fichier, tous les `r` = `""`), puis **STOP** et demander a l'utilisateur de remplir les `r`.
+3. Si **oui** mais un `required.r` est vide → **STOP**, lister les `q` non repondues.
+4. Si **oui** et tous les `required.r` remplis → lire les reponses, generer le `.cursorrules` du projet, puis travailler.
+5. Nouveau projet : recreer / regenerer l'actuelle FAQ.json (vider les `r`, recreer les `q` dynamiquement) sauf demande explicite de conserver.
+
+### 0A.3 COMMENT creer — format JSON strict
+
+Ecrire l'actuelle FAQ.json en UTF-8 avec exactement cette forme :
+
+```json
+{
+  "meta": {
+    "version": 1,
+    "source": "D:\\base.cursorrules",
+    "updated": "YYYY-MM-DD",
+    "note": "Genere par l'agent. Un seul fichier. Remplir chaque r."
+  },
+  "question1": { "q": "...", "r": "", "required": true },
+  "question2": { "q": "...", "r": "", "required": true }
+}
+```
+
+Regles :
+- Cles : `question1`, `question2`, … (ordre d'interrogation).
+- `q` (string) : question en francais.
+- `r` (string) : reponse ; **toujours `""` a la creation**.
+- `required` (bool) : si `true`, bloque tant que `r` == `""`.
+- Interdit : autre chemin, autre nom, plusieurs FAQ, pre-remplir `r` a la place de l'utilisateur.
+
+### 0A.4 COMMENT generer les questions (dynamique depuis CE fichier)
+
+L'agent **derive** les `q` en parcourant ce `base.cursorrules` (sections 0 a 9 + besoins annexe IA). Catalogue minimal obligatoire a inclure a la creation :
+
+| Cle | Theme de `q` (adapter le libelle) |
+|-----|-----------------------------------|
+| question1 | Nom du projet |
+| question2 | Objectif en une phrase |
+| question3 | **IA locale dans le projet ?** (`oui` / `non`) — GATE kit AItools |
+| question4 | Stack Tauri 2 + React 18 + TS + Vite + SQLite ? |
+| question5 | Charte / couleur d'accent |
+| question6 | Ecosysteme / slogan / branding |
+| question7 | Page Login au demarrage ? |
+| question8 | Page Parametres au demarrage ? |
+| question9 | Strategie metier : dynamique \| routes \| manuel |
+| question10 | Separateur CSV |
+| question11 | Chemin kit AItools (defaut ou autre) — ignore si IA=non |
+| question12 | [IA] strategie Loggy : dynamique \| routes \| n/a |
+| question13 | [IA] recherche Internet : oui/non/n/a |
+| question14 | [IA] GGUF + backend CPU/CUDA/auto \| n/a |
+| question15 | Chemin absolu racine du projet |
+| question16 | Langue UI |
+| question17 | Privileges admin + par entite |
+| question18 | Autres contraintes (ou « aucune ») |
+| question19 | Quelles bases SQLite rendre configurables ? Choix multiple. Reponse : cles separees par une virgule, parmi `metier`, `historique`, `depot`, `applique`, `data`, ou `toutes`. Detail des fichiers : Full-page-parametre |
+
+Si CE fichier evolue : **ajouter** de nouvelles `questionN` sans effacer les `r` deja remplis des questions existantes.
+
+Choix multiple : le `q` liste les cles autorisees. Le `r` en contient plusieurs, separees par une virgule, sans texte autour. Exemple : `metier, historique`.
+
+Questions propres au projet : l'agent a le droit d'ajouter **autant** de `questionN` que necessaire (question20, question21, …), en plus du catalogue. Chaque question vise un point que ce projet laisse ouvert et que le catalogue ne couvre pas. Rester precis : une information par `q`, libelle court, pas de doublon, pas de question vague ou de remplissage. `r` reste `""` jusqu'a la reponse de l'utilisateur. `required: true` seulement si le travail est bloque sans cette reponse. Ne jamais ecraser un `r` deja rempli.
+
+### 0A.5 Gate IA (critique)
+
+N'appliquer la **section 7** et l'**annexe IA** (kit AItools copie ci-dessous) **QUE SI** `question3.r` (ou equivalent) vaut `oui`.
+
+- `non` / vide / absent → **ignorer** annexe IA, pas de llama, pas de `ai_*`, pas de RAG.
+- `oui` → appliquer section 7 + annexe IA + `D:\llama-b8184-bin-win-cpu-x64\AItools\`.
+
+**N'utilise le kit AItools / l'annexe IA QUE si, a ta demande, l'utilisateur repond qu'il va utiliser une IA dans le projet.**
+
+### 0A.6 Apres FAQ complete
+
+1. Mapper les `r` → variables (NOM_PROJET, IA_PROJET, stack, charte, strategie…).
+2. Generer / maj le `.cursorrules` **a la racine du projet**. Y recopier la section 3 telle quelle : la structure n'est pas une question FAQ.
+3. Executer la demande utilisateur.
+4. FAQ.json reste la source de verite des reponses (ne pas le supprimer).
+
+### 0A.7 Message utilisateur si FAQ a creer ou incomplet
+
+Afficher uniquement :
+1. « Je cree / j'attends <chemin vers ce projet>\FAQ.json »
+2. Liste des `q` avec `r` vide
+3. « Remplis chaque r dans <chemin vers ce projet>\FAQ.json puis dis-moi quand c'est pret. »
+
+---
+
+## 0. VISION ET OBJECTIF DU PROJET
+
+Valeurs issues de **FAQ.json** (genere selon 0A).
+
+**Principe directeur** : en finalite, le developpeur ne devrait modifier que les **JSON** et les **donnees metier** ; le code (items, combinaisons, moteur d'ecrans) reste stable et reutilisable.
+
+### IA locale — activation (rappel)
+
+| Variable | Valeurs | Defaut si FAQ incomplet |
+|----------|---------|-------------------------|
+| IA_PROJET | oui \| non | non |
+
+- **non** → ignorer section 7 + annexe IA.
+- **oui** → suivre section 7 + annexe IA scrupuleusement.
+
+---
+
+## 1. STACK TECHNIQUE
+
+| Couche | Choix par defaut (surchargeable via FAQ) |
+|--------|------------------------------------------|
+| Front | React 18 + TypeScript strict + Vite |
+| Desktop (si applicable) | Tauri 2 |
+| Backend | Commandes Tauri + SQLite |
+| Styles | Un seul fichier CSS : src/App.css (section 3) |
+| Langue UI | Francais |
+| Exports donnees | CSV, separateur \| |
+| IA locale [IA] | llama-server + RAG FTS5 — section 7 + annexe IA **seulement si FAQ IA = oui** |
+
+---
+
+## 2. CHARTE GRAPHIQUE
+
+Valeurs depuis FAQ. Pas de CSS inline dans les JSON. Couleurs et variables d'environnement : sous-section « Thème et constantes » de la section 3.
+
+---
+
+## 3. STRUCTURE DES DOSSIERS
+
+**Loi absolue, issue du schéma « Structuration Projet ».** Front, Back et DB sont les trois zones. Aucun dossier hors de cette liste. Si un passage plus bas nomme un autre dossier, ce passage est ignoré : le code va dans le dossier du schéma qui porte ce rôle.
+
+Les dossiers du schéma qui manquent sont créés dès qu'un travail en a besoin. On n'attend pas que l'utilisateur les ajoute. On ne les renomme pas `components`, `ui`, `layout`, `hooks`, `services` (côté Front), `utils`, `context` ou `styles`.
+
+### 3.0 Arborescence fermée
+
+```
+Front
+  .env
+  src/App.css
+  src/App.tsx
+  src/items/
+  src/interfaces/
+  src/constants/
+    Environnement.constants.ts
+    Themes.constants.ts
+    ZIndex.constants.ts
+  src/combinaisons/
+  src/pages/
+    <NomPage>/
+
+Back
+  back/.env
+  back/interfaces/
+  back/controller/
+  back/services/
+  back/repositories/
+  back/constants/
+```
+
+`src-tauri/` peut exister comme coque desktop. Il n'ajoute aucun dossier métier. La logique du Back reste dans `back/`.
+
+### 3.1 Front
+
+| Chemin | Rôle dans le schéma |
+|--------|---------------------|
+| `.env` | Variables du Front, à la racine chargée par Vite. Flèche vers Constants. |
+| `src/constants/Environnement.constants.ts` | Seul lecteur du `.env`. Unique pont vers les autres dossiers. |
+| `src/constants/Themes.constants.ts` | Liste des thèmes et couleurs, dont le thème Lin (#F2F0F0 / #FFFFFF). |
+| `src/constants/ZIndex.constants.ts` | Z-index de chaque position, calculé dynamiquement. |
+| `src/items/` | Briques UI, un fichier par brique. `Trigger.tsx` seulement si FAQ IA = oui. |
+| `src/interfaces/` | Contrats des entités concrètes. Lien vert « Api ou équivalent » vers `back/interfaces/`. |
+| `src/combinaisons/` | Assemblages d'items. |
+| `src/pages/<NomPage>/` | Une page, un dossier. Seul endroit où un sous-dossier est autorisé. |
+| `src/App.tsx` | Monte les pages. |
+| `src/App.css` | Seul fichier CSS du projet. Importé par `App.tsx`. |
+
+Sens des flèches, obligatoire :
+
+1. `.env` alimente Constants. Aucun autre fichier ne lit `.env`, `import.meta.env` ou `process.env`.
+2. Constants est importé par `items`, `combinaisons`, `pages` et `App.tsx`. Constants n'importe aucun de ces dossiers.
+3. `items` alimente `combinaisons`. `combinaisons` alimente `pages`. `pages` alimente `App.tsx`. `App.css` alimente `App.tsx`.
+4. `interfaces` alimente `combinaisons`. Une interface n'importe ni un item, ni une combinaison, ni une page.
+5. Le Front n'appelle ni `back/services`, ni `back/repositories`, ni la DB. Il passe par les interfaces, en API ou équivalent.
+
+Anciens chemins, désormais interdits. On utilise le chemin de droite :
+
+| Ancien chemin | Chemin du schéma |
+|---------------|------------------|
+| `src/constants/couleur.constant.ts` | `src/constants/Themes.constants.ts` |
+| `src/constants/environment.constant.ts` | `src/constants/Environnement.constants.ts` |
+| `src/constants/style.css` | `src/App.css` |
+| `src/constants/json/<nomPage>.constant.json` | textes dans `src/pages/<NomPage>/` |
+| `src/ecrans/` | le dossier de la page, `src/pages/<NomPage>/` |
+| `src/securite/` | `back/services/` et l'item `Privilege` dans `src/items/` |
+| `src/entite/` | `src/interfaces/` et `back/interfaces/` |
+
+### 3.2 Back
+
+| Chemin | Rôle dans le schéma |
+|--------|---------------------|
+| `back/.env` | Variables du Back. Lues seulement par `back/constants/`. |
+| `back/interfaces/` | Contrats exposés au Front. |
+| `back/controller/` | Entrée des requêtes. Appelle les services. N'accède pas à la DB. |
+| `back/services/` | Règles métier, droits, validations. Appelle les repositories. |
+| `back/repositories/` | Seul accès à la DB. Flèches vertes vers les bases. |
+| `back/constants/` | Constantes du Back, importées par controller, services et repositories. Pas de sous-dossier. |
+
+Sens obligatoire : Interfaces, puis Controller, puis Services, puis Repositories, puis DB.
+
+`back/constants/` est importé par controller, services et repositories. Ce dossier ne les importe pas. Le Front ne saute pas une couche.
+
+### 3.3 DB
+
+Le schéma montre plusieurs bases côte à côte, reliées dans les deux sens, puis `...` pour les bases suivantes. Chaque base porte la même pile de tables : `T01`, `T02`, puis `...`.
+
+- Une entité concrète a plusieurs tables. Nommage de tranche : `T01`, `T02`, `T03`, ou `eleve1`, `eleve2`.
+- Chaque table contient au plus **10 000 lignes**. La ligne suivante ouvre la tranche suivante.
+- Les lignes sont rangées par ordre alphabétique de la clé de recherche, pour savoir quelle tranche ouvrir sans parcourir les autres.
+- Seul `back/repositories/` lit et écrit ces tables.
+- Ce plafond de 10 000 lignes prime sur tout autre plafond cité dans ce fichier.
+
+### 3.4 Interdictions du schéma
+
+Ces règles viennent du schéma. Elles ne se négocient pas dans la FAQ.
+
+- Aucun dossier en plus de la section 3.0. Seule exception : dans `src/pages/`, un dossier par page, et rien à l'intérieur de ce dossier (pas de `components`, pas de `hooks`, pas de `services`).
+- Aucune `class`. Composants, contrôleurs, services et dépôts sont des fonctions.
+- Hooks : `useState` et `useEffect`. Un autre hook seulement si la demande en cours l'exige par écrit.
+- Les props vivent dans le dossier qui les utilise (l'item, la combinaison ou la page). Pas de dossier `props` ou `types` partagé.
+- Une interface décrit une entité concrète du projet, et rien d'autre. Exemple école : `Eleve`, `Professeur`, `Ecole`, `Privilege`, `User`. Pas d'interface d'écran, de style, de formulaire ou de hook.
+- `src/constants/` contient exactement les 3 fichiers nommés en 3.1. Pas de quatrième fichier, pas de sous-dossier.
+
+**Création de page** : toute nouvelle page n’utilise **que** cette méthode. Elle importe et assemble uniquement les objets exportés par `src/items/` (sections 4A à 4L, et 4N pour la matrice des droits). Pas de bouton, champ, tableau, menu, graphique ou dialogue écrit dans la page. Si aucune brique ne convient, la créer **une fois** dans `src/items/`, puis l’utiliser. Réutiliser les props déjà prévues. Viser le plus **réutilisable** possible (props optionnelles, pas de logique métier figée dans l’item). Dès que la page lit ou écrit des données, revoir le bouton d’actualisation pour qu’il recharge aussi ces données.
+
+**Full-page** : quand l’utilisateur demande une « Full-page », prendre la page **la plus complète du projet en cours** (celle qui a déjà ajouter, supprimer, modifier et filtrer). La reproduire **à l’identique** pour la disposition et pour ces quatre fonctions. Utiliser **exactement les mêmes Items**, branchés de la même façon. Changer le métier (données, libellés, droits), pas la coquille.
+
+**Item Privilège, créé avec chaque Full-page** : dans le même geste, poser l’item `Privilege` (4N) s’il n’existe pas encore, puis ajouter cette page (et ses sous-menus, s’il y en a) comme ressource de la matrice. Une seule matrice pour le projet. Le porteur des droits, les libellés de menus et la liste d’actions viennent du projet en cours. Le détail, le contrat et le côté Tauri sont en 4N.
+
+### Full-page-connection
+
+Quand l’utilisateur demande une « Full-page-connection », poser **cette** coquille de connexion. Ne pas inventer un autre écran de login. N’utiliser que les Items 4E, 4F, 4H, 4I, 4J, 4K et 4L. Les deux fenêtres vivent dans `src/pages/Identification/` (`LoginModal.tsx`, `MotDePasseModal.tsx`) et n’importent que `Modal`, `Input`, `Loader`.
+
+#### Disposition
+
+Page en colonne, pleine largeur, fond blanc, texte `#555`, 13px, Arial. Classes à conserver : `.site-container`, `.logo-fond`, `.main-header`, `.main-layout`, `.sidebar`, `.content-area`, `.main-footer`.
+
+1. **Filigrane** : `Logo` (4I) fixe au centre, opacité 0,18, sans clic.
+2. **En-tête**
+   - Formes décoratives, `aria-hidden`.
+   - Marque : logo d’apparence s’il existe, sinon `Logo`. À côté, le nom (`h1`) et le slogan. Nom, slogan, logo et thème viennent du réglage d’apparence. Le titre de l’onglet suit le nom.
+   - Maquette d’ordinateur : écran avec `Icone` `partage` (4E). Si l’adresse publique existe, `Input` `mailto` (4F) ouvre le courriel d’accès. Sinon le texte « Connexion indisponible ». Sous l’écran, un clavier à trois touches. À droite, le boîtier : un bouton rond change le thème (cycle des thèmes, fondu sauf si `prefers-reduced-motion`), une fente, une grille. Connecté, le thème choisi est enregistré sur le compte.
+   - Session, à part : connecté, le nom et le rôle entre parenthèses, plus `BoutonIcone` « Déconnexion ». Sinon `BoutonIcone` « Connexion », en texte, qui ouvre la fenêtre de connexion.
+3. **Corps** : menu `SideBar` vertical (4L) à gauche, zone de contenu à droite. L’entrée active suit le hash. Au-dessus du contenu connu : titre (`Input` `H2`, ou « Accueil ») et `BoutonIcone` « Actualiser les données ». Page inconnue : « Page introuvable » et un lien vers l’accueil, dans `.identification-page` / `.identification-form`.
+4. **Pied** : le même logo, puis `© {année} {nom} - Conçu par LoggyStudio`.
+5. **Toasts** : `Notifications` (4K), toujours monté.
+
+L’accueil (hash vide) reste dans cette coquille. Non connecté : phrase de bienvenue et `Input` bouton « Se connecter ». Connecté : « Bonjour {nom} ». Dessous, cartes chiffrées (actes, demandes, demandes en cours, agences, utilisateurs) qui mènent aux hash du menu. Connecté seulement : bloc « Dernières activités ».
+
+#### Fenêtre Connexion (`Modal`, 4J)
+
+- Titre « Connexion ». Fermeture par la croix, refusée pendant l’envoi. Libellé de chargement : « Authentification… ».
+- Identifiant : `label` + `Input` `text`. Indication : « Nom complet, e-mail ou numéro ». Hint : prénom et nom, nom et prénom, e-mail ou téléphone. La casse de l’identifiant n’est pas prise en compte. L’identifiant est trimé à l’envoi.
+- Mot de passe : `Input` `password` (œil afficher / masquer). Ni trim, ni changement de casse.
+- `Input` bouton « Se connecter », `submit`. Champs et bouton désactivés pendant l’envoi. Le mot de passe est vidé à la fermeture et après la tentative.
+- Envoi vide ignoré. Pas de seconde confirmation.
+
+`POST /api/connexion` avec `{ identifiant, motDePasse }` renvoie `{ token, compte }`.
+
+- Une seule session par poste. Si un autre compte a déjà un jeton, fermer le jeton tout juste reçu, ne pas ouvrir la session, toast d’erreur demandant de se déconnecter d’abord. Le bouton Connexion fait la même garde avant d’ouvrir la fenêtre.
+- Succès : mémoriser le jeton et le compte, fermer la fenêtre, vider le hash, toast « Bienvenue, {prénom} ! ». Recharger les données, sauf si le compte doit changer son mot de passe.
+- Échec : toast « Connexion impossible. »
+- Les autres fenêtres du poste suivent le même jeton (`storage`). Jeton absent : vider l’écran. Au chargement, `GET /api/moi`. Session expirée : vider l’écran et rouvrir la connexion.
+- Déconnexion : `POST /api/deconnexion`, effacer le jeton, vider l’écran, toast « Vous êtes déconnecté. » Le menu a aussi « Se déconnecter » une fois connecté.
+
+L’adresse publique vient de `GET /api/publique` (quelques essais). À défaut, l’origine de la page.
+
+#### Fenêtre mot de passe obligatoire
+
+Si `doitChangerMdp` : `Modal` « Changement de mot de passe obligatoire », **sans** croix de fermeture. Hint des règles. Deux `Input` `password` (nouveau, confirmation). Erreur dans `.form-error`. Pendant l’enregistrement, `Loader` « Enregistrement… » à la place du bouton. Sinon `Input` bouton « Enregistrer ».
+
+Règles, les mêmes que le serveur : au moins 8 caractères, au plus 128, une lettre et un chiffre. Refuser le mot de passe temporaire `Temp0001` et les mots trop courants (`sadmin`, `0000`, `1234`, `123456`, `password`, `motdepasse`, `admin`, `root`), comparaison en minuscules. Les deux saisies doivent être identiques. Le temporaire ne peut pas être rechoisi. Succès : enregistrer, lever l’obligation, recharger les données.
+
+### Full-page-statistique
+
+Quand l’utilisateur demande une « Full-page-statistique », poser **cette** page dans la coquille (hash du menu). Fichier `src/pages/Statistique/Statistique.tsx`. Items : `Graphe` (4D), `Table` en lecture seule (4A), `Input` select et date (4F), `BoutonIcone`, `Modal` (4J). Pas d’autre graphique ni d’autre tableau. Le bouton d’actualisation de la coquille incrémente la révision : la page recharge les séries et le détail.
+
+#### États
+
+- Non connecté : « Connectez-vous » ouvre la fenêtre de connexion. Pas de graphe.
+- Erreur de série : le message, plus un toast.
+- Aucune activité et aucun filtre : « Aucune activité enregistrée pour le moment. Commencez par une Intervention. »
+
+#### Filtres
+
+Une rangée `.filtres-historique.filtres-statistique` (flex, retour à la ligne, le bouton calé à droite) :
+
+| Contrôle | Rôle |
+|----------|------|
+| `Input` select, indication « Toute la période », `filtre` | « 7 derniers jours », « 30 derniers jours », « Manuelle ». Valeur vide : toute l’activité connue |
+| `Input` select « Tous les demandeurs », `filtre` | Options renvoyées par le serveur |
+| `Input` select « Tous les intervenants », `filtre` | Idem |
+| `Input` select « Toutes les catégories », `filtre` | Options fournies par la page parente |
+| `BoutonIcone` « Télécharger le rapport » | Export, voir plus bas |
+
+Changer un filtre de personne, de catégorie ou de période enlève le jour choisi. Si la période est déjà « Manuelle », le select a l’action « Modifier les dates » (fin de liste, valeur `__nouveau__`). Choisir « Manuelle » ouvre la fenêtre. Le libellé de l’option devient alors la plage en dates longues.
+
+Fenêtre `Modal` « Période manuelle », fermée par la croix. Hint : début et fin, 120 jours maximum. Deux `Input` `date`. `Input` bouton « Appliquer » (`submit`) et « Annuler ». Début et fin obligatoires. La fin est le même jour ou après. Au-delà de 120 jours inclus : erreur dans `.form-error`. Fermer sans plage enregistrée restaure la période d’avant. Défaut du brouillon : la plage déjà choisie, sinon les 7 derniers jours.
+
+#### Graphe
+
+`Graphe`, titre « Activités journalières », dates en format court. Quatre séries, couleurs du **thème courant** (palette statistique), pas de couleurs figées dans la page :
+
+| Série | Nom de teinte (infobulle de la pastille) | Code d’API |
+|-------|------------------------------------------|------------|
+| Demande | rouge | `demande` |
+| Intervention | bleu | `intervention` |
+| Intervention liée | violet | `liee` |
+| Tâches | jaune | `taches` |
+
+La pastille du tableau reprend la couleur du thème et l’infobulle « {type} ({teinte}) ».
+
+Période affichée :
+
+- 7 jours : aujourd’hui et les 6 jours d’avant.
+- 30 jours : aujourd’hui et les 29 jours d’avant.
+- Manuelle : la plage validée.
+- Sinon : du premier jour d’activité au dernier. Si cet intervalle fait au plus 120 jours, tous les jours sont remplis (zéros compris). Au-delà, seuls les jours qui ont une activité.
+
+Clic sur un jour : ce jour devient le filtre, ou le filtre saute si on reclique le même jour. Page du tableau remise à 1, recherche vidée. Clic sur une série : ne garde que cette série. « Tout afficher » enlève la série **et** le jour choisi, puis remet la page à 1 et vide la recherche.
+
+Ligne de compte : « {n} activité(s) » , la série entre parenthèses si elle est filtrée, « sur la période ». Si un jour est choisi : « détail du {date longue} ». Sinon : « toutes les données du graphe ci-dessous ; cliquez un jour pour filtrer ».
+
+#### Tableau
+
+Sous le graphe, titre « Activités du {date} » ou « Activités de la période », puis le nom de la série s’il y en a une. Zéro ligne : « Aucune activité ce jour-là » ou « sur la période ».
+
+`Table` lecture seule, 10 lignes par page, `paginationDistante`, recherche serveur (`onRechercher` remet la page à 1). Colonnes : pastille (en-tête vide, filtre « Type »), Type, N°, Activité, Catégorie, Demandeur, Groupe, Intervenant, État. Activité d’une tâche privée : uniquement le texte `(priver)`, jamais le titre ni le corps. Les autres activités passent par le libellé empilé (4M). Valeur absente : un tiret. Pour un compte qui voit la base technique, l’infobulle de ligne donne la base, la table (`demandes` ou `actes`) et la requête.
+
+`GET /api/statistiques` avec intervenant, demandeur, catégorie et la révision. `GET /api/statistiques/jour` avec soit `date`, soit `debut` et `fin`, plus les filtres, le code de série, `page`, `parPage`, `recherche`, `colonne`. L’écran ne charge pas tout le détail.
+
+#### Rapport
+
+« Copier le rapport » (`onCopier`) et « Télécharger le rapport » n’agissent qu’au clic. Jours concernés : le jour choisi, ou les jours du graphe dont le total filtré est supérieur à 0. Aucun jour : toast d’information, pas de fichier. Pour chaque jour, un appel `tout=1` (même filtre et même recherche). Interdit au chargement de l’écran.
+
+Le texte copié et le fichier Word « Rapport de statistiques » portent : date d’établissement, période, plage, demandeur, intervenant, catégorie, type, nombre d’entrées, recherche, totaux par type, puis le détail jour par jour. Une tâche privée y est aussi masquée (`(priver)`, pas de titre). Le Word inclut l’image SVG du graphe, légende « Activités journalières (filtres actuels) ». Nom de fichier : `rapport-statistiques-{jour}` ou `rapport-statistiques-{debut}_{fin}`. Toasts de succès ou d’échec.
+
+### Full-page-compte
+
+Quand l’utilisateur demande une « Full-page-compte », poser **cette** page (hash du menu Comptes). Fichier `src/pages/Comptes/Compte.tsx`. Items : `Table` (4A), `Input` (4F), `BoutonIcone`, `Modal` (4J). L’actualisation incrémente la révision : la liste serveur et les lignes figées se rechargent, les brouillons restent.
+
+#### Qui voit quoi
+
+- Non connecté : « Connectez-vous » ouvre la fenêtre de connexion.
+- Connecté : carte « Mon profil » pour tout le monde.
+- « Gestion des utilisateurs » seulement pour root, admin et IT. Les autres ne voient pas le tableau.
+- Modifier une fiche : un compte root seulement par un root. Un admin ou un IT peut modifier les autres. Sinon, seul le créateur de la fiche. La cellule d’actions des autres lignes reste un tiret.
+- Le compte root (identifiant `root` ou rôle `root`) ne se supprime pas. Toast d’erreur.
+
+#### Mon profil
+
+Bloc `.sidebar-box`. `Input` `liste` : Nom, Rôle, Prénom, Genre, Couleur (nom du thème), Statut, Email, Agence, Téléphone, Groupe. Genre vide : « non renseigné ». Agence vide : « agence non mentionnée ». Groupe vide : « groupe non mentionné ». Sans fiche liée au nom connecté : une phrase le dit, pas la liste.
+
+Select « Couleur du thème » : enregistre tout de suite sur le compte. Boutons si la fiche existe : « Modifier » (si le droit le permet) et « Changer le mot de passe ».
+
+#### Gestion des utilisateurs
+
+Phrase : mot de passe initial `Temp0001`, à changer à la première connexion. Bouton « Créer un utilisateur » ouvre la fenêtre, fiche vide. S’il n’existe encore aucun utilisateur, le rôle proposé dans cette fenêtre est `admin`, sinon `utilisateur`.
+
+`Table` : existants figés puis brouillons. `+` libellé « Ajouter un utilisateur ». Une ligne vide par défaut : rôle `utilisateur`, statut `actif`. Valider n’enregistre **que** cette ligne et garde les autres brouillons. 10 lignes par page, `paginationDistante`, recherche serveur (remet la page à 1), voile « Chargement des utilisateurs… ». `donneesCle` suit la révision et les identifiants. Infobulle de ligne pour le compte qui voit la base technique.
+
+Colonnes : Prénom, Nom, Genre (select Masculin / Féminin), Email, Rôle (`admin`, `it`, `utilisateur`, `audit`), Statut (`actif`, `inactif`), Agence (select, action « Nouvelle agence »), Groupe (select). Un rôle `lecteur` s’affiche `audit`. Nom et prénom obligatoires. Genre obligatoire, masculin ou féminin. Sinon message sous le tableau. Création : mot de passe `Temp0001`, obligation de le changer, téléphone vide, thème 0.
+
+`GET /api/utilisateurs` avec `page`, `parPage`, `recherche`, `colonne` et la révision.
+
+Actions d’une ligne autorisée : « Modifier l’utilisateur », « Réinitialiser le mot de passe » (remet `Temp0001` et l’obligation, toast), « Supprimer l’utilisateur » (confirmation du navigateur, puis toast).
+
+#### Fenêtres
+
+« Nouvel utilisateur » ou « Modifier l’utilisateur », croix pour fermer. Champs : Nom et Prénom obligatoires, Genre obligatoire, Email, Téléphone, Rôle, Statut, Groupe, Agence avec « Nouvelle agence ». Bouton « Créer l’utilisateur » ou « Enregistrer les modifications ». Création : toast qui rappelle le mot de passe initial. Modification : toast de mise à jour.
+
+« Changer le mot de passe » : les mêmes règles que la fenêtre obligatoire de la connexion (8 à 128 caractères, une lettre, un chiffre, mots interdits, confirmation identique). Succès : ferme la fenêtre et lève l’obligation.
+
+### Full-page-parametre
+
+Quand l’utilisateur demande une « Full-page-parametre », poser **cette** page. Fichier `src/pages/Parametres/Parametres.tsx`. Le menu ne la montre qu’aux comptes IT et Root. Items : `Card` repliable (4C), `Table` lecture seule (4A), `Input` (4F). Pendant le chargement : « Chargement des paramètres… ». L’actualisation rappelle `GET /api/parametres` et `GET /api/reglages/messagerie`.
+
+Hint d’entrée : réservé à IT et Root. SQLite est le moteur par défaut. SQL Server reprend la même organisation : une base par fichier SQLite, les mêmes tables.
+
+Cartes, dans cet ordre :
+
+1. **Messagerie.** Durée en heures avant d’effacer les bulles lues et leurs médias. Une activité encore ouverte n’est pas effacée. Défaut 24. Entier de 1 à 8760, sinon toast d’erreur. Bouton « Enregistrer le délai ». `PATCH /api/reglages/messagerie`.
+2. **Autorisations.** Hint : une demande ou une intervention prévient le groupe dès la création, heure à la seconde. Une tâche prévient à son heure de rappel. Si le navigateur bloque l’alerte, l’application l’affiche. Case « Notifications ». Décocher : toast « Notifications désactivées. » Cocher : demander la permission.
+3. **Apparence de l’application.** Tableau Champ / Valeur, sans recherche : nom, slogan, logo (aperçu, `Input` fichier image, « Retirer le logo » s’il y en a un), thème. Un fichier qui n’est pas une image est refusé. Bouton « Enregistrer l’apparence » : écriture locale, la coquille se met à jour, et le thème est enregistré sur le compte connecté.
+4. **Fichiers.** Tableau sans recherche, trois valeurs en lecture seule avec bouton copier : fichier SQLite de la base métier, fichier SQLite de l’historique, dossier des fichiers de la base de connaissances.
+5. **Bases SQL Server.** Seulement s’il y en a. Tableau sans recherche : fichier SQLite, base SQL Server. Base absente : un tiret. Le titre indique le nombre.
+6. **Tables et colonnes.** Seulement s’il y en a. Tableau avec recherche, 10 lignes par page : Tableau, Colonne, Type, Disposé dans (bases où la colonne existe, tri français). Infobulle technique : base, table, et `SELECT` de cette table.
+7. **Connexion.** Tableau Champ / Valeur, sans recherche, puis « Enregistrer la connexion » :
+   - URL du back. Vide : automatique (local ou proxy `/api`).
+   - Moteur : « SQLite (défaut) » ou « SQL Server ».
+   - Hôte, port SQL Server (indication 1433), port de démarrage (indication 7069, entier de 1024 à 65535).
+   - Utilisateur. Mot de passe : vide signifie inchangé. Le champ est vidé après un enregistrement réussi.
+   - `PATCH /api/parametres`. Toast : le port de démarrage sera pris en compte au prochain lancement.
+
+#### Bases SQLite actuelles
+
+Dossier `bases/` à côté de l’application (en développement : `src-tauri/bases`). Journal WAL. Les fichiers `-wal` et `-shm` ne sont pas des bases. Le réglage est dans `bases/connexion.json`. Le moteur par défaut est `sqlite`. Le chemin du fichier métier est réécrit à chaque lecture et à chaque enregistrement : il reste celui du fichier métier, il ne se déplace pas depuis l’écran. Le mot de passe SQL n’est pas renvoyé en clair.
+
+| Clé | Fichier | Rôle |
+|-----|---------|------|
+| `metier` | `bases/mecpip-helpdesk.sqlite` | Base métier. Nom SQL par défaut : `mecpip-helpdesk`. Toujours listée, même si le fichier vient d’être créé |
+| `historique` | `bases/historique.sqlite` | Journal. Toujours listé. Conservation 365 jours |
+| `depot` | `bases/depot/*.sqlite` | Fichiers déposés, listés s’ils existent |
+| `applique` | `bases/applique/*.sqlite` | Fichiers appliqués, listés s’ils existent |
+| `data` | `data/*.sqlite` | Ancien dossier, listé s’il reste des fichiers |
+
+Tout autre `.sqlite` trouvé dans `bases/` est listé aussi. Nom SQL : le nom de base réglé pour le fichier métier. Pour un fichier à la racine de `bases/`, le nom du fichier sans extension. Pour un fichier dans un sous-dossier, `{dossier}_{fichier}`. Un doublon de nom reçoit un indice `_2`, `_3`.
+
+Tables du fichier métier, créées si elles manquent : `utilisateurs`, `groupes`, `alertes`, `reglages`, `sessions`, `agences`, `categories`, `categories_bien`, `biens`, `demandes`, `actes`, `tickets`, `connaissances`, `connaissance_droits`, `journal`, `messages`, `budget`. Les colonnes ajoutées ensuite (groupe, thème, genre, rappel, médias, dates de budget) restent dans ces tables. Les rôles utilisateur admis : `root`, `admin`, `it`, `utilisateur`, `audit`. Les statuts : `actif`, `inactif`.
+
+Tables de l’historique : une table par mois, nom `m_AAAA_MM`, préparée pour les 12 derniers mois. Colonnes : `id`, `type`, `date`, `heure`, `numero`, `detail`, `individu`, `libelle`, `auteur_id`, `visibilite`, `payload`. Clé : `type` + `id`. Index sur la date et sur le libellé. Plafond visé : 10 000 lignes par table (section 3.3). Au-delà, tranche suivante, ordre alphabétique.
+
+`bases/stockage` est le dossier des fichiers de la base de connaissances. Ce n’est pas une base SQLite.
+
+Dans « Tables et colonnes », le type affiché est ramené à `var`, `int`, `float`, `blob`, `bool` ou `date`.
+
+Quelles de ces bases sont modifiables depuis l’écran se décide par la question 19 de la FAQ (choix multiple). Tant que la réponse n’est pas donnée, l’écran reste en lecture pour les chemins, comme aujourd’hui.
+
+### Thème et constantes
+
+Thème par défaut, nommé Lin. Couleur principale `#F2F0F0`. Couleur secondaire `#FFF` (`#FFFFFF`).
+
+`src/constants/Themes.constants.ts` est la source des teintes nommées (principale, secondaire, texte). Le thème Lin y est défini. S’il n’existe pas, l’agent le crée. C’est l’un des trois seuls fichiers de `src/constants/` (section 3). Le fichier qui fabrique les variables CSS importe ces valeurs. Il ne les recopie pas.
+
+`src/constants/Environnement.constants.ts` est le seul pont entre le `.env` et le reste de l’application. S’il n’existe pas, l’agent le crée. Toute variable d’environnement passe obligatoirement par lui (`import.meta.env`, `process.env`), puis il la distribue au reste de l’application. Aucun autre module ne lit l’environnement directement.
+
+### Full-page-messagerie
+
+Quand l’utilisateur demande une « Full-page-messagerie », poser **ce** panneau. Fichier `src/pages/Messagerie/Messagerie.tsx`. Il reste monté dans la coquille. Ce n’est pas une entrée de menu. Items : `BoutonIcone` (4F), `Icone` (4E), `Modal` (4J). Le détail d’une charge réutilise la fiche ticket déjà prévue. L’actualisation recharge la liste de messages fournie au panneau.
+
+#### Ouverture
+
+Bouton flottant « Messagerie », icône message. Connecté, le badge compte les messages non lus qui me sont adressés (hors canal annonce) plus, pour root, les budgets en attente. Au-delà de 99 : « 99+ ». Non connecté : le clic ouvre la connexion, le panneau reste fermé.
+
+Fenêtre `Modal` « Messagerie ». Deux zones : la liste des contacts, puis le fil. Une discussion choisie ajoute la classe qui montre le fil.
+
+#### Liste
+
+Champ « Rechercher un utilisateur ». Le filtre porte sur le prénom, le nom, l’agence, l’e-mail, et le mot « annonce ». Liste vide : « Aucun utilisateur. »
+
+Le premier contact est **Annonce** (identifiant `annonce`, initiales A). Sous-titre : le dernier texte, ou « Annonces générales ». Sa pastille, pour root seulement, est le nombre de budgets « En attente de validation ».
+
+Ensuite les autres utilisateurs, du plus récent au plus ancien, puis par nom. Inactif : avatar atténué et « (inactif) ». Sous-titre : dernier message, sinon l’agence, sinon le rôle. Pastille : non-lus de cette discussion. Choisir un contact vide le brouillon et place le curseur dans la saisie. « Retour » revient à la liste.
+
+Ouvrir une discussion privée marque comme lus les messages de ce contact qui me sont adressés. Les annonces ne passent pas par ce marquage. Le fil défile en bas à chaque ouverture ou nouveau message.
+
+#### Fil
+
+Sans contact : « Choisissez un utilisateur pour lui écrire. » Annonce vide : « Aucune annonce pour le moment. » Discussion vide : « Aucune discussion pour le moment. Les messages lus et leurs médias sont effacés après le délai défini dans Paramètres, sauf une activité non terminée. »
+
+Bulle à moi : classe `mien`. Dans Annonce, l’en-tête nomme l’expéditeur (« Vous », le nom, « Root », ou « Utilisateur »). Le texte garde les retours à la ligne. Une pièce est `nom|||dataUrl` : image affichée, autre fichier en lien de téléchargement.
+
+Si la bulle a un état : « État : {état} ». Charge ou budget : lien « voir les détails ».
+
+- Charge : fenêtre au-dessus, titre « Charge N° {numéro} », chargement « Chargement du détail… », `GET /api/messages/{id}/transaction`, fiche ticket.
+- Budget : titre « Demande de budget », `GET /api/messages/{id}/budget`. Champs : État, Année, Bien, Quantité, Catégorie, Coût en XOF sans décimale, Du, Au, Saisi par, Commentaire.
+
+En-tête « Tâche en attente de validation » si l’activité est encore ouverte, que je suis l’expéditeur ou le destinataire, et que l’état n’est ni Terminé ni Abandonné. Le destinataire qui a le droit d’écrire voit « valider la fin de l'intervention ». Budget en attente : en-tête « En attente de validation ». Root voit « Valider » et « Refuser ». Puis, selon le cas : « Intervention terminée », « Intervention abandonnée », « Budget validé », « Budget refusé ». L’heure suit la date.
+
+Si une bulle en attente sort de l’écran (seuil 0,2), une barre fixe la résume. Clic, Entrée ou Espace ramène la bulle sous la barre. Le destinataire peut valider depuis la barre. L’autre partie, et root pour un budget, ne voient que le résumé. Changer de discussion remet cette visibilité à zéro.
+
+#### Saisie
+
+Compte qui peut écrire : zone de texte. Annonce : « Publier une annonce… ». Sinon : « Écrire un message… ». Entrée envoie. Maj+Entrée passe à la ligne. Joindre : images, vidéo, audio, PDF, texte, plusieurs fichiers, 5 au plus, même forme `nom|||dataUrl`. Chaque pièce se retire. Envoi s’il y a un texte (espaces de bord retirés) ou au moins une pièce, et un contact choisi. L’annonce part vers l’identifiant `annonce`. Le brouillon et les pièces se vident seulement si l’envoi répond vrai.
+
+Compte audit : « Un compte audit consulte la messagerie sans écrire. »
+
+**Front web + Tauri** (si les deux existent) : toute demande côté Front s’applique **aussi** au côté Tauri. Le côté Tauri est **entièrement indépendant** du Back Node et du Front web (ports, bases, session, pas d’URL/API partagée).
+
+Interdictions : pas de UI/layout/components ; pas de dossier hors section 3 ; pas de class ; pas de hook hors useState et useEffect sauf obligation écrite ; pas de doublons items ; pas de src-tauri/src/ai/ ni ai_* si FAQ IA = non.
+
+---
+
+## 4. REGLES DE REUTILISABILITE (items)
+
+Localisation unique src/items/ (section 3) ; un fichier par type ; props dans le dossier qui les utilise ; props optionnelles non-breaking ; named exports ; listes via spread ; forms onChange+spread sans lib ; fonctions, jamais de class ; hooks useState et useEffect ; Error Boundary. Hors architecture : remplacer, fusionner, supprimer.
+
+Catalogue des items : **4A** Table, **4B** CapturePhotos, **4C** Card, **4D** Graphe, **4E** Icone, **4F** Input (select inclus), **4G** LienMedias, **4H** Loader, **4I** LogoMecpipHelpdesk, **4J** Modal, **4K** Notifications, **4L** SideBar, **4N** Privilege (créé avec chaque Full-page). Les libellés structurés sont en **4M**.
+
+---
+
+## 4A. ITEM TABLE — GABARIT `Table` (src/items/Table.tsx)
+
+**Périmètre** : un seul item tableau pour tout le projet. Les autres items (Modal, Form, Input…) restent couverts par la section 4 générale.
+
+### 4A.1 Rôle et emplacement
+
+| Élément | Règle |
+|---------|--------|
+| Fichier | `src/items/Table.tsx` (export default `Table` + types `TableColone`, `TableHandle`) — **un seul** fichier item table |
+| Styles | Classes `.mecpip-helpdesk-table`, `.mecpip-helpdesk-table-scroll`, `.table-recherche`, `.col-actions`, `.th-tri`, `.text-break`, `.col-centre`, `.cellule-medias-liens` dans `App.css` (ou CSS item dédié) |
+| Données | La **page / combinaison** prépare `colones` + `lignes` ; l’item **n’appelle pas** l’API. Pour une liste métier, la page ne demande **que la page affichée** (`page` + `parPage` → SQL `LIMIT` / `OFFSET`, voir 4A.6). |
+
+**Hiérarchie** : page → combinaison → **item `Table`**.
+
+Deux modes :
+- **Édition** (`lectureSeule` omis / `false`) : cellules via `Input`, lignes créables, colonne Actions.
+- **Lecture seule** (`lectureSeule`) : cellules = `ReactNode` déjà rendus ; Actions seulement si `actionsFigee` est fourni.
+
+> **Migration** : ne pas garder un second composant table divergent ; un seul `Table.tsx`.
+
+### 4A.2 Contrat colonnes — `TableColone`
+
+```typescript
+type TableColone = string | {
+  label: string
+  /** Libellé du filtre de recherche si l’en-tête est vide. */
+  filtre?: string
+  type?: string            // 'text' | 'textarea' | 'select' | 'date' | 'choix' | 'medias' | …
+  options?: OptionSelect[]
+  readOnly?: boolean
+  defaultValue?: string
+  extraAction?: InputExtraAction
+  onChoix?: (rowIndex: number) => void
+  figeSiRempli?: boolean   // ex. liaison demande : cellule figée une fois remplie
+  avecTitre?: boolean      // action titre + corps (ActionTitree)
+  photosPourLien?: (valeurCellule: string) => string[]
+  photosLigne?: (rowIndex: number) => string[]
+  onAjouterMedias?: (rowIndex: number) => void
+  peutAjouterMedias?: (rowIndex: number) => boolean
+  /** Options du select selon la ligne (ex. État sans Terminé si liée). */
+  optionsPourLigne?: (rowIndex: number, cells: string[]) => OptionSelect[] | undefined
+  /** Texte d’une cellule vide (ex. choix non lié). */
+  placeholder?: string
+}
+```
+
+Règles :
+- `label` / string courte en **français**.
+- Colonne `type: 'medias'` : liens « AJOUTER DES MEDIA » + `LienMedias` — pas de champ texte.
+- Colonne `type: 'choix'` + `figeSiRempli` : affichage `AfficheLibelleDemande` + retrait de liaison.
+- `avecTitre` : saisie / affichage titre + action (pas de tiret cadratin, voir 4M).
+- `optionsPourLigne` prime sur `options` pour la ligne concernée.
+- `placeholder` s’affiche tant que la cellule est vide. Il ne remplace pas une valeur enregistrée.
+
+### 4A.3 Props — toutes **optionnelles** sauf besoin métier (non-breaking)
+
+```typescript
+type TableProps = {
+  colones?: TableColone[]
+  lignes?: React.ReactNode[][]   // édition : strings ; lectureSeule : ReactNode OK
+  boutonAjout?: string           // aria / title du « + » (défaut : Ajouter une ligne)
+  lectureSeule?: boolean
+  /** Cache la ligne « + » sans changer le rendu des lignes déjà affichées. */
+  masquerAjout?: boolean
+
+  /** Nombre de lignes en tête = existants figés (lecture seule tant que non édités via actionsFigee). */
+  lignesFigees?: number
+  /** Actions (modifier / supprimer / …) pour une ligne figée, ou en lecture seule. */
+  actionsFigee?: (rowIndex: number) => React.ReactNode
+  /** Bouton valider (icône) **uniquement** sur les lignes de création (index >= lignesFigees). */
+  onValiderCreation?: (rowIndex: number) => void
+
+  parPage?: number               // taille de page (défaut **10**) = LIMIT SQL en mode distant ; slice local seulement si la liste est déjà petite en mémoire
+  /** Quand cette valeur change, ou quand l’empreinte du contenu figé change, les lignes figées sont resynchronisées depuis `lignes`. Les brouillons restent. */
+  donneesCle?: string | number
+  recherche?: boolean            // défaut true. Barre soudée (4A.5)
+  onCopier?: (lignes: string[][], filtre?, indices?) => void
+  libelleCopie?: string
+  /** Même jeu de lignes que la copie, écrit dans un fichier. */
+  onTelecharger?: (lignes: string[][], filtre?, indices?) => void
+  libelleTelechargement?: string // défaut : Télécharger le rapport
+  onChange?: (lignes: string[][]) => void
+
+  /** Page serveur : pas de second slice local. */
+  paginationDistante?: {
+    page: number
+    pages: number
+    total: number
+    onPage: (page: number) => void
+  }
+  /** Recherche serveur à la place du filtre local. */
+  onRechercher?: (mot: string, colonne: string) => void
+  /** Voile + spinner pendant un chargement distant. */
+  chargement?: boolean
+  libelleChargement?: string
+  /**
+   * Hors serveur : grise la ligne « + » et les champs éditables.
+   * Réservé aux formulaires Demande / Intervention.
+   */
+  bloqueHorsServeur?: boolean
+  /** Classe de ligne (ex. année, ligne terminée). */
+  classeLigne?: (rowIndex: number, cells: string[]) => string | undefined
+  /** Infobulle native de la ligne. */
+  titreLigne?: string | ((rowIndex: number) => string | undefined)
+}
+
+type TableHandle = {
+  setCell: (rowIndex: number, colIndex: number, value: string) => void
+}
+```
+
+### 4A.4 Modes d’usage obligatoires
+
+#### A. Tableau unique « existants + création » (Demandes, Interventions, Tâches, Registre…)
+
+1. Une **seule** `Table` : d’abord les lignes existantes, puis une ou plusieurs lignes de création vides.
+2. `lignesFigees = existants.length` : les existants ne sont pas éditables en place via les Inputs (sauf double-clic / crayon sur les **nouvelles**).
+3. `actionsFigee(rowIndex)` : crayon / corbeille (ou équivalent) **uniquement** si la règle métier l’autorise (ex. pas sur état **Terminé** ; demandes non liées…).
+4. `onValiderCreation(rowIndex)` : icône valider dans `.col-actions` **seulement** sur les lignes de création — jamais sur les figées.
+   - Le handler **doit** utiliser `rowIndex` : n’enregistrer **que** cette ligne.
+   - **Interdit** : `() => form.requestSubmit()` / créer toutes les lignes remplies via le bouton d’une seule ligne.
+   - Après validation : retirer cette ligne des brouillons ; **conserver** les autres lignes de création (remplies ou vides ajoutées avec `+`).
+   - Les brouillons vivent dans l’état parent (`brouillons`) et sont rebranchés en `lignes={[...existants, ...brouillons]}` — ne pas les écraser quand les existants se rechargent.
+5. Sous l’en-tête de colonnes : bouton **`+`** en **ligne** pleine largeur, **`+` centré** dans la zone visible (sticky au scroll) — 4A.7.
+6. **Ordre visuel obligatoire** (édition) : **`+`** → **lignes de formulaire** (création) → **lignes de contenu** (existants paginés). **Interdit** : contenus puis formulaire puis `+`.
+7. Bouton « Enregistrer » du formulaire (s’il existe) : peut créer **toutes** les lignes complètes d’un coup, tout en **conservant** les brouillons incomplets.
+8. **Interdit** : un tableau « existants » + un second tableau / formulaire « nouvelle ligne » séparés ; **interdit** : modal de création quand le flux est tabulaire.
+
+#### B. Lecture seule (listes, historique, rapports)
+
+- `lectureSeule` + `lignes` en `ReactNode[][]`.
+- Recherche / pagination / `onCopier` selon besoin.
+- `actionsFigee` si des actions par ligne sont nécessaires sans édition cellule.
+
+### 4A.5 Barre de recherche soudée (dans l’item)
+
+En haut à droite (`.table-recherche`, `gap: 0`, `width: fit-content`, `margin-left: auto`) — **3 contrôles collés** :
+
+| Ordre | Contrôle | Rôle |
+|-------|----------|------|
+| 1 | `input type="search"` | Mot |
+| 2 | `select` | Colonne (`label` ou `filtre`) |
+| 3 | bouton `Rechercher` | Lance (également Entrée) |
+
+Comportement :
+- Filtre **au clic / Entrée**, jamais à chaque frappe.
+- Une seule colonne à la fois ; casse ignorée.
+- Champ vide + Rechercher → toutes les lignes.
+- Aucun résultat : « Aucun résultat pour « mot » dans {colonne} ».
+- `onRechercher` fourni → la page gère le filtre serveur ; sinon filtre local.
+- **Interdit** de recréer cette barre hors de l’item.
+
+Désactiver avec `recherche={false}` si le contexte l’exige (rare).
+
+### 4A.6 Pagination — charger seulement la page affichée
+
+**Règle d’or** : un tableau paginé ne charge **jamais** toute la table. Page 1 avec 10 lignes/page → `SELECT … LIMIT 10 OFFSET 0`. Page 2 → `LIMIT 10 OFFSET 10`. Interdit : `SELECT *` / `findAll()` / `tout=1` puis découper dans l’item.
+
+| Mode | Props | Comportement |
+|------|--------|--------------|
+| **Distant (défaut listes métier)** | `paginationDistante` + fetch `?page=&parPage=` | SQL `COUNT(*)` + `LIMIT parPage OFFSET (page-1)*parPage`. L’item affiche la page telle quelle : **pas de second slice**. Recherche → `onRechercher` (requête serveur), pas un filtre sur un dump local. |
+| Locale | `parPage` (défaut **10**) | Slice **client** uniquement si la liste est **déjà petite en mémoire** (options, schéma, < quelques dizaines de lignes). Si `lignesFigees > 0` en édition : **seules les figées** sont paginées ; création + `+` restent **au-dessus**. |
+| `tout=1` | — | **Uniquement** « Copier le rapport » **au clic**. Même filtre, toutes les pages. Jamais au chargement de l’écran. |
+
+Listes dérivées (rappels, liaisons, annuaire) : endpoint **filtré** (`vue=rappels`, `vue=libres`…) — pas toute la table « au cas où ».
+
+UI : Précédent / « Page n / m (N ligne(s)) » / Suivant — visibles seulement si plus d’une page.
+
+### 4A.7 Colonne Actions + sticky + pied `+` + bordures
+
+- Colonne `.col-actions` (en-tête vide `aria-label="Actions"`) dès qu'il y a édition, `actionsFigee` ou `onValiderCreation`.
+- Contenu typique :
+  - **Figée** : rendu de `actionsFigee(index)` (modifier / supprimer métier).
+  - **Création** : `onValiderCreation` (icône valider) + corbeille si plus d'une ligne créable ; sinon crayon / valider d'édition inline si pas de `onValiderCreation`.
+- **Sticky Actions** : `position: sticky; right: 0` sur `th`/`td.col-actions` (largeur ~5.5rem, plus large s'il y a un `select`).
+- Conteneur `.mecpip-helpdesk-table-scroll` : `overflow-x: auto` ; `container-type: inline-size` ; table `border-collapse: separate; border-spacing: 0; width: max-content; min-width: 100%`.
+- Cellules : `width: auto` (pas de largeurs fixes arbitraires sauf `.col-actions`).
+
+#### Ligne `+` et ordre (forme d'origine)
+
+Le `+` (édition) est une **ligne** sous l’en-tête de colonnes, **avant** les lignes de formulaire, **pas** un bouton dans `.col-actions` ni un `tfoot`.
+
+Ordre dans le tableau (édition) :
+
+1. `thead` : en-tête des colonnes
+2. `thead` : ligne **`+`** (`.table-ajout`, `colSpan` = colonnes + Actions)
+3. `tbody` : **lignes de formulaire** (création)
+4. `tbody` : **lignes de contenu** (existants de la page)
+5. `tfoot` : uniquement un bouton de pied optionnel (`onCopier`, etc.) — jamais le `+`
+
+| Élément | Règle |
+|---------|--------|
+| Cellule `+` | un seul `td.table-ajout` dans `thead` avec `colSpan` = colonnes + Actions |
+| Bouton | `width: 100%` — **toute la ligne** est cliquable |
+| Marqueur | `.table-ajout-marque` (`+` ou libellé) **centré** dans la **zone visible** |
+| Scroll | `position: sticky; left: 0; width: 100cqi; display: flex; justify-content: center` (suit le défilement horizontal, reste au milieu de l'écran) |
+
+**Interdit** : coller le `+` à droite ; le réduire à la cellule `.col-actions` ; une barre `+` dont le signe disparaît à gauche au scroll ; placer le `+` **sous** les contenus.
+
+#### Bordures — grille 1 px sans double trait
+
+```css
+th, td { border: solid #e0e0e0; border-width: 1px 0 0 1px; }
+tr > *:last-child { border-right-width: 1px; }
+tbody tr:last-child td { border-bottom-width: 1px; }
+table:has(tfoot) tbody tr:last-child td { border-bottom-width: 0; }
+tfoot td { border-bottom-width: 1px; }
+```
+
+- Pas de `border: 1px` supplémentaire sur `.table-ajout` (sinon double cadre).
+- Pas de `border-bottom` sur `thead` (le `border-top` du `tbody` suffit).
+- Dernière ligne de création toujours éditable ; autres nouvelles : double-clic ou crayon.
+
+### 4A.8 Colonne médias
+
+Pour une colonne `type: 'medias'` :
+- `photosLigne(rowIndex)` → miniatures / liens via `LienMedias`.
+- `onAjouterMedias(rowIndex)` + `peutAjouterMedias?(rowIndex)` → lien « AJOUTER DES MEDIA ».
+- Ne pas stocker le binaire dans la cellule texte : la page ouvre CapturePhotos / modal et met à jour l’état métier.
+
+### 4A.9 Exemple d’utilisation (création + existants)
+
+```tsx
+<Table
+  ref={tableRef}
+  colones={colones}
+  lignes={[...lignesExistantes, ...lignesCreation]}
+  lignesFigees={lignesExistantes.length}
+  parPage={10}
+  paginationDistante={{ page, pages, total, onPage: setPage }} // listes métier : fetch LIMIT, pas tout=1
+  onValiderCreation={(rowIndex) => void enregistrerUneCreation(rowIndex)} // pas requestSubmit()
+  actionsFigee={(rowIndex) =>
+    peutModifier(existants[rowIndex]) ? (
+      <>
+        <button type="button" className="btn-cellule" onClick={() => editer(rowIndex)}>
+          <Icone nom="modifier" />
+        </button>
+        <button type="button" className="btn-cellule btn-cellule-danger" onClick={() => supprimer(rowIndex)}>
+          <Icone nom="supprimer" />
+        </button>
+      </>
+    ) : null
+  }
+  onChange={setLignesCreationCompletes}
+/>
+```
+
+Règles métier fréquentes (à appliquer dans la **page**, pas dans l’item) :
+- Pas d’actions sur enregistrements **Terminé**.
+- Demandes : modifier / supprimer seulement si non liées et non Terminées.
+- Une table Tâches = figés + création inline (pas de modal « Nouvelle tâche »).
+
+### 4A.10 Checklist création / modification d’un tableau
+
+- [ ] Item unique `src/items/Table.tsx`
+- [ ] `colones` en français ; types adaptés (`choix`, `medias`, `avecTitre`…)
+- [ ] Un seul tableau pour existants + création (`lignesFigees` + `+`)
+- [ ] `onValiderCreation(rowIndex)` n’enregistre **que** cette ligne ; les autres brouillons restent
+- [ ] `actionsFigee` pour les existants autorisés ; brouillons conservés après reload des existants
+- [ ] Pas d’actions sur **Terminé** (garde page + API)
+- [ ] `.mecpip-helpdesk-table-scroll` + `.col-actions` sticky à droite ; `+` = **ligne** pleine largeur **sous l’en-tête**, marqueur **centré** (`.table-ajout-marque`, `100cqi`) ; ordre **`+` → formulaire → contenus** ; bordures 1 px sans double trait (4A.7)
+- [ ] Listes métier : fetch `page` + `parPage` (`LIMIT` SQL) + `paginationDistante` ; **pas** de `tout=1` / `SELECT *` à l’affichage
+- [ ] Pagination locale (`parPage=10`) seulement si les lignes sont déjà en mémoire et peu nombreuses ; ne cache pas le `+` ni les lignes de création (restent au-dessus des existants)
+- [ ] Recherche : barre soudée de l’item (4A.5), jamais dupliquée
+- [ ] Médias via colonne `medias` / `LienMedias`, pas un champ texte libre
+- [ ] Libellés multi-infos empilés (section 4M), pas de tiret cadratin
+- [ ] Tri au clic sur l’en-tête (4A.12) : croissant puis décroissant. Les lignes de création restent en haut
+- [ ] Texte long dans `.text-break`. Actions sans retour à la ligne. Médias en flex, plafond 100px
+- [ ] Colonne courte (moins de 20 lettres ou chiffres) : `.col-centre`, entre 100px et 500px
+
+### 4A.11 Anti-patterns table
+
+- ❌ Deux tableaux (existants / nouveau) ou formulaire séparé alors que le flux est tabulaire
+- ❌ Modal de création / édition de ligne alors que `Table` gère déjà création + Actions
+- ❌ Bouton valider sur les lignes figées / existantes
+- ❌ `onValiderCreation={() => form.requestSubmit()}` (valide toutes les lignes et efface les brouillons)
+- ❌ Réinitialiser les lignes de création à une seule ligne vide après chaque enregistrement d’une ligne
+- ❌ Actions modifier-supprimer sur une ligne **Terminé**
+- ❌ Oublier `overflow-x` / sticky Actions → Actions hors écran sur table large
+- ❌ `+` collé à droite, réduit à `.col-actions`, ou placé **sous** les lignes de contenu (doit rester une **ligne sous l’en-tête**, `+` au **centre**, puis formulaire, puis contenus)
+- ❌ Bordures doubles (thead+tbody, body+tfoot, ou `border` extra sur `.table-ajout`)
+- ❌ Largeurs de colonnes fixes partout (sauf `.col-actions`, `.col-centre` et les médias)
+- ❌ Barre de recherche dupliquée dans la page
+- ❌ Filtrer dans le parent **et** dans l’item sans `onRechercher` / pagination distante cohérente
+- ❌ Charger toute la table (`tout=1`, `findAll()` sans limit, `SELECT *`) puis paginer dans `Table`
+- ❌ Réutiliser un dump complet (actes, demandes, users…) pour un autre écran au lieu d’un `SELECT` limité / filtré
+- ❌ Second composant table par écran
+- ❌ Coller n° / date / titre avec un tiret cadratin dans une cellule (voir 4M)
+- ❌ Trier les lignes de création avec les existants, ou les envoyer sous les contenus
+- ❌ En pagination distante, croire que le clic d’en-tête trie les pages non chargées
+- ❌ Parser une date `jj/mm/aaaa` avec `Date.parse` (lu comme mois/jour)
+- ❌ Poser `.text-break` sur `.col-actions` ou sur `.cellule-medias-liens`
+
+---
+
+## 4A.12 Tri, retour à la ligne, colonnes courtes
+
+Aptitudes de l’item. La page ne les réimplémente pas.
+
+### Tri au clic sur l’en-tête
+
+Chaque en-tête de colonne de données est un bouton `.th-tri`. La colonne Actions n’est pas triable.
+
+| Clic | Sens | Marque |
+|------|------|--------|
+| aucun | pas de tri | ⇅ (opacité 0.35) |
+| 1er sur la colonne | croissant | ↑ |
+| 2e sur la même colonne | décroissant | ↓ |
+| autre colonne | croissant de cette colonne | ↑ |
+
+`aria-sort` vaut `ascending`, `descending` ou `none`. La colonne active porte `.th-tri-actif` (marque opaque). Le survol d’un en-tête, hors Actions, prend le fond `var(--vert-clair)`.
+
+La comparaison porte sur le **texte visible** (`texteCellule`), pas sur le nœud React brut. Ordre des tests :
+
+1. Deux cellules vides sont égales. Une cellule vide passe **après** une cellule remplie en sens croissant.
+2. Deux jours (Lundi à Dimanche, dans cet ordre) se comparent entre eux.
+3. Deux dates se comparent en instant. Formats lus : `jj/mm/aaaa`, avec `hh:mm` ou `hh:mm:ss` facultatifs, et ISO `aaaa-mm-jj`.
+4. Deux nombres : les espaces de milliers sont ignorés, la virgule est la décimale.
+5. Sinon comparaison française, numérique, sans tenir compte des accents (`localeCompare`, `fr`, `numeric`, `sensitivity: 'base'`).
+
+Portée du tri :
+
+- Les lignes de **création** (`index >= lignesFigees`) restent **en haut** et ne sont pas triées.
+- Tableau **local** : toutes les lignes filtrées sont triées, puis paginées. Le clic remet la page locale à 1.
+- Tableau **distant** (`paginationDistante`) : seule la **page déjà chargée** est triée. La page serveur ne change pas.
+- L’actualisation recharge les données. La colonne et le sens choisis restent et se réappliquent. Pas de requête séparée pour le tri.
+
+### Retour à la ligne
+
+Le texte d’une cellule et le libellé d’en-tête sont dans `.text-break` :
+
+```css
+.text-break {
+  display: block;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+```
+
+La colonne Actions n’enveloppe pas ses boutons. Les médias restent en colonne flex (`.cellule-medias-liens`), avec `max-width: 100px` et le même retour à la ligne. Ne pas leur ajouter `.text-break` : `display: block` casserait le flex.
+
+### Colonnes courtes centrées
+
+Si au moins une cellule non vide de la colonne compte **moins de 20** lettres ou chiffres (espaces et ponctuation ignorés), la colonne reçoit `.col-centre` :
+
+- texte centré ;
+- `min-width: 100px` ;
+- `max-width: 500px`.
+
+Les champs date, heure et datetime-local de cette colonne restent alignés à gauche.
+
+Les props `masquerAjout`, `donneesCle`, `onTelecharger`, `chargement`, `bloqueHorsServeur`, `classeLigne`, `titreLigne`, `optionsPourLigne` et `placeholder` sont dans le contrat 4A.2 et 4A.3.
+
+---
+
+## 4B. ITEM CAPTUREPHOTOS : `CapturePhotos` (src/items/CapturePhotos.tsx)
+
+**Périmètre** : saisie de médias (images et documents) en data URL. L’affichage « voir les médias » est `LienMedias` (4G), pas cet item.
+
+### Rôle
+
+| Élément | Règle |
+|---------|--------|
+| Fichier | `src/items/CapturePhotos.tsx` |
+| Stockage | Une entrée = `nom\|\|\|dataUrl`. Le nom ne contient pas de `\|`. |
+| Plafond | **5** fichiers (`MAX_MEDIAS`). Au-delà : message, rien n’est ajouté. |
+| Formats | JPEG, PNG, WebP, GIF, PDF, Word, Excel, TXT, CSV, RTF, ODT. Type MIME vide : l’extension décide. |
+
+### Props
+
+```typescript
+type Props = {
+  photos: string[]
+  onChange: (photos: string[]) => void
+  disabled?: boolean
+  chargement?: boolean
+  libelleChargement?: string
+}
+```
+
+### Comportement
+
+- Ajout multiple. Le champ fichier est vidé après chaque choix.
+- Image : miniature. Document : lien de téléchargement au nom du fichier.
+- « Retirer » enlève une entrée et rappelle `onChange`.
+- `disabled` ou plafond atteint : l’ajout est bloqué.
+- Helpers exportés : `estDataUrlMedia`, `parserMedia`, `estImageDataUrl`. Les autres items s’en servent. Ne pas réécrire le parseur.
+
+### Anti-patterns
+
+- Stocker le binaire hors data URL dans la cellule.
+- Dépasser 5 fichiers.
+- Recréer un input fichier dans la page alors que cet item existe.
+
+---
+
+## 4C. ITEM CARD : `Card` (src/items/Card.tsx)
+
+**Périmètre** : bloc de page (titre + corps). Pas un tableau, pas un modal.
+
+### Props
+
+```typescript
+type Props = {
+  titre?: ReactNode
+  retractable?: boolean   // défaut false : <details> / <summary>
+  img?: string
+  body?: ReactNode        // ignoré si children est fourni
+  children?: ReactNode
+  className?: string
+  chargement?: boolean
+  libelleChargement?: string  // défaut « Chargement… »
+}
+```
+
+### Comportement
+
+- `children` prime sur `body`.
+- Carte rétractable : `<details>`, le titre est le `<summary>`.
+- Cartes imbriquées : fond alterné (`card-strie-gris` / `card-strie-blanc`) selon la profondeur.
+- `chargement` voile le corps via `AvecChargement` (4H). Le titre reste visible.
+- Image optionnelle dans `.card-img-placeholder`.
+
+### Anti-patterns
+
+- Reproduire `.article-card` à la main dans une page.
+- Mettre un formulaire métier entier dans le CSS de la carte au lieu des items `Input` / `Table`.
+
+---
+
+## 4D. ITEM GRAPHE : `Graphe` (src/items/Graphe.tsx)
+
+**Périmètre** : barres groupées en SVG. La page fournit les séries déjà agrégées. L’item n’appelle pas l’API.
+
+### Props
+
+```typescript
+type SerieGraphe = { nom: string; couleur: string; valeurs: number[] }
+
+type Props = {
+  labels: string[]
+  series: SerieGraphe[]          // valeurs alignées sur labels
+  titre?: string
+  labelChoisi?: string | null
+  serieChoisie?: string | null
+  formatLabel?: (label: string) => string
+  onSelect?: (label: string) => void
+  onSelectSerie?: (nom: string | null) => void
+  chargement?: boolean
+  libelleChargement?: string
+}
+```
+
+`forwardRef` vers le conteneur `.graphe`.
+
+### Comportement
+
+- Vide (`labels` ou `series` absents) : « Aucune donnée à afficher. »
+- `chargement` : titre + `Loader` plein, pas le SVG.
+- Légende : « Tout afficher » puis une pastille par série. Le clic filtre (`onSelectSerie`). `null` = toutes les séries.
+- Axe Y : graduations entières, 5 au plus. Le max est le plus grand nombre + 1, au minimum 1.
+- Axe X : une étiquette sur N dès qu’il y en a trop (plafond visuel ~14). L’étiquette choisie reste affichée. Rotation -45°.
+- Clic ou Entrée / Espace sur une colonne : `onSelect(label)`. La colonne choisie est surlignée.
+- Infobulle d’une barre : libellé, nom de série, valeur.
+
+### Anti-patterns
+
+- Charger toutes les lignes métier dans le graphe pour les compter côté SVG.
+- Deuxième composant de barres par écran.
+
+---
+
+## 4E. ITEM ICONE : `Icone` (src/items/Icone.tsx + src/items/icones.ts)
+
+**Périmètre** : pictogrammes SVG 24×24 et le choix d’icône à partir d’un libellé français.
+
+### Contrat
+
+```typescript
+type NomIcone =
+  | 'fermer' | 'supprimer' | 'annuler' | 'valider' | 'modifier' | 'cle'
+  | 'dossier' | 'fichier' | 'ajouter' | 'telecharger' | 'deplacer' | 'copier'
+  | 'droits' | 'precedent' | 'suivant' | 'lier' | 'connexion' | 'deconnexion'
+  | 'agence' | 'compte' | 'cahier' | 'intervention' | 'tache' | 'historique'
+  | 'statistique' | 'connaissance' | 'oeil' | 'oeilFerme' | 'envoyer' | 'message'
+  | 'retour' | 'actualiser' | 'parcourir' | 'importer' | 'parametres'
+  | 'categorie' | 'budget' | 'partage'
+
+function Icone({ nom, chargement }: { nom: NomIcone; chargement?: boolean })
+function iconePour(libelle: string): NomIcone | ''
+```
+
+### Comportement
+
+- `Icone` est décoratif (`aria-hidden`). Le bouton porteur fournit `aria-label`.
+- `chargement` ajoute la classe `en-chargement`.
+- `iconePour` parcourt des motifs dans l’ordre de `icones.ts`. Le premier motif qui matche gagne. Libellé vide : `''`.
+- `BoutonIcone` (4F) appelle `iconePour(label)`. Un nouveau libellé de bouton récurrent se branche **ici**, pas par un SVG copié dans la page.
+
+### Anti-patterns
+
+- Importer une librairie d’icônes.
+- Dupliquer un `<svg>` dans une page.
+- Ajouter un nom dans `Icone.tsx` sans tracé dans `TRACES`.
+
+---
+
+## 4F. ITEM INPUT : `Input` (src/items/Input.tsx)
+
+**Périmètre** : un seul champ pour tout le projet. Le select, les cases, le fichier, le bouton et la liaison demande passent par ce fichier. Pas de second composant Select.
+
+`BoutonIcone` est exporté nommé depuis ce fichier.
+
+### 4F.1 Props
+
+```typescript
+type OptionSelect = string | { value: string; label?: string; disabled?: boolean }
+
+type InputExtraAction = {
+  label: string
+  value?: string          // défaut '__nouveau__'
+  onClick: (rowIndex?: number) => void
+}
+
+type Props = {
+  type: string
+  placeholder?: string
+  value?: string
+  options?: OptionSelect[]
+  readOnly?: boolean
+  disabled?: boolean
+  id?: string
+  extraAction?: InputExtraAction
+  onChange?: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void
+  onClick?: () => void
+  title?: string
+  avecTitre?: boolean
+  onFocus?: () => void
+  onBlur?: () => void
+  photosPourLien?: (valeurCellule: string) => string[]
+  filtre?: boolean        // ajoute l’option <vide> si elle n’est pas déjà là
+  danger?: boolean
+  submit?: boolean
+  className?: string
+  texte?: boolean         // bouton : forcer le libellé même si une icône existe
+  form?: string
+  copier?: boolean        // bouton copier collé au champ (pas sur datetime)
+}
+```
+
+### 4F.2 Types
+
+| `type` | Rendu |
+|--------|--------|
+| `text`, `email`, `color`, `date` | `<input>` du même type |
+| `datetime`, `datetime-local` | `datetime-local`. Bouton × pour vider si une valeur est présente et le champ n’est pas en lecture seule |
+| `password` | œil afficher / masquer |
+| `textarea` | 3 lignes. `avecTitre` : champ titre + corps, publiés ensemble. Pas de `.trim()` à chaque frappe (4M) |
+| `select` | liste déroulante, voir 4F.3 |
+| `checkbox` | cases. `value` = valeurs cochées jointes par une virgule |
+| `liste` | liste en lecture. `placeholder` sert de titre |
+| `choix` | liaison. Vide : champ lecture seule + bouton. Rempli : libellé empilé, retrait, médias du lien |
+| `mailto` | bouton qui ouvre le courriel. Rien si l’URL est vide, ou si le champ est désactivé |
+| `bouton` | `BoutonIcone`. `submit` envoie le formulaire `form` |
+| `file` / `fichier` | un fichier |
+| `files` / `fichiers` | plusieurs fichiers |
+| `repertoire` / `dossier` | choix de dossier |
+| `affichage` | paragraphe. Vide : « value a completer » |
+| `H1` … `H6` | titre du niveau demandé |
+| autre | `<input type="text">` |
+
+`copier` ajoute un bouton « Copier le contenu » (presse-papiers + notification). Inactif si la valeur est vide. Ignoré sur datetime.
+
+Le champ fichier masque l’`<input>` natif et passe par `BoutonIcone`. La valeur du input est remise à vide après le choix, pour pouvoir reprendre le même fichier.
+
+### 4F.3 Select
+
+Règles obligatoires. Elles évitent qu’une liste se cale toute seule sur la première option.
+
+- `value` vide, ou absente de `options` : la valeur contrôlée est `""`. Une option vide est affichée. Son libellé est `placeholder`, sinon « Choisir… ».
+- Sans cette option vide, le navigateur montre la première vraie option **sans** `onChange`. Interdit.
+- `extraAction` dont le libellé matche `nouve` (insensible à la casse) : option « + {label} » **en tête**, juste sous « Choisir ». Classe `option-nouveau`. « Choisir » est en gras.
+- Les autres `extraAction` : option « + {label} » **en fin** de liste.
+- La valeur de l’action est `extraAction.value`, sinon `__nouveau__`. Le parent (souvent `Table`) ne l’enregistre pas : il appelle `extraAction.onClick`.
+- `filtre` : ajoute l’option sentinelle des valeurs non renseignées si elle n’est pas déjà dans `options`.
+- `disabled` ou `readOnly` : le select est désactivé.
+- Option objet : `label` affiché, `value` stockée, `disabled` grise la ligne.
+- Ne pas trier les options dans l’item. L’ordre vient de la page.
+
+### 4F.4 BoutonIcone
+
+```typescript
+BoutonIcone({
+  label, onClick?, onDoubleClick?, danger?, type?, form?, disabled?,
+  className?, children?, texte?, ariaCurrent?, title?, href?,
+  nouvelOnglet?, chargement?,
+})
+```
+
+- `label` est le `aria-label` et le `title` (sauf `title` explicite).
+- Une icône est choisie par `iconePour(label)` (4E). Sinon le texte du label s’affiche.
+- `texte` force le libellé. `children` remplace le contenu.
+- `href` et bouton utilisable : rendu `<a>`. `nouvelOnglet` ajoute `target="_blank"` et `rel="noopener noreferrer"`.
+- `chargement` désactive le bouton, pose `aria-busy` et la classe `en-chargement`.
+- `danger` : variante danger.
+
+### Anti-patterns
+
+- `<select>`, `<input>` ou `<button>` métier recréés dans une page.
+- Oublier l’option vide du select quand `value` peut être `""`.
+- Placer « + Nouveau… » en bas alors que le libellé matche `nouve`.
+- Laisser le select afficher la première option réelle tant que l’utilisateur n’a rien choisi.
+- `.trim()` sur le `onChange` d’un titre.
+
+---
+
+## 4G. ITEM LIENMEDIAS : `LienMedias` (src/items/LienMedias.tsx)
+
+**Périmètre** : ouvrir les médias déjà stockés. La capture est `CapturePhotos` (4B).
+
+### Props
+
+```typescript
+type Props = {
+  photos?: string[] | null
+  className?: string
+  chargement?: boolean
+  libelleChargement?: string
+}
+```
+
+Deux exports :
+
+- `LienMedias` (défaut) : lien « voir des media ». Ouvre un `Modal` (4J). Liste vide et pas de chargement : ne rend rien.
+- `ApercuMedias` : galerie directe, titre « Médias (n) ». Liste vide : ne rend rien.
+
+### Comportement
+
+- Chaque entrée passe par `parserMedia` (4B).
+- Image : aperçu. Double-clic : plein écran (portail). Échap, clic autour ou double-clic sur l’image ferment le plein écran.
+- Document : lien `download` au nom du fichier.
+- Le plein écran ne remplace pas le modal de la liste : on peut le fermer et rester dans la liste.
+
+### Anti-patterns
+
+- Réécrire la visionneuse dans une page.
+- Mettre `.text-break` sur `.cellule-medias-liens` (4A.12) : le bloc reste en flex, plafond 100px.
+
+---
+
+## 4H. ITEM LOADER : `Loader` (src/items/Loader.tsx)
+
+**Périmètre** : spinner et voile. Les items qui chargent (`Table`, `Modal`, `Card`, `SideBar`, `Graphe`, `LienMedias`, `CapturePhotos`, `Notifications`) passent par ici. Pas de second spinner.
+
+### Props
+
+```typescript
+type TailleLoader = 'petit' | 'moyen' | 'grand'
+
+Loader({
+  label = 'Chargement…',
+  sansLabel?: boolean,
+  taille = 'moyen',
+  plein?: boolean,     // occupe le parent
+  actif = true,        // false : ne rend rien
+  className?: string,
+})
+
+AvecChargement({
+  chargement?: boolean,
+  label = 'Chargement…',
+  taille?: TailleLoader,
+  className?: string,
+  children,
+})
+```
+
+### Comportement
+
+- `Loader` : `role="status"`, `aria-live="polite"`, `aria-label` = le libellé.
+- `AvecChargement` : le contenu reste monté. Si `chargement`, un voile recouvre le bloc (`aria-busy`).
+- Libellé par défaut : « Chargement… ».
+
+### Anti-patterns
+
+- Démonter le formulaire pendant le fetch (on perd la saisie).
+- Spinner CSS local dans une page.
+
+---
+
+## 4I. ITEM LOGO : `LogoMecpipHelpdesk` (src/items/LogoMecpipHelpdesk.tsx)
+
+**Périmètre** : marque SVG (feuille, fleur, pli). viewBox `0 0 200 200`.
+
+### Props
+
+```typescript
+type Props = { className?: string; title?: string }
+```
+
+- `title` présent : `role="img"` et `aria-label`.
+- `title` absent : `role="presentation"`, `aria-hidden`.
+- Le modal (4J) le pose en filigrane (`.logo-fond-modal`).
+- Ne pas redessiner le logo dans une page. Une variante de taille passe par `className`.
+
+---
+
+## 4J. ITEM MODAL : `Modal` (src/items/Modal.tsx)
+
+**Périmètre** : fenêtre au-dessus de la page, rendue dans `document.body`.
+
+### Props
+
+```typescript
+type ModalProps = {
+  title?: string
+  children?: ReactNode
+  actions?: ReactNode          // barre basse. Absente : pas de .modal-barre
+  isOpen?: boolean             // défaut true
+  onClose?: () => void         // absent : pas de bouton Fermer
+  className?: string
+  overlayClassName?: string    // empiler un modal au-dessus d’un autre
+  chargement?: boolean
+  libelleChargement?: string   // défaut « Chargement… »
+}
+```
+
+### Comportement
+
+- `isOpen` faux : ne rend rien.
+- Fermeture **uniquement** par le bouton Fermer (icône), et seulement si `onClose` est fourni. Un clic sur le fond ne ferme pas.
+- À l’ouverture, le focus va au premier `input`, `select` ou `textarea` visible et non readonly. L’effet ne dépend pas de `onClose` : sinon chaque frappe ramène le curseur au premier champ.
+- `role="dialog"`, `aria-modal`, `aria-label` = `title`.
+- Le corps est voilé par `AvecChargement` si `chargement`.
+- Le logo (4I) est en fond du corps.
+- `actions` : barre basse (`.modal-barre`).
+
+### Anti-patterns
+
+- Fermer au clic sur l’overlay.
+- Refaire un portail de dialogue dans une page.
+- Rouvrir le focus à chaque rendu.
+
+---
+
+## 4K. ITEM NOTIFICATIONS : `Notifications` (src/items/Notifications.tsx)
+
+**Périmètre** : toasts à l’écran et rappel de tâche planifié. Le toast Windows (logo, thème) est côté Rust. Cet item ne le remplace pas.
+
+### Props
+
+```typescript
+type RappelPlanifie = {
+  id: string
+  numero: string
+  action: string
+  nomComplet: string
+  zone: string
+  categorie?: string
+  etat?: string
+  a: string               // date du rappel
+}
+
+Notifications({
+  rappels?: RappelPlanifie[],
+  chargement?: boolean,
+  libelleChargement?: string,
+})
+```
+
+### Comportement
+
+- Toasts : abonnement à `abonnerNotifications`. Durée **4500 ms**. Fermeture anticipée par le bouton. `role="status"`.
+- Rappel : une tâche cron à la date `a`, une seule fois, si la date est valide et si ce rappel n’est pas déjà vu.
+- Clé de vu : `id:a`, dans `localStorage` (`mecpip-helpdesk-rappels-vus`). « Vu » enregistre la clé. Fermer la fiche sans « Vu » ne l’enregistre pas. Le cron ne relance pas le même affichage dans la session.
+- La fiche est un `Modal` « Rappel de tâche » : numéro, état, titre, contenu, intervenant, agence, catégorie, échéance. Champs vides omis.
+- Le bouton d’actualisation recharge les rappels. Les clés déjà en `localStorage` restent vues.
+
+### Anti-patterns
+
+- Second conteneur de toasts dans une page.
+- Marquer le rappel vu à la simple fermeture.
+- Afficher une pile de rappels déjà passés : le filtre « déjà vu » reste.
+
+---
+
+## 4L. ITEM SIDEBAR : `SideBar` (src/items/SideBar.tsx)
+
+**Périmètre** : menu. Horizontal (`alignement="X"`) ou vertical (`"Y"`, défaut).
+
+### Props
+
+```typescript
+type SideBarOption = string | {
+  label: string
+  href?: string
+  onClick?: () => void
+  actif?: boolean
+  enfants?: SideBarOption[]   // groupe repliable
+  pastille?: number           // 0 ou absent : pas de pastille. Au-delà de 99 : « 99+ »
+}
+
+SideBar({
+  alignement?: 'X' | 'Y',
+  options: SideBarOption[],
+  activeHash?: string,
+  chargement?: boolean,
+  libelleChargement?: string,
+})
+```
+
+### Comportement
+
+- Une chaîne devient un lien `#libelle-en-minuscules` (espaces remplacés par `-`).
+- `href` explicite prime.
+- `onClick` : bouton, pas un lien. En vertical, un séparateur précède le premier bouton d’action.
+- Groupe (`enfants`) : bouton qui ouvre ou ferme. S’ouvre tout seul si un enfant correspond à `activeHash`. `aria-expanded`.
+- L’entrée dont le hash égale `activeHash` porte `active` et `aria-current="page"`.
+- Le libellé passe par `iconePour` (4E) : icône + texte.
+- `pastille` : nombre blanc sur cercle rouge, à côté du libellé. Réservé aux liens, pas aux boutons d’action.
+- `chargement` voile le menu et marque les boutons d’action en chargement.
+
+### Anti-patterns
+
+- Recoder le menu dans la page.
+- Pastille sur une action `onClick` (elle n’est pas rendue).
+- Hash d’activité calculé autrement que la comparaison à `activeHash`.
+
+---
+
+
+## 4M. LIBELLÉS STRUCTURÉS, MULTILIGNE (pas de tiret cadratin)
+
+Quand un libellé UI regroupe **plusieurs infos distinctes** (n°, date, créateur, titre, texte, zone, état, « lié »…), **ne pas** les coller sur une seule ligne avec `—` / `-` / `|`.
+
+### Règle
+
+| À faire | À éviter |
+|---------|----------|
+| Une info = une ligne (ou un bloc empilé) | `N° … — date — nom — objet` |
+| Hiérarchie typo : `<strong>` / `<small>` / texte normal | Tout en même graisse sur une ligne |
+| Composant réutilisable (`AfficheLibelleDemande`, `AfficheCharge`, `ActionTitree`…) | Copier-coller des concaténations ` — ` dans chaque page |
+| Conserver espaces dans les champs titre à la saisie (pas de `.trim()` à chaque frappe) | `.trim()` sur `onChange` qui mange les espaces |
+
+### Structure type (ordre recommandé)
+
+1. **Identifiant** (`N° …`) en `strong`
+2. **Date** en `small`
+3. **Créateur / acteur** en `strong`
+4. **Titre** en `strong` (couleur accent si déjà définie)
+5. **Corps / objet / détail** en texte normal
+6. **Métadonnée** (zone, lié, actif…) en `small`
+
+### Stockage vs affichage
+
+- Stockage / recherche : séparateur nouvelle ligne (ou parseur compatible ancien tiret cadratin) OK.
+- Affichage utilisateur : **toujours** le composant empilé, jamais la chaîne brute avec tirets.
+- Fiches / rapports copiés en presse-papier : lignes `Clé : valeur` — pas de tiret cadratin comme séparateur principal.
+
+### Exceptions
+
+- Phrases complètes (ex. hint sous un graphe)
+- Pied de page / copyright
+- `aria-label` / `title` accessibilité
+- Tooltips SVG / attributs techniques
+
+---
+
+## 4N. ITEM PRIVILEGE : `Privilege` (src/items/Privilege.tsx)
+
+**Périmètre** : une seule matrice de droits pour le projet. Elle s’ouvre au-dessus de la page qui porte les droits. L’item n’appelle pas l’API. Le catalogue (menus, actions) et l’alignement des cases vivent dans `src/metier/privileges.ts`. Le même catalogue est recopié côté Tauri, dans le module des privilèges, qui reste indépendant du front web et de tout back Node.
+
+**Création automatique** : à chaque « Full-page » (section 3). Si les fichiers manquent, les créer selon ce gabarit. Si l’item existe déjà, ne pas le dupliquer : ajouter seulement la nouvelle ressource.
+
+### Ce qui s’adapte au projet
+
+| Point | Source dans le projet en cours |
+|-------|--------------------------------|
+| Lignes (ressources) | Menus et sous-menus déjà posés dans `SideBar` (4L), plus chaque Full-page ajoutée ensuite |
+| Clé de ressource | Slug stable du libellé : minuscules, espaces remplacés par `-`. Une clé existante ne change pas |
+| Sous-menu | `enfant: true`. Affiché `· {libellé}` |
+| Colonnes (actions) | La liste par défaut ci-dessous. Retirer une action que le projet n’a pas (pas de notes, pas d’assignation). Garder les clés des actions conservées |
+| Porteur | Le groupe, si le projet a des groupes (un compte, un seul groupe, les droits sont ceux du groupe). Sinon le compte |
+| Qui voit | Admin du projet, ou un membre du porteur |
+| Qui modifie | Admin du projet seulement |
+| Rôles | Les noms de rôles déjà répondus en FAQ (question 17) |
+
+Liste d’actions par défaut, dans cet ordre : `voir-tous` « Voir tous », `editer-tous` « Éditer tous », `creer` « Créer », `supprimer` « Supprimer », `purger` « Purger », `lire-notes` « Lire les notes », `maj-notes` « Mise à jour des notes », `voir-assignes` « Voir les éléments assignés », `maj-assignes` « Mettre à jour les éléments assignés », `voir-mes` « Voir mes éléments », `maj-mes` « Mettre à jour mes éléments ».
+
+### Contrat de l’item
+
+L’item assemble `Modal` (4J), `Table` (4A) et `BoutonIcone` (4F). Aucune case à cocher écrite à la main.
+
+```typescript
+Privilege({
+  ouvert: boolean,
+  titre: string,                         // « Privilèges de {nom du porteur} »
+  lignes: string[][],
+  chargement?: boolean,
+  onFermer: () => void,
+  onChange: (lignes: string[][]) => void, // lignes déjà alignées
+  onValiderLigne: (index: number) => void,
+})
+```
+
+Fenêtre : `className="modal-large modal-privileges"`, fermée par la croix. Hint : « Une ligne par menu ou sous-menu. Cochez les droits, puis validez la ligne pour l’enregistrer. »
+
+Tableau :
+
+| Réglage | Valeur |
+|---------|--------|
+| Première colonne | « Menu », `affichage`, lecture seule |
+| Colonnes suivantes | Une par action, `type: 'checkbox'`, libellé de l’action |
+| Dernière colonne | « Sélectionner/désélectionner tout », `checkbox` |
+| Lignes | Toutes figées. `masquerAjout`. Pas de brouillon |
+| Recherche | Barre soudée de la Table |
+| Page | 20 lignes |
+| Chargement | « Chargement des privilèges… » |
+| Action de ligne | `BoutonIcone` « Valider la ligne », en texte |
+
+`donneesCle` suit le porteur, un compteur incrémenté après le chargement, la révision de l’actualisation, et l’état des cases. Ainsi une recharge réaffiche les cases du serveur.
+
+### Alignement des cases
+
+Valeur cochée : la chaîne `oui`. Vide : décochée. L’index de la case Tout est `1 + nombre d’actions`.
+
+- La case Tout vient de changer et elle est cochée : toutes les actions de la ligne passent à `oui`, et Tout reste coché.
+- La case Tout vient de changer et elle est décochée : toutes les actions passent à vide, et Tout aussi.
+- Une action vient de changer : Tout est coché seulement si toutes les actions de la ligne le sont.
+- Lecture d’une ligne : si Tout est coché, toutes les clés d’actions ; sinon les clés dont la case vaut `oui`.
+- Construction d’une ligne : libellé, puis une case par action, puis Tout.
+
+L’item applique cet alignement avant d’appeler `onChange`. La page stocke le résultat renvoyé.
+
+### Ouverture
+
+Lien « Modifier », classe `lien-privilege`, `href="#privileges"`, `preventDefault`. Il est posé sur la ligne du porteur (colonne « Privilège » de la gestion des groupes, ou de la gestion des comptes si le projet n’a pas de groupes). Sans droit de modifier : la cellule reste un tiret.
+
+Ouverture : titre avec le nom du porteur, lignes vides le temps du chargement, puis les lignes renvoyées. Fermer remet la cible à vide.
+
+### Persistance
+
+Table SQLite, créée si elle manque. `actions` est un JSON de clés, jamais la case Tout.
+
+```sql
+CREATE TABLE IF NOT EXISTS privileges_groupe (
+  groupe TEXT NOT NULL,
+  ressource TEXT NOT NULL,
+  actions TEXT NOT NULL DEFAULT '[]',
+  PRIMARY KEY (groupe, ressource)
+);
+```
+
+Porteur = compte : même forme, table `privileges_utilisateur`, clé `utilisateur_id`. Une seule des deux tables est la source des droits du projet.
+
+`GET /api/{porteurs}/{cle}/privileges` renvoie `{ lignes: [{ ressource, actions }] }`, une entrée par ressource connue. Ressource absente en base : `actions: []`. Porteur inconnu : 404. Lecture interdite : 403.
+
+`PATCH` du même chemin, corps `{ ressource, actions }`, n’écrit que cette ressource. Les autres lignes du porteur restent. Clé de ressource inconnue : ignorée. Clé d’action inconnue : retirée. Écriture interdite : 403. Succès : la ligne enregistrée, et une trace au journal (« Privilèges », nom du porteur).
+
+L’actualisation de la coquille incrémente la révision. Une matrice ouverte se recharge avec cette révision.
+
+**Front web et Tauri** : les deux portent l’item, le catalogue et la table. Le module Tauri ne lit pas le front. Les deux listes (ressources, actions) restent les mêmes clés.
+
+### Styles (fichier CSS unique du projet)
+
+```css
+.modal-privileges.modal-content { width: min(1100px, 96vw); }
+.modal-privileges .mecpip-helpdesk-table-scroll { overflow-x: auto; }
+.lien-privilege { color: var(--vert); font-weight: 700; text-decoration: underline; }
+```
+
+Le sélecteur de défilement reprend la classe de scroll déjà posée par la Table du projet.
+
+### Checklist à chaque Full-page
+
+- [ ] `src/items/Privilege.tsx` existe et reste le seul écran de matrice
+- [ ] `src/metier/privileges.ts` contient la nouvelle ressource, sans doublon de clé
+- [ ] Un sous-menu de cette page est une ligne `enfant`
+- [ ] Le module Tauri a les mêmes clés, la table, `GET` et `PATCH` par ligne
+- [ ] Le lien « Modifier » du porteur ouvre cet item
+- [ ] L’actualisation recharge la matrice ouverte
+
+### Anti-patterns
+
+- Recopier les menus d’un autre projet dans le catalogue.
+- Une seconde matrice, ou des cases à cocher hors de la Table.
+- Enregistrer toute la matrice quand le bouton dit « Valider la ligne », ce qui effacerait les lignes non envoyées.
+- Changer une clé de ressource déjà en base.
+- Oublier le côté Tauri.
+
+---
+
+## 5. LOGIQUE METIER
+
+Ecran : Lister, Ajouter, Modifier, Supprimer, Filtrer.
+Lister : **une page SQL à la fois** (`LIMIT` / `OFFSET` = `parPage` / page courante). Pas de liste complète en mémoire pour paginer ensuite (4A.6).
+Entite : privileges voir/creer/modifier/supprimer/filtrer ; matrice item 4N (menus × actions, case Tout, enregistrement par ligne, créée avec chaque Full-page) ; CSV | ; impression ; [IA] ai_reindex si FAQ IA=oui.
+Login : sans confirmation ; QR remote toujours ; auth_* + remote_connection_get ; independant de l'IA. Ecran : Full-page-connection (section 3).
+Parametres : panneaux communs toujours ; panneaux Assistant [IA] seulement si FAQ IA=oui ; privileges via triggers.
+
+---
+
+## 6. SECURITE
+
+SOLID ; argon2/bcrypt ; privileges backend ; pas de secrets en clair dans JSON.
+
+---
+
+## 7. IA LOCALE — [IA] (uniquement si FAQ.json repond oui a l'IA)
+
+Section + annexe IA **entierement ignorees** si FAQ IA != oui.
+
+Activation : FAQ r=oui → IA_PROJET=oui → appliquer annexe IA + D:\llama-b8184-bin-win-cpu-x64\AItools\
+
+Contenu : Loggy, llama-server :18080, RAG FTS5, strategie dynamique dda_* (ou routes si FAQ), ai_*, reindex, prompt systeme dynamique (pas -sys/-sysf).
+
+Interdit : activer sans FAQ oui ; melanger IA et metier si non.
+
+---
+
+## 8. DIRECTIVES CURSOR
+
+1. Toujours : protocole FAQ (0A) — si <chemin vers ce projet>\FAQ.json absent, le CREER (ne pas attendre qu'il soit livre avec le kit)
+2. Relire ce fichier ; appliquer reponses FAQ
+3. Loi de structure et section 3 avant tout fichier : Front (`items`, `interfaces`, `constants` avec exactement 3 fichiers, `combinaisons`, `pages`, `App.tsx`, `App.css`) et Back (`interfaces`, `controller`, `services`, `repositories`, `constants`) ; creer un dossier du schema s'il manque ; aucun autre dossier ; pas de class ; hooks `useState` et `useEffect` ; si `src/items/` ou `src/pages/` manque, le creer ; TS strict ; UI francais ; toute nouvelle page n’assemble que les items (methode section 3) ; « Full-page » = copie de la page la plus complete du projet, memes Items, ajouter / supprimer / modifier / filtrer, et creation de l’item Privilege (4N) avec ajout de la page a ses ressources ; « Full-page-connection » = coquille de connexion de la section 3 ; « Full-page-statistique » = page statistiques de la section 3 ; « Full-page-compte » = page comptes de la section 3 ; « Full-page-parametre » = page parametres de la section 3 ; « Full-page-messagerie » = panneau messagerie de la section 3
+4. Pas HTML/CSS dans JSON ; pas routes/menus manuels par entite
+5. Login/Parametres → section 5 ; [IA]/ai_*/annexe → ignorer si FAQ IA != oui
+6. Tableaux : pagination distante + `LIMIT` (4A.6) ; Front = Tauri si les deux existent ; Tauri indépendant du Back/Front web
+
+---
+
+## 9. CHECKLIST AGENT — DEMARRAGE SESSION
+
+[ ] <chemin vers ce projet>\FAQ.json existe ?
+[ ] Sinon → CREER <chemin vers ce projet>\FAQ.json (format 0A.3, questions 0A.4, r=""), STOP
+[ ] Tous les required.r remplis ?
+[ ] Sinon → lister q manquantes, STOP
+[ ] Lire r → fixer IA_PROJET, NOM_PROJET, stack, charte…
+[ ] Ecrire/maj .cursorrules du projet
+[ ] Si IA_PROJET=oui → charger annexe IA ; sinon l'ignorer
+[ ] Arborescence section 3 seulement ? `src/items/`, `src/interfaces/`, `src/constants/` (3 fichiers), `src/combinaisons/`, `src/pages/`, `src/App.tsx`, `src/App.css`, et `back/` (`interfaces`, `controller`, `services`, `repositories`, `constants`) ? Creer ceux qui manquent. Aucun autre dossier.
+[ ] Executer la demande utilisateur
+
+==============================================================================
+# ANNEXE IA — KIT AITOOLS (COPIE INTEGRALE)
+#
+# UTILISATION STRICTEMENT CONDITIONNELLE :
+# Appliquer CETTE ANNEXE SEULEMENT SI dans <chemin vers ce projet>\FAQ.json la reponse a la question
+# « Vas-tu utiliser une IA locale dans ce projet ? » (ou equivalent) est « oui ».
+# Sinon : ne pas lire, ne pas implementer, ne pas citer comme obligatoire.
+# N'utilise ces infos QUE si a ta demande l'utilisateur repond qu'il va utiliser une IA.
+==============================================================================
+# CURSOR RULES — KIT AITOOLS (Loggy / llama.cpp / RAG FTS5 / SQLite)
+#
+# Emplacement du kit : D:\llama-b8184-bin-win-cpu-x64\AItools
+#
+# OBJECTIF : avec CE fichier + le dossier AItools uniquement, recréer dans un
+# nouveau projet Tauri + React + SQLite un assistant IA local aussi performant
+# que la spécification ci-dessous (registre dynamique → triggers → DDA → RAG FTS5
+# → intents avant LLM → prompt système dynamique).
+#
+# Sources autorisées (rien d'autre) :
+#   - reference/rust/*.rs
+#   - reference/commands/ai.rs
+#   - reference/frontend/*
+#   - knowledge/*.txt
+#   - schema/ai_tables.sql
+#   - docs/*.md
+#   - manifest.json
+#   - CE fichier .cursorrules (spécification complète)
+#
+# NE PAS re-télécharger llama.cpp ni le GGUF si les binaires sont déjà dans
+# D:\llama-b8184-bin-win-cpu-x64\ (adapter le chemin GGUF au modèle du projet).
+#
+# IMPORTANT — prompt système : injecter via message OpenAI `role: "system"` à chaque
+# requête chat (contenu DYNAMIQUE : RAG + expérience + branding). NE PAS se reposer
+# sur `-sys` / `-sysf` de llama-cli (voir §23).
+
+---
+
+## 0. MISSION DE L'AGENT CURSOR
+
+Tu implémentes un **assistant local hors ligne** nommé par défaut **Loggy** qui :
+
+1. Lance `llama-server.exe` en sous-processus (API OpenAI-like sur 127.0.0.1:18080).
+2. Enrichit le prompt système via **RAG lexical FTS5** (PAS d'embeddings vectoriels).
+3. Mémorise les succès utilisateur dans `ai_experience` (similarité de tokens, PAS fine-tuning).
+4. Exécute des **outils métier** en Rust avec vérification stricte des **privilèges**.
+5. Préfère la **stratégie dynamique** (§20–§23) : registre JSON → triggers → outils `dda_*`.
+   Alternative legacy : routes `/api/...` + `api_call` (§14) ou file pending (§5.3).
+
+Le LLM **ne génère jamais de SQL**. Il produit au plus une ligne JSON d'outil.
+
+**Performance = architecture, pas taille du modèle.** Ordre critique :
+intents directs → expérience → RAG court (3 chunks + rewrite FTS) → LLM en dernier.
+
+---
+
+## 1. RESSOURCES LOCALES (NE PAS RE-TÉLÉCHARGER)
+
+| Ressource | Chemin par défaut |
+|-----------|-------------------|
+| Binaires CPU | `D:\llama-b8184-bin-win-cpu-x64\llama-server.exe` |
+| Modèle GGUF | `D:\llama-b8184-bin-win-cpu-x64\Qwen2.5-Math-7B-Instruct-Q5_K_S-GGUF\qwen2.5-math-7b-instruct-q5_k_s.gguf` |
+| Binaires CUDA | `<racine-projet>\llama-b8184-bin-win-cuda-13.1-x64\` (ou chemin configuré dans `config.rs`) |
+| Ce kit doc/code | `D:\llama-b8184-bin-win-cpu-x64\AItools\` |
+
+Constantes (voir `manifest.json`) :
+
+- Port chat : **18080**
+- Port benchmark profilage : **18082**
+- Contexte : **2048** tokens
+- Temperature chat : **0.15**
+- Max tokens réponse : **600**
+- Chunk RAG : **700** caractères
+
+---
+
+## 2. MÉTHODOLOGIE RAG — SPÉCIFICATION EXACTE À REPRODUIRE
+
+### 2.1 Nature du RAG
+
+- Moteur : **SQLite FTS5** (table virtuelle `ai_fts`).
+- Stockage miroir : table `ai_chunks` (id, source, content).
+- **Aucun** embedding, **aucun** appel API externe, **aucun** vecteur float[].
+
+### 2.2 Indexation (fonction `reindex` / commande `ai_reindex`)
+
+**Étape A — Vider**
+
+```sql
+DELETE FROM ai_chunks;
+DELETE FROM ai_fts;
+```
+
+**Étape B — Collecter les documents**
+
+Fonction `build_project_knowledge(root)` retourne `Vec<(source, texte)>` :
+
+| source | Fichier |
+|--------|---------|
+| README.md | `<racine>/README.md` |
+| .cursorrules | `<racine>/.cursorrules` |
+| outils_ia | contenu de `knowledge/knowledge_tools.txt` (embarqué ou kit) |
+| schema_metier | contenu de `knowledge/knowledge_schema.txt` |
+| layout | `knowledge_layout.txt` (si présent) |
+| routes_api | `knowledge_api_routes.txt` (stratégie routes `/api/...` seulement) |
+| routes_checklist | `<racine>/Route api.txt` (stratégie routes seulement) |
+
+**Étape Bbis — Knowledge dynamique (stratégie registre, obligatoire pour perf)**
+
+Après `build_project_knowledge`, indexer **tous** les `*.txt` de :
+
+- `{app_data}/dda/knowledge/` (MASTER_* + fiches entités générés par triggers §20)
+- `{app_data}/dda/validations/` (si présent)
+
+**Étape C — Ajouter données live**
+
+Indexer une entrée `donnees_live` :
+
+```text
+État actuel: {résumé KPI des tables métier / entités} ...
+```
+
+Source : `build_live_summary()` (agrégats SQLite, pas de dump de lignes).
+
+**Étape D — Chunking**
+
+Pour chaque `(source, text)` :
+
+- Remplacer `\r` par rien.
+- Si `text.len() <= 700` (en **chars** Unicode) → 1 chunk.
+- Sinon découper par fenêtres `[start, start+700)` sans chevauchement.
+- Pour chaque chunk : `INSERT ai_chunks` + `INSERT ai_fts` avec mêmes `chunk_id`, `source`, `content`.
+
+Référence implémentation : `reference/rust/rag.rs`.
+
+### 2.3 Recherche (fonction `search(query, limit)`)
+
+**Étape 0 — Réécriture FTS (obligatoire pour la perf)**
+
+Avant `rag.search`, appeler `fts_rewrite::rewrite_user_query_for_fts` :
+
+- Appel court à llama-server (temp ~0.1, max_tokens ~96).
+- System prompt dédié : convertir le message en **3–5 tokens** séparés par `OR`,
+  avec variantes singulier/pluriel + indices `MASTER_entities_schema` / `MASTER_entities_tools`.
+- Fallback = message brut si LLM indisponible, trop court (< 8 car.), ou sortie inutilisable.
+- Module à créer : `src-tauri/src/ai/fts_rewrite.rs` (spécifié ici ; pas besoin d'autre source).
+
+**Étape 1 — Tokeniser la question (ou la requête réécrite)**
+
+- `split_whitespace` ; conserver `_` pour tokens type `MASTER_entities_schema`.
+- Pour chaque mot : garder alphanumériques + `_` (`sanitize_fts_token`).
+- Ignorer mots de longueur < 2.
+- Si aucun token → retourner `[]`.
+
+**Étape 2 — Construire requête FTS5**
+
+- Chaque token → `"token"` (guillemets, échapper `"` internes).
+- Joindre avec ` OR ` (disjonction).
+- Si la ligne contient déjà ` OR `, splitter sur ` OR ` puis sanitizer.
+
+Exemple brut : `exporte le dernier bien` → `"exporte" OR "le" OR "dernier" OR "bien"`
+Exemple après rewrite : `facture OR factures OR client OR MASTER_entities_schema`
+
+**Étape 3 — SQL**
+
+```sql
+SELECT content FROM ai_fts WHERE ai_fts MATCH ?1 LIMIT {min(limit,8)}
+```
+
+Retour : liste de strings (contenus), ordre FTS interne.
+
+### 2.4 Injection dans le prompt LLM
+
+Dans `Agent::chat`, construire `rag_context` ainsi (**cible perf**) :
+
+```
+SI wants_action_intent(message_utilisateur) ALORS
+    rag_context = build_live_summary()   // KPI uniquement, PAS de FTS
+SINON
+    fts_query = rewrite_user_query_for_fts(message)
+    chunks = rag.search(fts_query, 3)                 // exactement 3 chunks dans le prompt
+    SI chunks vide ALORS
+        chunks = rag.search(message_brut, 3)          // fallback
+    SI chunks encore vide ALORS rag_context = build_live_summary()
+    SINON rag_context = chunks.join("\n---\n")
+```
+
+`wants_action_intent` = verbes d'action (créer, supprimer, lister, exporter, etc.) — `intent_filters.rs`.
+
+**Deux pipelines (ne pas confondre)** :
+
+| Pipeline | Commande | RAG FTS | Outils métier | Usage |
+|----------|----------|---------|---------------|-------|
+| Agent complet | `ai_chat` | oui (3 chunks) | oui + expérience | chat outils / CRUD |
+| Dashboard léger | `ai_dashboard_answer` | **non** | non | accueil, web, réponses courtes |
+
+**Prompt système final** (injecté en `role: "system"`, **pas** via `-sysf`) :
+
+```text
+Tu es Loggy, l'assistant IA de {ecosysteme} (français) [+ hors ligne | + web si activé].
+
+ARCHITECTURE ENTITÉS (prioritaire) :
+- Registre Paramètres > Entités (registry.json)
+- CRUD : dda_* avec screen_key = nom exact
+- Consulter MASTER_entities_schema.txt / MASTER_entities_tools.txt (RAG)
+
+[... règles JSON outil une ligne, interdiction LaTeX / JSON visible ...]
+{experience_hints si non vide}
+Contexte:
+{rag_context}
+```
+
+`experience_hints` = top 4 expériences (score ≥ 0.25) — §3.
+`{ecosysteme}` = branding dynamique depuis le registre (jamais hardcodé).
+
+### 2.5 Déclenchement auto index
+
+Au début de `Agent::chat` :
+
+```sql
+SELECT COUNT(*) FROM ai_chunks
+```
+
+Si 0 → appeler `reindex()` avant de continuer.
+
+### 2.6 Erreurs FTS à éviter
+
+- Ne jamais passer `?`, `*`, ou tokens non quotés bruts à `MATCH` (casse la requête).
+- Toujours quoter chaque token.
+- Utiliser `OR` pas `AND` par défaut (meilleure recall sur petit corpus).
+
+### 2.7 Ce que le RAG ne couvre PAS
+
+- Lignes tables métier (biens, contrats) : lues via **outils** `list_*` / `get_*`, pas indexées FTS (sauf résumé KPI live).
+- Historique chat : table `ai_messages` séparée, injecté comme messages OpenAI, pas dans FTS.
+
+---
+
+## 3. APPRENTISSAGE PAR EXPÉRIENCE (DEUXIÈME COUCHE MÉMOIRE)
+
+**Distinct du RAG.** Table `ai_experience`.
+
+### 3.1 Enregistrement
+
+Après succès d'un outil ou confirmation :
+
+- `message_norm` = `normalize_message(texte_utilisateur)` (minuscules, accents simplifiés).
+- `tool_name`, `params_json`, `summary` court, `outcome` ∈ {success, confirmed, pending}.
+- Upsert sur `(message_norm, tool_name)` : incrémenter `use_count`.
+
+### 3.2 Réutilisation (`try_experience_intent`)
+
+1. Charger 80 meilleures entrées (`outcome` success|confirmed, tri `use_count`).
+2. Score = intersection tokens / max(len q, len s), avec match partiel substring.
+3. Seuil **0.38** + boost `use_count * 0.02` (max 10).
+4. Réexécuter l'outil ; écritures → pending confirmation.
+
+### 3.3 Hints prompt
+
+Top 4 expériences avec score ≥ **0.25** injectées en tête du system prompt.
+
+Référence : `reference/rust/experience.rs`.
+
+---
+
+## 4. LLAMA / CUDA / PROFILAGE
+
+### 4.1 Démarrage serveur
+
+- Exécutable : `{bin_dir}/llama-server.exe` avec `current_dir = bin_dir`.
+- Args : `-m {gguf}`, `--host 127.0.0.1`, `--port 18080`, `-ngl {gpu_layers}`, `-t {threads}`, `--ctx-size 2048`, `--parallel 1`.
+- Attendre GET `http://127.0.0.1:18080/health` succès (boucle 500ms, max ~90s).
+
+### 4.2 Choix backend (`hardware_profile.rs`)
+
+Ordre de détection dossiers :
+
+1. `llama-b8184-bin-win-cuda-13.1-x64` si `ggml-cuda.dll` + `llama-server.exe`
+2. `llama-b8184-bin-win-vulkan-x64` si `ggml-vulkan.dll`
+3. `llama-b8184-bin-win-cpu-x64`
+
+**Profilage** (commande `ai_profile_runtime`) :
+
+- Benchmark temps chargement jusqu'à health.
+- CPU toujours testé ; GPU testé `ngl=99` puis `28`.
+- Garder le plus rapide sauf si GPU > 2× CPU → CPU.
+- Persister dans `ai_runtime_profile` (id='default', bin_fingerprint).
+
+### 4.3 Cache
+
+Mutex global `CACHED_RUNTIME` + invalidation si fingerprint binaire change.
+
+---
+
+## 5. LIAISON BASE DE DONNÉES
+
+### 5.1 Tables IA
+
+Appliquer `schema/ai_tables.sql` (v9 + v10 + v11 + colonne confirm_privilege v14).
+
+### 5.2 Tool calling
+
+Format strict une ligne :
+
+```json
+{"tool":"nom","params":{...},"explain":"raison optionnelle"}
+```
+
+Pipeline :
+
+1. `parse_tool_call` ou intents directs (`parse_delete_from_user_message`, etc.)
+2. `tool_privilege(tool)` → vérifier `has_privilege(session, priv)`
+3. Si outil écriture (`WRITE_TOOLS` dans crud.rs) → `queue_write_action` → INSERT `ai_pending_actions`
+4. Sinon → `execute_read_tool` immédiat
+
+### 5.3 Confirmations
+
+- `privilege` : qui peut **proposer** (ex. biens:modifier).
+- `confirm_privilege` optionnel : qui peut **valider** (ex. directeur:confirmer pour delete_all_biens).
+- UI désactive « Oui » si privilège confirm manquant.
+- `ai_confirm_action` → `execute_pending` → `execute_crud_write` → DELETE pending.
+
+### 5.4 Sécurité
+
+- **Chaque** commande Tauri : `require_privilege("ai:utiliser")` minimum.
+- **Chaque** outil : privilège métier dans `tool_privilege()`.
+- Admin `*` bypass via `has_privilege`.
+
+---
+
+## 6. ORCHESTRATION AGENT (ORDRE DES PRIORITÉS)
+
+Dans `Agent::chat`, **avant** d'appeler le LLM :
+
+1. `classify_greeting` → réponse fixe, return.
+2. `try_direct_delete_all_intent` (delete_all_biens + Directeur).
+3. `try_direct_delete_intent`.
+4. `try_direct_update_intent`.
+5. `try_direct_write_intent` (create / JSON CRUD).
+6. `try_direct_list_intent`, export, loyers, détail, paiement, recherche.
+7. `try_experience_intent`.
+8. Sinon : `LlamaServer::chat` + `parse_tool_call` sur réponse.
+9. Fallback si LLM échoue : retry intents write/list.
+
+**Raison** : modèle 7B faible en français ; intents garantissent le métier.
+
+---
+
+## 7. FICHIERS À COPIER DANS UN NOUVEAU PROJET
+
+```
+src-tauri/src/ai/          ← reference/rust/*.rs
+src-tauri/src/commands/ai.rs
+src-tauri/src/lib.rs       ← mod ai + handler
+src/hooks/useAiChat.ts
+src/types/ai.ts
+src/components/ai/         ← chat UI
+knowledge/                 ← knowledge_*.txt (racine ou ai/)
+```
+
+Adapter dans `config.rs` :
+
+```rust
+pub fn project_root() -> PathBuf { ... }  // parent de src-tauri
+pub const BIN_CPU: &str = "llama-b8184-bin-win-cpu-x64";
+```
+
+Si le projet utilise `D:\llama-b8184-bin-win-cpu-x64` directement, pointer `model_bundle_dir()` vers ce chemin absolu.
+
+---
+
+## 8. COMMANDES TAURI OBLIGATOIRES
+
+- `ai_status`
+- `ai_profile_runtime`
+- `ai_reindex`
+- `ai_chat`
+- `ai_confirm_action`
+- `ai_dismiss_action`
+- `ai_stop_server` (optionnel)
+
+Signatures exactes : `reference/commands/ai.rs`.
+
+---
+
+## 9. FRONTEND MINIMAL
+
+- Bouton flottant ouvrant chat.
+- `invoke('ai_chat')` avec `conversation_id` persistant.
+- Si `tool_results[i].requires_confirmation` → panneau Oui/Non.
+- Si `confirm_privilege === 'directeur:confirmer'` → désactiver Oui sans privilège.
+
+Référence : `reference/frontend/`.
+
+---
+
+## 10. TESTS DE VALIDATION APRÈS IMPLÉMENTATION
+
+1. `ai_status.profiled == true` et `gpu_enabled` cohérent avec machine.
+2. `ai_reindex` > 0 chunks.
+3. Question doc : « quels outils Loggy » → cite knowledge_tools (RAG).
+4. « liste les biens » → JSON outil ou intent direct, données JSON réelles.
+5. « supprime tous les biens » → pending + message Directeur, pas de JSON inventé `supprime_bien`.
+6. Agent sans `directeur:confirmer` ne peut pas confirmer delete_all.
+
+---
+
+## 11. DOCUMENTATION DÉTAILLÉE
+
+Lire dans l'ordre si ambiguïté :
+
+1. `docs/02-rag-fts5-methodologie.md` — RAG
+2. `docs/03-apprentissage-experience.md` — expérience
+3. `docs/04-liaison-base-donnees.md` — SQLite
+4. `docs/05-cuda-gpu-profilage.md` — GPU
+5. `docs/08-checklist-nouveau-projet.md` — checklist
+
+---
+
+## 12. RÈGLES DE MODIFICATION POUR CURSOR
+
+- Ne pas remplacer le RAG par des embeddings sans demande explicite utilisateur.
+- Ne pas autoriser le LLM à exécuter du SQL brut.
+- Tout nouvel outil d'écriture → ajouter à `WRITE_TOOLS`, `tool_privilege`, `knowledge_tools.txt`, reindex.
+- Nouvelle route API → **TXT (§19) d'abord** → `knowledge_api_routes.txt` → `ROUTES[]` → `api_dispatch.rs` → `ai_reindex`.
+- **Interdit** : marquer ✅ dans le TXT sans implémentation + test (§19.4).
+- Garder les chemins binaires **locaux** ; documenter dans README si déplacement.
+- Réponses utilisateur en **français**.
+- Code complet, pas de TODO, TypeScript strict côté front.
+
+---
+
+## 13. SYNONYME RAG DANS CE KIT
+
+Quand l'utilisateur dit « RAG » pour ce projet, il désigne **toujours** :
+
+> Indexation fichiers/TXT générés → chunks 700 → réécriture FTS via LLM → FTS5 OR → top **3** chunks → concat en fin de system prompt (`role: system`), avec bypass KPI pour intents action.
+
+Ce n'est pas LangChain, pas Chroma, pas OpenAI embeddings, pas `-sysf`.
+
+---
+
+## 14. MÉTHODE CRUD COMPLÈTE VIA ROUTES API (`api_call`)
+
+Méthode **générique** pour que Loggy exécute **tout le CRUD** d'un projet Tauri dont le frontend passe par des routes `/api/...` mappées vers des commandes `/invoke`.
+
+**Principe** : un seul outil `api_call` couvre **Create, Read, Update, Delete** — le LLM ne génère jamais de SQL.
+
+### 14.1 Correspondance HTTP → CRUD
+
+| Method HTTP | Opération CRUD | Rôle typique des commandes |
+|-------------|----------------|----------------------------|
+| **GET** | **Read** | `list_*`, `get_*`, `search_*`, stats |
+| **POST** | **Create** | `add_*`, `create_*`, `upsert_*`, `save_*` |
+| **PUT** | **Update** | `update_*` |
+| **DELETE** | **Delete** | `delete_*` |
+
+Défaut si `method` absent : **GET**. Chaque entrée du registre précise : `path`, `method`, `command`, type payload, privilège optionnel.
+
+### 14.2 Cahier des charges TXT — avant tout code (§19)
+
+Le fichier **`Route api.txt`** (ou `<projet> spec.txt`) à la racine est le **cahier des charges vivant** de Loggy pour ce projet.
+**Règle d'or : on documente d'abord dans le TXT, on code ensuite.** Jamais l'inverse.
+
+Voir **§19** pour la méthode complète (statuts honnêtes, structure, cycle).
+
+Contenu minimal par route :
+
+1. **Chemin** `/api/...`
+2. **Method** `GET | POST | PUT | DELETE`
+3. **Commande** Tauri (miroir `/invoke`)
+4. **Champs** JSON (URL segments ou body)
+5. **Privilège** optionnel (lecture / écriture)
+6. **Statut honnête** : ✅ fait | 🔄 partiel | ⬜ planifié (§19.3)
+7. Section « routes extension » pour commandes `/invoke` sans route HTTP legacy
+8. **Résumé véridique** : `Loggy : N fait / M documenté` + chemins modules
+
+Format ligne (générique) :
+
+```text
+✅ GET    /api/ressources | list_ressources  | scopeId, limit | priv. res01
+✅ POST   /api/ressources | add_ressource    | body           | priv. res02
+✅ PUT    /api/ressources | update_ressource | body           | priv. res02
+✅ DELETE /api/ressources | delete_ressource | id, scopeId    | priv. res02
+```
+
+Convention privilèges (adapter par projet) : `xxx01` = lecture, `xxx02` = écriture, `ai:utiliser` = accès IA.
+
+### 14.3 Documenter pour le RAG
+
+Fichiers à indexer dans `build_project_knowledge()` :
+
+| source | Fichier |
+|--------|---------|
+| outils_ia | `knowledge_tools.txt` |
+| routes_api | `knowledge_api_routes.txt` |
+| schema_metier | `knowledge_schema.txt` |
+| routes_checklist | `<racine>/Route api.txt` |
+
+Contenu `knowledge_api_routes.txt` :
+
+- Table CRUD : route + method → commande → format payload.
+- **GET** : URL chiffrée AES (un segment par param).
+- **POST/PUT/DELETE** : body chiffré `{ "body": "<AES>" }`.
+- Exemples `api_call` pour **chaque verbe** CRUD.
+- Commandes `/invoke` sans route legacy.
+- Codes privilèges du projet.
+
+```json
+{"tool":"api_call","params":{"route":"/api/ressources","method":"GET","limit":20}}
+{"tool":"api_call","params":{"route":"/api/ressources","method":"POST","nom":"…"}}
+{"tool":"api_call","params":{"route":"/api/ressources","method":"PUT","id":"…","nom":"…"}}
+{"tool":"api_call","params":{"route":"/api/ressources","method":"DELETE","id":"…"}}
+{"tool":"api_call","params":{"command":"list_ressources","limit":50}}
+```
+
+Injecter depuis `AiSession` les clés de contexte (`tabId`, `pays`, `userId`, `tenantId`…) si absentes.
+
+### 14.4 Architecture Rust (3 modules)
+
+**A) `api_invoke.rs` — mapping routes**
+
+```rust
+struct RouteDef {
+    path: &'static str,
+    method: &'static str,      // GET | POST | PUT | DELETE
+    command: &'static str,
+    kind: PayloadKind,         // Url(&["tabId","limit",...]) | Body
+    priv_code: Option<&'static str>,
+}
+const ROUTES: &[RouteDef] = &[ ... ];
+```
+
+Fonctions clés :
+
+- `find_route(path, method)` — normalise le chemin, match method.
+- `build_payload()` — GET : URL chiffrée via `resolve_cript_key()` + `crypto` (segments AES comme le frontend) ; POST/PUT/DELETE : body chiffré.
+- `invoke_api_route()` / `invoke_by_command()` — résolution route ou commande directe.
+- `check_privilege()` — `privileges` vide = bypass admin ; sinon vérifier `priv_code`.
+- `try_*_from_message()` — parsers NL optionnels (create/update depuis langage naturel).
+
+**B) `api_dispatch.rs`** — miroir `http_server` `/invoke`. Toute commande de `ROUTES[]` **doit** y figurer.
+
+**C) `tools.rs`** — outil `api_call` : route+method **OU** command + champs métier → HTML via `format_display.rs`.
+
+Raccourcis lecture optionnels : `dashboard_stats`, `list_*`, `search_*`.
+
+### 14.5 Deux stratégies pour les écritures CRUD
+
+| Stratégie | Usage | Comportement |
+|-----------|-------|--------------|
+| **A — File pending** (§5.3) | Outils CRUD dédiés (`WRITE_TOOLS`) | Écriture → `ai_pending_actions` → confirmation UI |
+| **B — Direct `api_call`** | Projet routé `/api/...` | POST/PUT/DELETE immédiat si privilège OK |
+
+Stratégie B : `is_write_tool("api_call")` → `false` ; contrôle via `priv_code` + session.
+Stratégie A : outils nommés dans `crud.rs`. Ne **pas** mélanger les deux pour la même commande.
+
+### 14.6 Intents directs CRUD (avant LLM)
+
+Pattern `try_direct_intent()` dans `agent.rs` :
+
+| CRUD | Pattern français | Action |
+|------|------------------|--------|
+| Read stats | « combien de … » | raccourci ou GET |
+| Read list | « liste les … » | `list_*` ou GET |
+| Read search | « cherche … » | `search_*` ou GET |
+| Create NL | « crée … », « ajoute … », « planifie … » | parser → POST |
+| Update NL | « modifie … » | parser → PUT |
+| Delete NL | « supprime … » | parser → DELETE |
+
+`intent_filters.rs` + `record_success()` / `record_learned_tags()` après succès.
+
+### 14.7 Prompt système CRUD
+
+- `api_call` + `method` = verbe CRUD (GET=lire, POST=créer, PUT=modifier, DELETE=supprimer).
+- Écritures si privilèges OK (stratégie B).
+- Réponse HTML uniquement (§16) ; filtrer Thought (`sanitize_llm.rs`).
+
+### 14.8 Frontend — session et privilèges
+
+Passer à `ai_chat` : identifiants session + liste privilèges (contrôleur auth du projet).
+Admin : `privileges: []` → bypass Rust. Masquer chat sur page connexion si pertinent.
+
+### 14.9 Cycle de mise à jour
+
+**Ordre obligatoire (§19.5) :** TXT d'abord → code Rust/TS → marquer ✅ → `ai_reindex`.
+
+Nouvel endpoint : ligne ⬜ dans TXT → implémentation → passage ✅ → `knowledge_*.txt` → `ROUTES[]` → `dispatch_command` → test → **`ai_reindex`**.
+
+Checklist : GET list/get/search, POST create, PUT update, DELETE delete, privilèges, dispatch, test manuel par verbe — **tous reflétés honnêtement dans le TXT**.
+
+### 14.10 Tests de validation CRUD
+
+1. RAG cite `Route api.txt` après reindex.
+2. Read → HTML, données réelles.
+3. Create / Update / Delete via `api_call` → effet en base si priv. OK, refus sinon.
+4. Intent NL create (si implémenté) = même résultat que POST.
+5. Pas de fuite Thought.
+
+Référence kit : `reference/rust/api_invoke.rs`, `api_dispatch.rs`, `tools.rs`.
+
+---
+
+## 15. APPRENTISSAGE RAG PAR MOTS TAGGABLES (3e COUCHE)
+
+**Distinct du RAG fichier et de `ai_experience`.** Table `ai_rag_tags`.
+
+### 15.1 Tags
+
+- Hashtags explicites : `#liste #create #ressource` (tags métier du projet).
+- Auto-tags : mots-clés extraits après succès CRUD (`liste`, `create`, nom entité métier…).
+- Champ `tags` (espaces) indexé dans FTS via chunks `ordres_appris`.
+
+### 15.2 Ordres explicites
+
+Phrases déclencheurs :
+
+- `retiens que …`, `mémorise que …`, `apprends que …`, `note que …`
+- `quand je dis X signifie Y`, `X = Y`, `X veut dire Y`
+- Deux hashtags ou plus : `#liste #ressource …`
+
+Enregistrement : `try_parse_teaching_order()` → `ai_upsert_rag_tag()` + chunk FTS immédiat.
+
+### 15.3 Auto-apprentissage
+
+Après chaque outil réussi : `record_learned_tags(message, tool, params)`.
+
+### 15.4 Injection RAG
+
+Dans `Agent::chat`, avant le LLM :
+
+```text
+chunks FTS standard (top 5)
++ learned_context_for_query(message, 3)  // ordres dont tags/trigger matchent
+```
+
+Au `reindex` : `reindex_all_learned_orders()` réindexe toute la table `ai_rag_tags`.
+
+### 15.5 Schéma SQL
+
+```sql
+CREATE TABLE ai_rag_tags (
+  id, tags, trigger_phrase, tool_name, params_json, instruction,
+  use_count, created_at, last_used_at
+);
+```
+
+Référence implémentation : `reference/rust/rag_learning.rs`, `ai_db.rs`.
+
+---
+
+## 16. FORMAT RÉPONSE UTILISATEUR — TEXTE DANS LA BULLE, STRUCTURÉ EN MODAL
+
+### 16.1 Règle absolue (non-codeurs)
+
+**La bulle Loggy = texte naturel court uniquement** (personnifié via `ai_alert_personify` si besoin).
+
+**Tout contenu non textuel** (tableau, liste de données, sélecteur de colonnes, formulaire, confirmation…) **s'affiche dans un modal**, ouvert par un **bouton centré** sous le texte de la bulle.
+
+L'utilisateur final ne doit **JAMAIS** voir :
+- de JSON brut (`{ "entityKey": … }`, blocs ` ```json `) ;
+- un tableau HTML inline dans la bulle ;
+- une liste numérotée de colonnes dans la bulle.
+
+### 16.2 Protocole interne vs affichage
+
+| Couche | Format | Visible bulle ? | Rendu utilisateur |
+|--------|--------|-----------------|-------------------|
+| Appel outil LLM | `{"tool":"…","params":{…}}` une ligne | **Non** | — |
+| Données liste chat | `__LOGGY_DISPLAY__` + JSON + `__END_LOGGY_DISPLAY__` | **Non** | Bouton → `ChatListPreviewModal` (tableau paginé) |
+| Choix colonnes | `__LOGGY_ASK_COLS__` + JSON + `__END_LOGGY_ASK_COLS__` | **Non** | Bouton → `ChatColsPickerModal` (cases à cocher) |
+| Réponse outil CRUD | `ToolResult.data` (JSON Rust) | **Non** | `format_display.rs` → texte |
+| Message assistant final | Texte français court | **Oui** | Bulle Loggy |
+
+**Règle implémentation** : stocker le message complet (marqueurs inclus) en base pour la continuité conversation ; retourner au frontend le texte nettoyé (`visible_chat_message`) **+** champs structurés (`display_blocks`, `cols_request`) pour les modals.
+
+### 16.3 Mise en forme backend (obligatoire)
+
+- `format_display.rs` — pas de JSON visible dans les réponses outil.
+- `list_preview.rs` — messages courts (« Clique sur le bouton ci-dessous… ») ; `ListPreviewResult { raw_message, display_blocks, cols_request }`.
+- `ask_columns_message` — **interdit** la liste numérotée inline ; texte court + `ChatColsRequest` structuré.
+- `ChatReply` (`agent.rs`) — champs `display_blocks`, `cols_request` sérialisés en camelCase.
+
+### 16.4 Prompt système
+
+Interdire JSON visible, blocs ` ```json `, tableaux inline dans la réponse affichée.
+Les données structurées passent par les marqueurs machine ou les champs API — jamais dans le texte utilisateur.
+
+### 16.5 Frontend (obligatoire)
+
+| Composant | Rôle |
+|-----------|------|
+| `ChatLoggyAttachments.tsx` | Hub : boutons centrés dans la bulle → modals |
+| `ChatListPreviewModal.tsx` | Tableau / liste paginée read-only |
+| `ChatColsPickerModal.tsx` | Sélection colonnes (checkboxes + « Toutes ») |
+| `chatDisplayParse.ts` | Retire marqueurs `__LOGGY_*` ; parse historique |
+| `DashboardChatThread.tsx` | Bulle = `ChatLinkifiedText` + attachments |
+| `DashboardPage.tsx` | `onChatFollowUp` → renvoi choix colonnes à Loggy |
+
+**Flux choix colonnes** : modal → labels cochés (ou « toutes ») → `ai_dashboard_answer` → liste en modal.
+
+### 16.6 Anti-patterns
+
+- ❌ Tableau HTML ou `<ul>` de données **dans** la bulle
+- ❌ Liste numérotée de colonnes **dans** la bulle
+- ❌ Afficher le contenu entre `__LOGGY_ASK_COLS__` et `__END_LOGGY_ASK_COLS__`
+- ❌ `serde_json::to_string_pretty` dans une réponse utilisateur
+- ❌ Demander à l'utilisateur de « lire le JSON »
+
+---
+
+## 17. ADAPTER LE CRUD À UN NOUVEAU PROJET (CHECKLIST)
+
+Quand tu intègres Loggy dans un **nouveau** projet Tauri + React :
+
+### 17.1 Fichiers à créer / copier
+
+```
+src-tauri/src/ai/
+  api_invoke.rs      ← registre ROUTES[] + build payload chiffré
+  api_dispatch.rs    ← dispatch_command miroir http_server /invoke
+  tools.rs           ← outil api_call + raccourcis lecture
+  intent_filters.rs  ← détection intents CRUD français
+  format_display.rs  ← réponses listes/tableaux (pas de JSON visible)
+  sanitize_llm.rs    ← filtre Thought / analyse interne
+  agent.rs           ← try_direct_intent + prompt CRUD
+  rag.rs             ← indexe Route api.txt + knowledge_*
+Route api.txt        ← cahier des charges honnête (§19) — AVANT le code
+knowledge_api_routes.txt
+knowledge_tools.txt
+```
+
+### 17.2 Étapes d'intégration CRUD
+
+0. **Créer le cahier des charges TXT** à la racine (§19) — même vide avec structure et ⬜.
+1. **Auditer** `http_server.rs` (ou équivalent) : lister toutes les commandes `/invoke` dans le TXT.
+2. **Mapper** chaque route frontend `/api/...` → commande + method CRUD **dans le TXT**.
+3. **Implémenter** le code seulement pour les lignes documentées ; marquer ✅ après test.
+4. **Implémenter** `ROUTES[]` + `dispatch_command` pour chaque ✅ route.
+5. **Choisir** stratégie écriture (§14.5 A pending ou B direct `api_call`).
+6. **Brancher** privilèges session frontend → `ai_chat`.
+7. **Documenter puis coder** intents entités (§18 + §19) : TXT → `entity_intents.rs`.
+8. **Réconcilier** TXT ↔ code (§19.6) → **`ai_reindex`** → tests §14.10 + §18.8.
+
+### 17.3 Références kit AItools
+
+| Ressource | Chemin |
+|-----------|--------|
+| Kit doc/code | `D:\llama-b8184-bin-win-cpu-x64\AItools\` |
+| Rust référence | `AItools/reference/rust/*.rs` |
+| Schéma IA | `AItools/schema/ai_tables.sql` |
+| Docs méthode | `AItools/docs/*.md` |
+| Spécification complète | `AItools/.cursorrules` (ce fichier) |
+| Binaires llama | `D:\llama-b8184-bin-win-cpu-x64\` |
+
+Le modèle GGUF et le domaine métier **varient par projet** — ne pas hardcoder dans ces règles.
+Pour la stratégie **dynamique haute perf**, suivre §20–§23 en priorité sur §14.
+
+---
+
+## 18. INTENTS PAR ENTITÉ ET ATTRIBUTS (INTERFACES TYPESCRIPT)
+
+Méthode pour dériver les **intents directs** Loggy à partir des **interfaces entités** du frontend (`entities.tsx` ou équivalent), sans attendre le LLM.
+
+### 18.1 Principe — le TXT précède les intents
+
+**Aucun intent Rust (`entity_intents.rs`, `intent_filters.rs`) ne doit exister sans ligne correspondante dans le cahier des charges TXT (§19).**
+
+Ordre de travail :
+
+1. Lister chaque `export interface Entité { ... }` du projet dans le **TXT** (section INTENTS ENTITÉS).
+2. Pour **chaque attribut** (`id`, `nom`, `prenom`, `prix`…) documenter dans le TXT :
+   - Champ TypeScript (clé JSON API)
+   - 2–5 libellés français (synonymes utilisateur)
+   - Action : LIST | SEARCH | GET | LIST_RELATED | CREATE | UPDATE | DELETE
+   - Route `/api/...` ou commande `/invoke`
+   - **Statut honnête** ✅ / 🔄 / ⬜
+   - Exemple de phrase utilisateur
+3. **Ensuite seulement** : implémenter `EntityAttribute` dans `entity_intents.rs`.
+4. Tester → mettre à jour le statut ✅ dans le TXT → `ai_reindex`.
+
+### 18.2 Format checklist (`Route api.txt`)
+
+```text
+✅ INTENT {entité} | {attribut} | {libellés FR} | {ACTION} | {route/commande} | {priv} | « exemple phrase »
+```
+
+Exemples génériques :
+
+```text
+✅ INTENT patient | nom | nom, nom de famille | SEARCH | search_* | res01 | « cherche client Dupont »
+✅ INTENT acte | nom | type, libellé | LIST_RELATED | list_*_by_parent | res01 | « liste les actes de Marie »
+✅ INTENT catalogue | prix | tarif, montant | LIST | /api/catalogue | — | « liste les tarifs »
+```
+
+### 18.3 Structure Rust (`entity_intents.rs`)
+
+```rust
+struct EntityAttribute {
+    field: &'static str,           // clé interface TS
+    labels_fr: &'static [&'static str],
+}
+
+struct EntityDef {
+    key: &'static str,
+    labels_fr: &'static [&'static str],  // alias entité en français
+    attributes: &'static [EntityAttribute],
+    priv_read: Option<&'static str>,
+}
+
+enum EntityAction {
+    List, Search, GetDetail,
+    ListRelated,  // ex. actes d'un patient, matériels d'un acte
+}
+
+fn resolve_entity_intent(message: &str) -> Option<ResolvedEntityIntent>;
+fn intent_to_tool_call(intent: &ResolvedEntityIntent) -> ToolCall;
+```
+
+Pipeline dans `Agent::chat` **avant** le LLM :
+
+```text
+resolve_entity_intent(message)
+  → execute_entity_intent (recherche intermédiaire si besoin : nom → id)
+  → api_call / raccourci outil
+  → format HTML
+```
+
+### 18.4 Règles de résolution
+
+| Pattern utilisateur | Action | Exécution |
+|---------------------|--------|-----------|
+| « liste les {entités} » | List | GET collection |
+| « cherche {entité} {valeur} » | Search | GET search ou filtre |
+| « fiche / détail {entité} {nom} » | GetDetail | search → pick id → GET by id |
+| « liste les {enfants} de {parent} » | ListRelated | search parent → id → GET enfants |
+| « {attribut} de {nom} » | GetDetail | champ ciblé via fiche complète |
+
+**Priorités** (éviter collisions) :
+
+1. Intents composés spécifiques (`noms actes` avant `actes de patient`).
+2. Entité la plus longue (meilleur match alias).
+3. LIST_RELATED avant LIST générique.
+
+### 18.5 Chaînage search → id
+
+Quand l'API exige un `id` mais l'utilisateur donne un **nom** :
+
+1. `search_*` ou SQL local avec attributs `nom`/`prenom`/`telephone`.
+2. `pick_*_from_search` — 1 résultat direct ; plusieurs → match exact prénom/nom ; sinon message « précisez ».
+3. Appel GET / LIST_RELATED avec `id` résolu.
+
+### 18.6 Indexation RAG
+
+Inclure dans `build_project_knowledge()` :
+
+- `Route api.txt` (section INTENTS ENTITÉS)
+- `entity_registry_summary()` exporté depuis `entity_intents.rs` (optionnel)
+- `knowledge_schema.txt` (schéma champs)
+
+### 18.7 Cycle de mise à jour
+
+**TXT d'abord, code ensuite (§19.5).**
+
+À chaque nouvel attribut dans une interface TS :
+
+1. Ligne INTENT dans le TXT avec statut ⬜.
+2. Implémenter `EntityAttribute` + exécuteur si besoin.
+3. Test phrase française → statut ✅ dans le TXT.
+4. `ai_reindex`.
+
+### 18.8 Tests de validation
+
+1. « liste les {entités catalogue} » → LIST route correcte.
+2. « cherche {entité} {nom} » → SEARCH, pas LIST globale.
+3. « liste les {enfants} de {nom} » → LIST_RELATED, pas liste parents.
+4. « fiche {entité} {nom} » → GET détail après résolution id.
+5. Collision « noms X » vs « X de Y » → intent le plus spécifique gagne.
+
+---
+
+## 19. CAHIER DES CHARGES TXT — DOCUMENTATION HONNÊTE AVANT INTENTS
+
+Le fichier texte à la racine du projet (convention : **`Route api.txt`**, ou `Loggy spec.txt`, `CahierDesCharges Loggy.txt`) est la **source de vérité** pour Loggy, l'équipe et le RAG.
+
+Ce n'est **pas** un document marketing ni une wishlist : c'est un **état des lieux véridique** de ce qui est branché, partiel ou absent.
+
+### 19.1 Rôle du fichier TXT
+
+| Fonction | Description |
+|----------|-------------|
+| **Cahier des charges** | Ce que Loggy doit pouvoir faire (routes, intents, attributs). |
+| **Journal d'avancement** | Ce qui est réellement fait à l'instant T. |
+| **Contrat RAG** | Indexé FTS5 — Loggy s'y fie pour répondre « quelles routes ? ». |
+| **Gate avant code** | Aucune route ni intent codé sans ligne TXT préalable. |
+
+**Nom libre** par projet, emplacement recommandé : **racine du repo** (à côté de `README.md`).
+
+En-tête obligatoire en tête de fichier :
+
+```text
+# [NomProjet] — Cahier des charges Loggy (assistant IA)
+# Dernière mise à jour : YYYY-MM-DD
+# Règle : ✅ = implémenté ET testé | 🔄 = partiel | ⬜ = planifié, pas encore fait
+# Ce fichier est indexé RAG — rester honnête : ne jamais marquer ✅ sans preuve.
+```
+
+### 19.2 Structure recommandée du TXT
+
+```text
+=== ROUTES API ===
+✅ GET /api/... | commande | champs | priv.
+
+=== INTENTS ENTITÉS (entities.tsx) ===
+✅ INTENT entité | attribut | libellés FR | ACTION | route | priv | « exemple »
+
+=== OUTILS / RACCOURCIS ===
+✅ dashboard_stats | ...
+
+=== RÉSUMÉ HONNÊTE ===
+Routes : 58 documentées | 58 ✅ implémentées
+Intents  : 90 documentés  | 72 ✅ | 8 🔄 | 10 ⬜
+Modules  : api_invoke.rs, api_dispatch.rs, entity_intents.rs
+```
+
+Sections possibles (adapter au projet) :
+
+1. **ROUTES API** — mapping HTTP → commandes (§14)
+2. **INTENTS ENTITÉS** — entité × attribut × action (§18)
+3. **OUTILS HORS ROUTE** — raccourcis, intents NL
+4. **RÉSUMÉ HONNÊTE** — compteurs réels, jamais gonflés
+
+### 19.3 Statuts — sémantique stricte
+
+| Symbole | Signification | Quand l'utiliser |
+|---------|---------------|------------------|
+| **✅** | Fait | Route/intent **implémenté**, **testé manuellement**, dispatch OK. |
+| **🔄** | Partiel | Ex. route OK mais intent NL absent ; lecture OK, écriture non testée. |
+| **⬜** | Planifié | Documenté dans le cahier des charges, **pas encore codé**. |
+| **❌** | Hors scope | Volontairement exclu (ex. auth sur page connexion). |
+
+**Interdictions :**
+
+- ❌ Marquer ✅ « pour faire joli » ou « pour que Loggy dise que c'est bon ».
+- ❌ Documenter dans `knowledge_*.txt` ce qui n'est pas ✅ dans le TXT racine.
+- ❌ Coder un intent absent du TXT (ajouter d'abord la ligne ⬜, puis ✅ après test).
+- ❌ Résumé `N/N` si N inclut des ⬜ ou 🔄.
+
+### 19.4 Honnêteté — pourquoi c'est critique
+
+Le TXT est **indexé dans le RAG** (`build_project_knowledge` → `route_api_checklist`).
+
+Si le TXT ment :
+
+- Loggy affirme des capacités inexistantes → frustration utilisateur.
+- L'agent Cursor sur-estime l'avancement → mauvaises priorités.
+- Les tests §14.10 / §18.8 ne correspondent plus à la réalité.
+
+**Principe :** le TXT reflète le **dernier état connu du code**, pas l'intention future.
+Quand on planifie : ⬜. Quand on livre : ✅. Quand c'est incomplet : 🔄.
+
+### 19.5 Ordre de travail obligatoire
+
+Pour **chaque** nouvelle capacité Loggy (route, intent, attribut) :
+
+```text
+1. Écrire / mettre à jour la ligne dans le TXT (⬜ ou 🔄)
+2. Implémenter api_invoke.rs / entity_intents.rs / agent.rs
+3. Tester manuellement (phrase FR réelle)
+4. Passer le statut à ✅ dans le TXT
+5. Aligner knowledge_api_routes.txt / knowledge_tools.txt si besoin
+6. ai_reindex
+7. Mettre à jour le RÉSUMÉ HONNÊTE (compteurs)
+```
+
+**Cursor / agent IA :** lors d'une demande d'intégration, **lire le TXT en premier**, comparer au code, corriger les écarts (TXT trop optimiste ou code en avance sur le TXT).
+
+### 19.6 Réconciliation périodique
+
+À chaque session de dev Loggy significative :
+
+1. Parcourir `ROUTES[]`, `entity_intents.rs`, `try_direct_intent`.
+2. Comparer avec le TXT ligne par ligne.
+3. Corriger les statuts (✅ / 🔄 / ⬜) pour correspondre au code.
+4. Ajuster le RÉSUMÉ HONNÊTE.
+5. `ai_reindex`.
+
+Écart type à corriger :
+
+- Code present, TXT absent → ajouter ligne ⬜ puis ✅.
+- TXT ✅, code absent → rétrograder en ⬜ ou implémenter.
+
+### 19.7 Indexation RAG
+
+Dans `build_project_knowledge()` :
+
+```rust
+// Fichier racine — priorité haute, source de vérité
+if let Ok(s) = read("Route api.txt") {
+    out.push(("cahier_des_charges", s));
+}
+```
+
+Le label source peut être `cahier_des_charges`, `route_api_checklist` ou `spec_loggy` — **un seul** fichier racine suffit.
+
+Ne pas dupliquer le contenu complet dans `knowledge_*.txt` : y mettre des **compléments** (exemples JSON, payloads détaillés), en renvoyant au TXT pour l'état d'avancement.
+
+### 19.8 Template minimal (nouveau projet)
+
+Créer à la racine **`Route api.txt`** :
+
+```text
+# MonProjet — Cahier des charges Loggy
+# Dernière mise à jour : 2026-05-30
+# ✅ implémenté+testé | 🔄 partiel | ⬜ planifié
+
+=== ROUTES API ===
+⬜ GET /api/ressources | list_ressources | limit, scopeId
+
+=== INTENTS ENTITÉS ===
+⬜ INTENT ressource | nom | nom, libellé | LIST | /api/ressources | — | « liste les ressources »
+
+=== RÉSUMÉ HONNÊTE ===
+Routes : 1 documentée | 0 ✅ | 1 ⬜
+Intents  : 1 documenté  | 0 ✅ | 1 ⬜
+```
+
+Puis suivre §19.5 pour chaque ⬜ → ✅.
+
+---
+
+## 20. APPRENTISSAGE PAR TRIGGERS — MÉTHODE REPRODUCTIBLE (STRATÉGIE DYNAMIQUE)
+
+Pattern **trigger auto** pour que l'IA connaisse le schéma, les outils, les jointures et les suggestions **sans saisie manuelle**, dès la création ou modification d'une entité.
+
+### 20.1 Principe
+
+1. **Source de vérité unique** : un registre JSON (`entities/registry.json`) décrit les entités métier.
+2. **Orchestrateur unique** : `apply_registry()` (Rust) exécute une chaîne séquentielle à chaque sauvegarde du registre ou au démarrage.
+3. **Triggers = effets de bord déterministes** : chaque trigger écrit des fichiers `.txt` / `.json` dans `{app_data}/dda/knowledge/` puis `ai_reindex` les ingère en FTS5.
+4. **Jamais de knowledge métier codé en dur** dans le frontend ni dans le prompt LLM : tout est régénéré.
+
+### 20.2 Chaîne de triggers (ordre impératif)
+
+```
+entity_registry_save
+  → apply_registry(db, data_dir, previous_registry)
+      → schema SQLite (CREATE/ALTER tables ent_{nom})
+      → JSON DDA générés (dda/generated/{nom}.json)
+      → dda::triggers::run_all (privilèges, validations, filtres, knowledge écran, dossiers, impression)
+      → knowledge::finalize_entity_knowledge   ← MASTER + fiches par entité
+      → suggestions::write_dashboard_suggestions_trigger
+      → dda::reindex_ai_knowledge (FTS5)
+```
+
+**Reproduire dans un autre projet** : une fonction `apply_domain_model()` équivalente, appelée après chaque changement de modèle métier.
+
+### 20.3 Fichiers générés automatiquement
+
+| Fichier | Trigger | Contenu |
+|---------|---------|---------|
+| `MASTER_entities_schema.txt` | `finalize_entity_knowledge` | Schéma global + attributs + privilèges |
+| `MASTER_entities_tools.txt` | idem | Exemples `dda_*` + règles chat liste |
+| `MASTER_entities_relations.txt` | idem | **Jointures possibles** (entity ref → cible) |
+| `MASTER_entities_filters.txt` | idem + `trigger_filters` | **Filtres par type d'attribut** (opérateur SQL + phrases chat) |
+| `{nom}_entity_schema.txt` | idem | Fiche entité |
+| `{nom}_entity_relations.txt` | idem | Liaisons + phrases jointure chat |
+| `dda/filters/{nom}.json` | `trigger_filters` | Catalogue filtres (key, label, type, operator) |
+| `dda/filters/{nom}_filters.txt` | `trigger_filters` | Mémoire IA filtres par entité |
+| `entities/dashboard_suggestions.json` | `write_dashboard_suggestions_trigger` | UI barre de commande |
+| `MASTER_entity_dashboard_suggestions.txt` | idem | RAG suggestions |
+
+### 20.4 Contenu relations / jointures (trigger clé)
+
+Pour chaque attribut `type: entity` dans le registre, le trigger écrit :
+
+- entité source, champ FK, cardinalité (one-to-many vs many-to-one)
+- entité cible + libellé
+- **phrase modèle chat** : « liste les {source} avec {cible} »
+
+L'IA n'invente pas les jointures : elle lit `MASTER_entities_relations.txt` indexé en RAG.
+
+Implémentation cible : `src-tauri/src/entity/knowledge.rs` → `format_entity_relations`, `format_relations_catalog`.
+
+### 20.5 Affichage chat read-only (listes sans ouvrir le formulaire)
+
+**Principe UX** : bulle = texte court ; données structurées = **modal** (§16).
+
+**Intent** : « liste les articles », « liste les demandes avec nom, prix et article ».
+
+Pipeline dashboard (`ai_dashboard_answer`) :
+
+1. `list_preview::try_list_preview` — avant le LLM générique
+2. Si colonnes absentes → texte court + `cols_request` + marqueur `__LOGGY_ASK_COLS__` (état conversation) — **sélecteur en modal**, pas dans la bulle
+3. Si colonnes présentes → `dda_list` + jointures FK → `ChatDisplayBlock`
+4. Réponse embarquée : `__LOGGY_DISPLAY__{blocks}__END_LOGGY_DISPLAY__` — **tableau en modal** via bouton
+5. Frontend : `ChatLoggyAttachments` → `ChatListPreviewModal` / `ChatColsPickerModal`
+6. Si `entityKey` présent → bouton **Ouvrir l'écran** dans le modal liste (seule interaction CRUD)
+
+Fichiers cibles :
+
+- Backend : `entity/list_preview.rs`, `ai/dashboard_chat.rs`, `ai/format_display.rs`, `ai/agent.rs`
+- Frontend : `lib/chatDisplayParse.ts`, `items/ChatLoggyAttachments.tsx`, …
+
+### 20.6 Règles UX chat
+
+| Type de réponse | Bulle Loggy | Contenu structuré | Interaction |
+|-----------------|-------------|-------------------|-------------|
+| Texte seul | phrase courte | — | — |
+| Liste / tableau entité | phrase + bouton | Modal tableau paginé | Ouvrir écran entité (modal) |
+| Choix colonnes | phrase + bouton | Modal checkboxes | Valider → relance chat |
+| Formulaire CRUD | phrase | modal séparé | via « Gérer les … » ou action entité |
+
+### 20.7 Checklist reproduction (nouveau projet Tauri + SQLite + Loggy)
+
+1. Créer registre métier JSON + commande `registry_save`.
+2. Implémenter `apply_registry` avec triggers séquentiels (schéma DB + fichiers knowledge).
+3. Générer au minimum : `MASTER_*_schema.txt`, `MASTER_*_tools.txt`, `MASTER_*_relations.txt`.
+4. Brancher `ai_reindex` après chaque `apply_registry`.
+5. Ajouter intent « liste » dans le chat dashboard avec `ListPreviewResult` (`display_blocks`, `cols_request`).
+6. Parser côté React les marqueurs `__LOGGY_DISPLAY__` / `__LOGGY_ASK_COLS__` → modals (§16).
+7. Documenter dans `Route api.txt` (si stratégie routes) ou ce `.cursorrules` les intents LIST par entité.
+
+### 20.8 Anti-patterns
+
+- ❌ Hardcoder les colonnes ou jointures dans le prompt système
+- ❌ Hardcoder les opérateurs de filtre par entité (utiliser `trigger_filters` + type attribut)
+- ❌ Ouvrir automatiquement l'écran entité sur « liste les … »
+- ❌ Rendre les cellules du tableau cliquables (read-only sauf bouton entité)
+- ❌ Oublier `reindex` après modification du registre
+
+---
+
+## 21. FILTRES PAR TYPE D'ATTRIBUT — TRIGGER AUTO INCRÉMENTAL
+
+Méthode reproductible : à chaque création ou sync d'entité (`apply_registry`), les filtres FilterBar + chat Loggy sont **dérivés automatiquement** du type de chaque attribut — sans configuration manuelle par table.
+
+### 21.1 Principe
+
+1. **Source** : attributs du registre entité (`EntityAttribute.type`).
+2. **Génération config** : `entity/config.rs` → `build_field` appelle `dda/filters::filter_meta_for_attribute(type)`.
+3. **Trigger** : `dda/triggers.rs` → `trigger_filters` (après validations, avant knowledge écran).
+4. **Exécution SQL** : `dda/crud.rs` → `list_rows` via `dda/filters::append_field_filter_sql`.
+5. **Chat Loggy** : `entity/list_preview.rs` → `dda/filters::extract_filters_from_message`.
+
+### 21.2 Opérateur par type d'attribut (table de vérité)
+
+| Type attribut registre | Filtre UI activé | Opérateur SQL | Exemple chat |
+|------------------------|------------------|---------------|--------------|
+| `string`, `email`, `matricule` | oui | `contains` | « liste les X où nom contient Dupont » (= égalité stricte en chat avec `=`) |
+| `number`, `integer`, `float`, `stock`, `compteur` | oui | `equals` | « liste les articles de qte initial = 50 » |
+| `enum`, `boolean`, `bool` | oui | `equals` | « liste les taches où statut = a_faire » |
+| `date`, `time`, `datetime` | oui | `equals` | « liste les … où date = 2026-06-07 » |
+| `entity` (FK) | oui | `equals` | filtre par id liaison |
+| `photo`, `entity` embed, réservés | non | — | — |
+
+**Règle chat** : une égalité explicite (`=`, `egal`, `est`, `vaut`) force la correspondance exacte post-SQL même si l'opérateur UI est `contains`.
+
+### 21.3 Chaîne trigger `trigger_filters`
+
+Ordre dans `dda::triggers::run_all_with_progress` :
+
+```
+privileges → validations → filters → knowledge → folders → print
+```
+
+Pour chaque écran DDA généré :
+
+1. `build_filter_catalog(cfg)` — liste des champs filtrables + opérateur.
+2. Écrit `{app_data}/dda/filters/{screen_key}.json`.
+3. Écrit `{app_data}/dda/filters/{screen_key}_filters.txt` (RAG).
+4. Upsert SQLite `dda_filter_rules (screen_key, rules_json, updated_at)`.
+5. `finalize_entity_knowledge` agrège `MASTER_entities_filters.txt`.
+
+### 21.4 Fichiers cibles dans le projet généré
+
+| Fichier | Rôle |
+|---------|------|
+| `src-tauri/src/dda/filters.rs` | Opérateur par type, SQL, extraction chat, tests |
+| `src-tauri/src/dda/triggers.rs` | `trigger_filters` |
+| `src-tauri/src/entity/config.rs` | `filter_meta_for_attribute` à la génération JSON |
+| `src-tauri/src/dda/crud.rs` | Application filtres en liste |
+| `src-tauri/src/entity/list_preview.rs` | Filtres chat « liste les … de X = Y » |
+| `src-tauri/src/entity/knowledge.rs` | `MASTER_entities_filters.txt` |
+
+### 21.5 Ajout d'un nouvel attribut filtrable
+
+**Aucune action manuelle** si le type est dans la table §21.2 :
+
+1. Ajouter l'attribut dans le registre entité (Paramètres > Entités).
+2. Sauvegarder → `apply_registry` régénère JSON DDA + `trigger_filters`.
+3. FilterBar et chat Loggy reconnaissent automatiquement label + key.
+4. `ai_reindex` ingère `{nom}_filters.txt` et `MASTER_entities_filters.txt`.
+
+Pour un **nouveau type** d'attribut : étendre `filter_operator_for_attr_type` et `filter_enabled_for_attr_type` dans `dda/filters.rs`, puis documenter la ligne dans ce §21.2.
+
+### 21.6 Anti-patterns filtres
+
+- ❌ Parser les filtres chat uniquement en regex ad hoc hors `dda/filters.rs`
+- ❌ Dupliquer la logique SQL filtre hors `append_field_filter_sql`
+- ❌ Désactiver le post-filtre exact pour les nombres (évite `50` → `150`)
+- ❌ Oublier `trigger_filters` dans la chaîne `run_all` lors d'un port vers un autre projet
+
+### 21.7 Tests de validation
+
+1. Créer entité avec attribut `number` → JSON DDA contient `filter.enabled: true`, `operator: "equals"`.
+2. `dda/filters/{key}.json` généré après apply_registry.
+3. FilterBar : filtre numérique en égalité stricte.
+4. Chat : « liste les {entité} de {label} = {valeur} » → uniquement les lignes correspondantes.
+5. RAG cite `MASTER_entities_filters.txt` après reindex.
+
+---
+
+## 22. STRUCTURATION DYNAMIQUE COMPLÈTE — SPÉCIFICATION CIBLE (HAUTE PERF)
+
+Cette section est le **cahier d'architecture dynamique** à implémenter. Elle unifie registre, DDA, triggers, RAG, UI et IA. Tout ce qu'il faut est dans ce kit + ce fichier — aucune dépendance à un autre dépôt.
+
+### 22.1 Principe suprême
+
+**Ne plus créer d'écrans ni de menus par entité.** L'app tient en :
+
+| Route | Rôle |
+|-------|------|
+| `/` Tableau de bord | Commande naturelle → workspace entité (liste + formulaires modaux) |
+| `/parametres` | Registre JSON des entités + config IA locale |
+
+Tout le métier découle de `{app_data}/entities/registry.json`.
+
+### 22.2 Registre JSON (contrat)
+
+```json
+{
+  "ecosysteme": "Gestion Scolaire v1.0",
+  "slogan": "Établissements, classes et notes",
+  "entities": [
+    {
+      "nom": "users",
+      "label": "Utilisateur",
+      "description": "...",
+      "ai_suggestions": true,
+      "attributs": [
+        { "nom": "email", "type": "email", "required": true },
+        { "nom": "role", "type": "enum[admin,prof,eleve,parent]", "required": true },
+        { "nom": "photo_profil", "type": "photo", "required": false },
+        { "nom": "info", "type": "entity", "ref": "users" }
+      ]
+    }
+  ]
+}
+```
+
+**Types d'attribut** : `string`, `number`, `integer`, `float`, `boolean`, `date`, `datetime`, `time`, `email`, `photo`, `enum[a,b,c]` (ou `enum` + `enum_options`), `entity` (+ `ref`), `stock` (active module Stock), `compteur` (libellé + date jjmmaaaa + n° auto, lecture seule).
+
+**Règles** :
+- `id` / `uuid` du JSON **ignorés** (ID système DDA).
+- **Ne pas** déclarer l'entité `stock` à la main : injectée auto si ≥ 1 attribut `stock`.
+- Identité : `ecosysteme` + `slogan` + logo (`entities/logo.base64`, `entities/ecosystem-icon.png`) remplacent le nom produit partout (sidebar, titre, favicon, fenêtre Tauri, exports).
+
+### 22.3 Chaîne `apply_registry` (ordre impératif)
+
+À chaque `entity_registry_save` (et au démarrage) :
+
+```
+entity_registry_save
+  → écrire registry.json
+  → apply_registry(db, data_dir, previous)
+      1. relations::ensure_referenced_entities   // stubs si ref absente
+      2. schema SQLite ent_{nom} CREATE/ALTER
+      3. JSON DDA → dda/generated/{nom}.json
+      4. dda::triggers::run_all
+           privileges → validations → filters → knowledge écran → folders → print
+      5. knowledge::finalize_entity_knowledge    // MASTER_* + fiches
+      6. suggestions::write_dashboard_suggestions_trigger
+      7. dda::reindex_ai_knowledge               // FTS5
+  → sync privilèges session
+```
+
+**Aucun knowledge métier hardcodé** dans le front ni dans le prompt LLM : tout est régénéré.
+
+### 22.4 Effets de bord déterministes (checklist)
+
+| # | Effet | Détail |
+|---|-------|--------|
+| 1 | Entités liées | Attribut `entity` → stub auto si cible absente |
+| 2 | SQLite | `ent_{nom}` + colonnes selon attributs |
+| 3 | DDA généré | Liste + forms ; liaisons → Détail + panneaux ; create = `select` cibles libres |
+| 4 | Privilèges | `{nom}:voir\|creer\|modifier\|supprimer` (INSERT OR IGNORE, triggers only) |
+| 5 | Filtres | §21 — `dda/filters/{nom}.json` + TXT + MASTER_entities_filters |
+| 6 | RAG | MASTER_entities_schema/tools/relations + `{nom}_entity_*.txt` + reindex |
+| 7 | Suggestions | `dashboard_suggestions.json` + MASTER_entity_dashboard_suggestions |
+
+**Suggestions barre de commande** : phrase « Gérer {label} » pour entités `ai_suggestions: true` **uniquement** si le formulaire a une liaison `entity` vers une entité en `ai_suggestions: false` ; affichage filtré par `{nom}:voir` (`entity_list_manageable`).
+
+### 22.5 Arborescence runtime `{app_data}`
+
+```
+{app_data}/
+  entities/
+    registry.json
+    dashboard_suggestions.json
+    logo.base64
+    ecosystem-icon.png
+  dda/
+    generated/{nom}.json
+    knowledge/
+      MASTER_entities_schema.txt
+      MASTER_entities_tools.txt
+      MASTER_entities_relations.txt
+      MASTER_entities_filters.txt
+      MASTER_entity_dashboard_suggestions.txt
+      MASTER_stock_module.txt          # si module stock
+      MASTER_stock_tools.txt
+      {nom}_entity_schema.txt
+      {nom}_entity_relations.txt
+    filters/
+      {nom}.json
+      {nom}_filters.txt
+    validations/*.txt
+  ai/
+    internet.json                     # { "enabled": true|false }
+```
+
+### 22.6 Couches « knowledge » (3 + hors RAG)
+
+| Couche | Stockage | Rôle |
+|--------|----------|------|
+| A. Fichiers TXT | `dda/knowledge/*.txt` (+ embed Rust) | Source générée |
+| B. RAG FTS5 | `ai_chunks` + `ai_fts` | Recherche au chat agent |
+| C. Expérience | `ai_experience` | Réutiliser outils réussis |
+| Live | `build_live_summary()` | KPI tables (bypass FTS sur actions) |
+| UI suggestions | `dashboard_suggestions.json` | Barre commande (pas chaque message LLM) |
+| Conversations | `ai_conversations` / `ai_messages` | Historique chat |
+
+### 22.7 Indexation `Agent::reindex`
+
+1. `DELETE` `ai_chunks` + `ai_fts`
+2. `build_project_knowledge(root)` : README, `.cursorrules`, `knowledge_*.txt` embarqués
+3. Parcourir `{app_data}/dda/knowledge/*.txt` et `dda/validations/*.txt`
+4. Chunk `donnees_live` = `build_live_summary()`
+5. Chunks **700 car.** Unicode, sans chevauchement
+
+Auto-reindex si `COUNT(ai_chunks)=0` au premier `ai_chat`. Manuel : `ai_reindex`.
+
+### 22.8 Consommation IA (ordre de priorité `ai_chat`) — cœur de la perf
+
+```
+1. auto-reindex si vide
+2. salutations / quick answers / web direct
+3. contexte : action → live summary | sinon FTS rewrite → search(3) | fallback live
+4. experience_hints (top 4, score ≥ 0.25)
+5. intents directs (list_preview, delete, update, write…)  ← AVANT LLM
+6. try_experience_intent (score ≥ 0.38)
+7. LlamaServer::chat(messages avec role=system dynamique)
+8. parse JSON outil une ligne → exécuter → record_success
+```
+
+**CRUD données** : uniquement `dda_list|get|create|update|delete` avec `screen_key` = nom entité exact.
+**Loggy ne modifie jamais le registre** : guide vers Paramètres.
+
+### 22.9 Front (contraintes)
+
+| Chemin | Rôle |
+|--------|------|
+| `src/items/` | Seules briques UI (Table, Modal, EntityPanel, StatChart…). Dossier du schema, section 3. |
+| `src/pages/system/` | Dashboard + Paramètres seulement, sous-dossier de page autorise par la section 3. |
+
+**Interdit** : nouveau JSON écran métier manuel ; nouvelle route/menu par entité ; panneau chat Loggy flottant sur le dashboard (config IA = Paramètres).
+
+Commande naturelle dashboard : `entity_match_intent` (`entity/intent.rs`, **sans LLM**) → `EntityWorkspace`.
+
+### 22.10 Commandes Tauri (cœur dynamique)
+
+**Entités** : `entity_registry_get`, `entity_registry_save`, `entity_logo_from_url`, `entity_list_manageable`, `entity_match_intent`, `entity_get_screen_config`, `entity_relation_options`, `entity_relation_detail`, `entity_stats`, `entity_stock_*`
+
+**DDA** : `dda_list`, `dda_get`, `dda_create`, `dda_update`, `dda_delete`, …
+
+**IA** : `ai_status`, `ai_chat`, `ai_dashboard_answer`, `ai_reindex`, …
+
+Clés DDA protégées (écrans système) : `dashboard`, `parametres`, `admin`, `utilisateurs`.
+
+### 22.11 Deux stratégies — en choisir une
+
+| Stratégie | Outils Loggy | Knowledge | Quand |
+|-----------|--------------|-----------|-------|
+| **A — Dynamique DDA (cible perf)** | `dda_*` + intents entité | Triggers registre → MASTER_* | **Par défaut — §20–§23** |
+| **B — Routes API** | `api_call` + ROUTES[] | Route api.txt + knowledge_api_* | Legacy / API HTTP existante — §14–§19 |
+
+Ne **pas** mélanger A et B pour les mêmes opérations.
+
+### 22.12 Checklist reproduction « dynamique »
+
+1. Registre JSON + `entity_registry_save` / `apply_registry`
+2. Triggers schéma + DDA JSON + privileges + filters + knowledge
+3. `finalize_entity_knowledge` → MASTER_* minimum (schema, tools, relations)
+4. `ai_reindex` après chaque apply
+5. `fts_rewrite` avant `rag.search` ; injecter **3** chunks max
+6. System prompt **dynamique** en `role: "system"` (§23)
+7. Dashboard : `entity_match_intent` + list_preview modals (§16)
+8. Pas d'écran métier manuel ; pas de knowledge métier en dur dans React
+
+### 22.13 Anti-patterns dynamiques
+
+- ❌ Hardcoder jointures / colonnes / filtres dans le prompt système
+- ❌ Créer une route React par entité
+- ❌ Éditer à la main `dda/generated/*.json`
+- ❌ Remplacer FTS5 par embeddings sans demande explicite
+- ❌ Utiliser `-sysf` pour le contexte RAG (statique, incompatible §23)
+- ❌ Indexer des milliers de lignes JSON brutes sans résumé
+- ❌ Attendre le RAG sur `ai_dashboard_answer` (il n'y est pas)
+- ❌ Oublier `reindex` après modification du registre
+- ❌ Appeler le LLM avant les intents directs / l'expérience
+
+### 22.14 Hint de recherche (fin de réponse agent Cursor)
+
+Après correction / nouvelle entité :
+
+🔍 **Loggy Search Hint** : `[Mot-clé1] OR [Mot-clé2] OR MASTER_[nom]`
+
+---
+
+## 23. PROMPT SYSTÈME DYNAMIQUE vs `-sys` / `-sysf` (llama.cpp)
+
+### 23.1 Verdict
+
+Pour Loggy sur **llama-server** (API chat OpenAI-like) :
+
+| Approche | Fiabilité | Pourquoi |
+|----------|-----------|----------|
+| Message `{"role":"system","content":…}` **par requête** | **Obligatoire** | RAG, expérience, branding, web on/off changent à chaque tour |
+| `-sys` / `-sysf` (llama-cli / démarrage) | **Insuffisant** | Fichier/statique au boot ; ne peut pas porter le RAG live |
+| Combiner les deux | Optionnel / faible gain | Préfixe ultra-stable possible, mais le client doit quand même envoyer le system dynamique |
+
+**Ne pas** migrer le system prompt vers `-sysf` en espérant plus de fiabilité RAG : le goulot, c'est la **qualité FTS + taille de contexte + intents avant LLM**, pas le flag CLI.
+
+### 23.2 Structure recommandée du system message (ordre = cache KV)
+
+```
+[1] Identité stable courte (Loggy + règles JSON / interdits)     ← peu change
+[2] Bloc architecture entités (template fixe)                     ← peu change
+[3] Bloc web si activé                                            ← rare
+[4] experience_hints                                              ← dynamique
+[5] Contexte: {rag_context | live_summary}                        ← très dynamique
+```
+
+Garder **[1]+[2]** stables aide le prompt cache ; coller le RAG **en fin**.
+
+### 23.3 Implémentation cible
+
+- Construction : `Agent::system_prompt(rag_context, experience_hints)` dans `ai/agent.rs`
+- Envoi : `LlamaServer::chat` → POST `/v1/chat/completions` avec `messages[0].role = "system"`
+- FTS rewrite : **autre** system prompt court dans `fts_rewrite.rs` (séparé, max 96 tokens)
+- Dashboard léger : system prompt **court** dédié, **sans** RAG
+
+### 23.4 Ce qu'on peut mettre dans un fichier `-sysf` (si on veut quand même)
+
+Uniquement des règles **universelles** et stables, ex. :
+
+- « Réponds en français »
+- « Jamais de SQL ; outil = une ligne JSON »
+- « Jamais de JSON visible à l'utilisateur »
+
+**Jamais** : chunks RAG, MASTER_*.txt, KPI live, hints expérience, nom d'écosystème variable.
+
+En pratique : tout passe par le message `system` HTTP ; llama-server démarré **sans** `-sysf`.
+
+### 23.5 Démarrage serveur (rappel)
+
+Args typiques (voir `llama_server.rs` / `hardware_profile.rs`) :
+
+```
+llama-server.exe -m {gguf} --host 127.0.0.1 --port 18080
+  -ngl {gpu_layers} -t {threads} --ctx-size 2048 --parallel 1
+```
+
+Pas de `-sys` / `-sysf`. Health : `GET /health`. Lazy start au premier besoin.
+
+---
+
+## 24. PRÉRÉPONSES — REGISTRE DE 500 RÉPONSES SOUTENUES + ROTATION LLM
+
+### 24.1 Concept
+
+Simuler une réponse **naturelle et variée** de l'IA dans les bulles de discussion
+(salutations, remerciements, au revoir, « comment vas-tu ? », présentation, aide,
+accusés de réception) **sans solliciter le LLM** au moment de répondre :
+
+- Table `ai_prereponses` dans la base IA : **exactement 500 réponses** pré-rédigées
+  en **registre soutenu** (vouvoiement, français impeccable), réparties en catégories.
+- Tirage : moins utilisées en priorité + aléa SQLite → jamais de répétition mécanique.
+- Rotation par le LLM : à **5 utilisations** (`SEUIL_TROP_UTILISE`), la réponse est
+  **supprimée** et le LLM local en **rédige une nouvelle** à la place (même catégorie).
+- Plafond strict : la table ne dépasse **jamais** 500 lignes (remplacement atomique).
+
+### 24.2 Schéma SQL (à ajouter dans ai_tables.sql)
+
+```sql
+CREATE TABLE IF NOT EXISTS ai_prereponses (
+    id TEXT PRIMARY KEY NOT NULL,
+    categorie TEXT NOT NULL,
+    texte TEXT NOT NULL UNIQUE,          -- UNIQUE = anti-doublon au remplacement
+    use_count INTEGER NOT NULL DEFAULT 0,
+    last_used_at TEXT,
+    created_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_ai_prereponses_cat ON ai_prereponses(categorie);
+```
+
+### 24.3 Catégories et corpus initial (module `ai/prereponses.rs`)
+
+Catégories : `salutation` (125), `remerciement` (75), `conge` (60), `humeur` (60),
+`presentation` (60), `aide` (60), `transition` (60) = **500**.
+
+- Corpus généré **combinatoirement** (produit cartésien de fragments soutenus) et
+  **déterministe** ; test unitaire : 500 textes **distincts**, toutes catégories couvertes.
+- `salutation` : stocker avec placeholder `{salutation}` → remplacé au tirage par
+  « Bonjour »/« Bonsoir » selon l'heure locale.
+- Seed idempotent à l'ouverture de la base (`ensure_seed`), **plafonné** : ne jamais
+  re-remplir au-delà de 500 même si des textes du corpus ont été remplacés par le LLM.
+
+### 24.4 Tirage (`pick`)
+
+```sql
+SELECT id, texte, use_count FROM ai_prereponses WHERE categorie = ?1
+ORDER BY use_count ASC, RANDOM() LIMIT 1
+-- puis : UPDATE … SET use_count = use_count + 1, last_used_at = now WHERE id = …
+```
+
+Si `use_count + 1 >= 5` → déclencher la **maintenance en arrière-plan** (thread dédié,
+propre connexion SQLite + `busy_timeout`, garde `AtomicBool` = une seule à la fois).
+
+### 24.5 Maintenance LLM (rotation)
+
+Pour chaque réponse `use_count >= 5` :
+
+1. **LLM local** (seulement si `health_ok()`) : prompt system court « registre soutenu,
+   vouvoiement, réponds uniquement par la phrase demandée » + user « rédige une nouvelle
+   réponse (description catégorie), différente de : « ancien texte » ». Nettoyer la
+   sortie (une ligne, 20–400 caractères, sans guillemets).
+2. **Remplacement atomique** : `BEGIN IMMEDIATE; DELETE ancien; INSERT OR IGNORE nouveau;
+   COMMIT` — rollback si doublon → la table reste à 500 exactement.
+3. **Repli 1** (LLM éteint / doublon) : réinsérer un texte du corpus d'origine absent de la table.
+4. **Repli 2** (rien de disponible) : `use_count = 0` (on garde la réponse, compteur remis à zéro).
+
+Générateur **injectable** (`maintenance_avec(db, generateur)`) pour tester sans LLM.
+
+### 24.6 Intégration agent + commande
+
+- `greetings` / réponses sociales de l'agent : tirer depuis `ai_prereponses`
+  (catégorie mappée sur le type de salutation) ; repli sur les textes codés en dur si table vide.
+- Commande Tauri `ai_prereponse { categorie? }` (défaut `transition`) : le front affiche
+  une bulle instantanée d'accusé de réception pendant que le LLM calcule la vraie réponse.
+
+### 24.7 Anti-patterns
+
+- Ne pas dépasser 500 lignes (jamais INSERT sans DELETE apparié hors seed plafonné).
+- Ne pas bloquer la conversation avec la maintenance (toujours en arrière-plan).
+- Ne pas insérer la sortie LLM brute (nettoyage + validation longueur + UNIQUE obligatoires).
+- Ne pas re-seeder aveuglément : le seed doit respecter le plafond après remplacements LLM.
+
+---
+
+FIN DES RÈGLES AITOOLS — Version 2.1
+(Loggy — kit autonome haute perf : dynamique §20–§22 + prompt §23 ; RAG 3 chunks + fts_rewrite)
